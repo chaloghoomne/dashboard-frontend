@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const StepTwo = ({ formData, handleChange, nextStep, prevStep }) => {
+const StepTwo = ({
+  formData,
+  handleChange,
+  nextStep,
+  prevStep,
+  handleSubmit,
+}) => {
   const [faq, setFaq] = useState(formData.faq);
 
   const handleAddQuestion = () => {
-    setFaq([...faq, { question: '', answer: '' }]);
+    setFaq([...faq, { question: "", answer: "" }]);
   };
 
   const handleQuestionChange = (index, e) => {
-    const updatedFaq = faq.map((item, i) => (i === index ? { ...item, [e.target.name]: e.target.value } : item));
+    const updatedFaq = faq.map((item, i) =>
+      i === index ? { ...item, [e.target.name]: e.target.value } : item
+    );
     setFaq(updatedFaq);
   };
 
@@ -17,11 +25,13 @@ const StepTwo = ({ formData, handleChange, nextStep, prevStep }) => {
     setFaq(updatedFaq);
   };
 
+  const handleSave = () => {
+    handleChange(faq);
+  };
+
   const handleNext = (e) => {
     e.preventDefault();
-    // Add validation here if needed
-    handleChange(faq);
-    nextStep();
+    handleSubmit();
   };
 
   return (
@@ -63,6 +73,13 @@ const StepTwo = ({ formData, handleChange, nextStep, prevStep }) => {
         >
           Add FAQ
         </button>
+        <button
+          type="button"
+          onClick={handleSave}
+          className="px-4 py-2 ml-5 bg-[#11aaf6] text-white rounded-md"
+        >
+          Save
+        </button>
       </div>
       <div className="flex justify-between">
         <button
@@ -76,7 +93,7 @@ const StepTwo = ({ formData, handleChange, nextStep, prevStep }) => {
           type="submit"
           className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"
         >
-          Next
+          Submit
         </button>
       </div>
     </form>

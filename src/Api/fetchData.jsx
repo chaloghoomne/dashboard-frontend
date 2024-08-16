@@ -1,13 +1,13 @@
 import axios from "axios";
 
-export const fetchDataFromAPI = (method, url, body, requestHeaders,form) => {
+export const fetchDataFromAPI = (method, url, body, requestHeaders, form) => {
   console.log(requestHeaders);
-  // let contentType;
-  // if (form === true) {
-  //   contentType = "multipart/form-data";
-  // } else {
-    // contentType = "application/json";
-  // }
+  let contentType;
+  if (form === true) {
+    contentType = "multipart/form-data";
+  } else {
+    contentType = "application/json";
+  }
   let reqHeader = {
     // "Content-Type": contentType,
     Authorization: "Bearer " + localStorage.getItem("token"),

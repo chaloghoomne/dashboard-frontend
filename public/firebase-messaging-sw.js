@@ -35,7 +35,9 @@
 //   self.registration.showNotification(notificationTitle, notificationOptions);
 // });
 importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js");
+importScripts(
+  "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
+);
 
 const defaultConfig = {
   apiKey: "AIzaSyA57ATfewo20uHosQhU_8xLqzQH4nHWguk",
@@ -53,7 +55,7 @@ firebase.initializeApp(defaultConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log('Received background message ', payload);
+  console.log("Received background message ", payload);
 
   // Customize notification here
   const notificationTitle = payload.data.title;

@@ -34,7 +34,7 @@ const ChangePassword = () => {
         { email: email }
       );
       console.log("response", response);
-      localStorage.setItem('id', response.id);
+      localStorage.setItem("id", response.id);
       navigate(`/changePasswordOTP/${email}`);
       toast.success(response.message);
     } catch (error) {
@@ -46,8 +46,10 @@ const ChangePassword = () => {
     <div className="w-full h-full flex justify-center items-center">
       <div className="w-[35%] h-[80%] p-5 bg-white/20 rounded-[100px]">
         <div className="w-full h-full p-5 gap-2 bg-white rounded-[100px] flex flex-col justify-center items-center">
-          <p className="text-[#FC6011] font-medium text-3xl">CHANGE PASSWORD</p>
-          <p className="text-black text-lg mb-[20px]">Hope you are doing well</p>
+          <p className="text-[#3180CA] font-medium text-3xl">CHANGE PASSWORD</p>
+          <p className="text-black text-lg mb-[20px]">
+            Hope you are doing well
+          </p>
           <input
             className="w-[90%] border focus:outline-none border-[#5B5B5B] p-1 text-md rounded-lg"
             placeholder="Email"
@@ -57,7 +59,7 @@ const ChangePassword = () => {
           />
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
-            className="bg-[#FC6011] mt-4 rounded-lg text-white p-2 w-[90%]"
+            className="bg-[#3180CA] mt-4 rounded-lg text-white p-2 w-[90%]"
             onClick={onButtonClick}
           >
             Continue

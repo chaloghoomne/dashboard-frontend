@@ -1,224 +1,132 @@
-import React, { useEffect, useState } from 'react';
-import { Line, Bar, Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
-import { fetchDataFromAPI } from '../../../Api/fetchData';
-import { BASE_URL, NetworkConfig } from './../../../Api/urls';
+import React from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Box, Typography, Container, Grid } from "@mui/material";
+import { styled } from "@mui/system";
 
+const Root = styled(Box)({
+  background: "linear-gradient(to right, #000046, #1cb5e0)",
+  minHeight: "100vh",
+  color: "white",
+  padding: "20px 0",
+});
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend
-);
+const CarouselContainer = styled(Box)({
+  marginBottom: "40px",
+});
+
+const Card = styled(Box)({
+  background: "white",
+  color: "black",
+  padding: "20px",
+  borderRadius: "10px",
+  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  textAlign: "center",
+});
+
+const SectionTitle = styled(Typography)({
+  marginBottom: "20px",
+});
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState();
-  const [post, setPost] = useState({});
-  const [news, setNews] = useState();
-  const [events, setEvents] = useState();
-  const [companies, setCompanies] = useState();
-  const [schemes, setSchemes] = useState();
-  const [ads, setAds] = useState();
-  const [premiumusers, setPremiumusers] = useState([]);
-  const [validPremiumUsers, setValidPremiumUsers] = useState([]);
-  const [users, setUsers] = useState();
-  const [companyLabels, setCompanyLabels] = useState([]);
-  const [companyDatasets, setCompanyDataSets] = useState([]);
+  const carouselSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchDataFromAPI(
-          "GET",
-          `${BASE_URL}${NetworkConfig.DASHBOARD}`,
-        );
-        console.log(response);
-        setDashboardData(response.data);
-        setUsers(response.data.user);
-        setSchemes(response.data.schemes);
-        setPost(response.data.post);
-        setNews(response.data.news);
-        setEvents(response.data.events);
-        setCompanies(response.data.companies);
-        setAds(response.data.ads);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (companies) {
-      const company = companies.map((item) => item.sector_id);
-      const datasets = [{
-        label: 'Companies',
-        data: companies.map((item) => item._count.created_at),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#32a836', '#fcba03', '#039dfc'],
-      }];
-      setCompanyLabels(company);
-      setCompanyDataSets(datasets);
-    }
-  }, [companies]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchDataFromAPI(
-          "GET",
-          `${BASE_URL}/order-history`,
-        );
-        console.log(response);
-        setPremiumusers(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const validUsers = premiumusers.filter(user => user && user.first_name && user.created_at);
-    setValidPremiumUsers(validUsers);
-  }, [premiumusers]);
-
-  const adsImage = ads?.map((item) => item.image);
-  const newsImage = news?.map((item) => item.image);
+  const sections = [
+    { title: "Top Countries", content: "India,Australia,Canada,Thailand" },
+    { title: "Top Visa Plans", content: "India,Australia,Canada,Thailand" },
+    { title: "Top Partners", content: "Agoda,MakemyTrip" },
+    {
+      title: "Maximum Amount Visa ",
+      content: "$300000",
+    },
+  ];
 
   return (
-    <div className="p-6 bg-gray-100 max-h-full overflow-y-auto min-h-[90%]">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {post?.labels?.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Post</h2>
-            </div>
-            <Line data={post} />
-          </div>
-        )}
+    <div className="max-h-[89%]  overflow-y-auto">
+      <Root style={{ width: "full" }}>
+        <Container>
+          <CarouselContainer>
+            <Slider {...carouselSettings}>
+              <Box>
+                <img
+                  className="bg-cover"
+                  src="https://media.istockphoto.com/id/683962492/photo/sunrise-at-colosseum-rome-italy.webp?b=1&s=170667a&w=0&k=20&c=Ql9ZvuQQXvmWIiz39v0se1kSEsWKMU3HJtCssPutVEw="
+                  alt="Rome"
+                  style={{
+                    width: "100%",
+                    borderRadius: "10px",
+                    height: "250px",
+                  }}
+                />
+                <Typography
+                  variant="h4"
+                  style={{ textAlign: "center", marginTop: "10px" }}
+                >
+                  Canada
+                </Typography>
+              </Box>
 
-        {users?.labels?.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">User</h2>
-            </div>
-            <Bar data={users} />
-          </div>
-        )}
+              <Box>
+                <img
+                  className="bg-cover"
+                  src="https://i0.wp.com/reporterontheroad.com/wp-content/uploads/voyage-a-rome-cover.png?fit=1170%2C780&ssl=1"
+                  alt="Rome"
+                  style={{
+                    width: "100%",
+                    borderRadius: "10px",
+                    height: "250px",
+                  }}
+                />
+                <Typography
+                  variant="h4"
+                  style={{ textAlign: "center", marginTop: "10px" }}
+                >
+                  Rome
+                </Typography>
+              </Box>
 
-        {events?.labels?.length > 0 && (
-          <div className="bg-white p-4 h-auto rounded-lg shadow-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">All Events</h2>
-            </div>
-            <div className='pt-5'><Line data={events} /></div>
-          </div>
-        )}
-
-        {companyLabels.length > 0 && companyDatasets.length > 0 && (
-          <div className="bg-white  relative p-4 rounded-lg shadow-md chart-container">
-             <div className="flex absolute top-3  justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Sectors</h2>
-            </div>
-            <div className="legend-container">
-              <ul className="chart-legend">
-                {companyLabels.map((label, index) => (
-                  <li key={index} className='text-xs'>
-                    <span
-                      className="color-box text-xs"
-                      style={{ backgroundColor: companyDatasets[0].backgroundColor[index] }}
-                    ></span>
-                    {label}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="chart-wrapper canvas-container">
-              <Pie 
-                data={{ labels: companyLabels, datasets: companyDatasets }}
-                options={{
-                  plugins: {
-                    legend: {
-                      display: false
-                    }
-                  },
-                  maintainAspectRatio: false
-                }}
-                width={200}
-                height={200}
-              />
-            </div>
-          </div>
-        )}
-
-        {schemes?.labels?.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Schemes</h2>
-            </div>
-            <Line data={schemes} />
-          </div>
-        )}
-
-        {validPremiumUsers.length > 0 && (
-          <div className="bg-white p-4 w-full rounded-lg shadow-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Premiership</h2>
-            </div>
-            <div className='max-h-72 w-full overflow-y-auto overflow-clip'>
-              <table className="bg-white w-full">
-                <thead>
-                  <tr>
-                    <th className="py-2 px-4 border-b">User Name</th>
-                    <th className="py-2 px-4 border-b">Date</th>
-                  </tr>
-                </thead>
-                <tbody className='text-center'>
-                  {validPremiumUsers.map((item, index) => (
-                    <tr key={index}>
-                      <td className="py-2 px-4 border-b">{item.first_name}</td>
-                      <td className="py-2 px-4 border-b">{item.created_at.slice(0, 10)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {newsImage && newsImage.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">News</h2>
-            <div className="grid grid-cols-4 gap-4">
-              {newsImage.slice(0, 4).map((image, index) => (
-                <div key={index} className="h-24 bg-gray-200 rounded">
-                  <img className='h-24' src={image} alt="" />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {adsImage && adsImage.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">Ads</h2>
-            <div className="flex flex-wrap gap-4">
-              {adsImage.slice(0, 4).map((image, index) => (
-                <div key={index} className="h-24 bg-gray-200 rounded">
-                  <img className='h-24' src={image} alt="" />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+              <Box>
+                <img
+                  className="bg-cover"
+                  src="https://media.istockphoto.com/id/683962492/photo/sunrise-at-colosseum-rome-italy.webp?b=1&s=170667a&w=0&k=20&c=Ql9ZvuQQXvmWIiz39v0se1kSEsWKMU3HJtCssPutVEw="
+                  alt="Rome"
+                  style={{
+                    width: "100%",
+                    borderRadius: "10px",
+                    height: "250px",
+                  }}
+                />
+                <Typography
+                  variant="h4"
+                  style={{ textAlign: "center", marginTop: "5px" }}
+                >
+                  India
+                </Typography>
+              </Box>
+              {/* Add more slides as needed */}
+            </Slider>
+          </CarouselContainer>
+          <Grid container spacing={3}>
+            {sections.map((section, index) => (
+              <Grid item xs={12} md={6} key={index}>
+                <Card>
+                  <SectionTitle variant="h5">{section.title}</SectionTitle>
+                  <Typography>{section.content}</Typography>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Root>
     </div>
   );
 };

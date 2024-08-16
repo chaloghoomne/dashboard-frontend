@@ -6,36 +6,12 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 // import {getToken}from "firbase/messaging"
 const firebaseConfig = {
-
- 
-
-  apiKey: "AIzaSyD1jCOG-Oe-AmW1H9_Twk000o4ET1dya7w",
-
- 
-
-  authDomain: "groceryapp-4ea3f.firebaseapp.com",
-
- 
-
-  projectId: "groceryapp-4ea3f",
-
- 
-
-  storageBucket: "groceryapp-4ea3f.appspot.com",
-
- 
-
-  messagingSenderId: "962946943978",
-
- 
-
-  appId: "1:962946943978:web:bc36440336baa19d3d0093",
-
- 
-
-  measurementId: "G-6CWNBK39FV"
-
- 
+  apiKey: "AIzaSyDjmhDRDh04nXVjQGdn6oV9kCMBx-_2zQA",
+  authDomain: "chaloghoomne-b4c09.firebaseapp.com",
+  projectId: "chaloghoomne-b4c09",
+  storageBucket: "chaloghoomne-b4c09.appspot.com",
+  messagingSenderId: "1001829843334",
+  appId: "1:1001829843334:web:ab89c55b076d57c042ac07",
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -45,7 +21,7 @@ export { auth, provider };
 const messaging = getMessaging(app);
 
 const VITE_APP_VAPID_KEY =
-  "BJI5SMHO5f0dw5YarPEcqyoOhV26VfsDl6JYKP-PDYYKL74YobmdyJz0V5TzNFa06YlxnNhpUpVvWTIJmn-f6UQ";
+  "BGF_EOWSTdrqTErGAr-ORoVfIJY5XdXj279ITME_svm-fTyoLgoBlHcVcLJcr9vyCeLtHmD2I2duSxIfDpqc9Uk";
 console.log(VITE_APP_VAPID_KEY, "VITE_APP_VAPID_KEY/////////////");
 
 // export async function generateToken() {

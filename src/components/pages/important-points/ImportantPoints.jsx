@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from "react";
-import AddForm from "./AddForm";
-import PackageList from "./PackageList";
-import Pagination from "./Pagination";
-import DeleteModal from "./DeleteModal";
-import { BASE_URL } from "../../../../Api/urls";
-import { fetchDataFromAPI } from "../../../../Api/fetchData";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import ImportantPointsDeleteModal from "./components/ImportantDeleteModal";
+import AddImportantPoints from "./components/ImportantPointsAdd";
+import ImportantPointsList from "./components/ImportantPointsList";
+import Pagination from "../Packages/components/Pagination";
+import { fetchDataFromAPI } from "../../../Api/fetchData";
+import { BASE_URL, NetworkConfig } from "../../../Api/urls";
 
-const AddPackagePage = () => {
-  const navigate = useNavigate();
+const ImportantPoints = () => {
   const [activeTab, setActiveTab] = useState("add");
-  const [packages, setPackages] = useState([]);
+  const [importantPoints, setImportantPoints] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isModalOpen, setIsModelOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletedId, setDeletedId] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
-        const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
-        console.log(response, "response partners");
+        const response = await fetchDataFromAPI("GET", `${BASE_URL}notes`);
+        console.log(response);
         if (response) {
-          console.log(response.data, "response");
-          setPackages(response.data);
+          setImportantPoints(response.data);
           setTotalPages(response.totalPages);
         }
       } catch (error) {
@@ -32,40 +30,36 @@ const AddPackagePage = () => {
       }
     };
     fetchProfileImage();
-  }, [currentPage, activeTab]);
+  }, []);
 
   const handleEdit = (id) => {
-    // Implement edit functionality
-    navigate(`/home/visa/country/${id}`);
-    console.log("Edit package", id);
+    navigate(`/home/important-point/${id}`);
   };
 
   const handleDelete = (id) => {
-    setIsModelOpen(true);
+    setIsModalOpen(true);
     setDeletedId(id);
-    console.log("Delete package", id);
   };
 
   const confirmDelete = async () => {
     try {
       const response = await fetchDataFromAPI(
         "DELETE",
-        `${BASE_URL}delete-place/${deletedId}`
+        `${BASE_URL}notes/${deletedId}`
       );
       console.log(response);
       if (response) {
-        toast.success("Successfully Deleted");
         try {
-          const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
+          const response = await fetchDataFromAPI("GET", `${BASE_URL}notes`);
           console.log(response);
           if (response) {
-            setPackages(response.data);
+            setImportantPoints(response.data);
             setTotalPages(response.totalPages);
           }
         } catch (error) {
           console.log(error);
         }
-        setIsModelOpen(false);
+        setIsModalOpen(false);
       }
     } catch (error) {
       console.log(error);
@@ -73,14 +67,14 @@ const AddPackagePage = () => {
   };
 
   return (
-    <div className="p-4 w-full h-[95%] ">
+    <div className="w-full p-4 min-h-[89%] overflow-auto h-[89%] bg-slate-300 max-h-[89%] ">
       <div className="flex justify-center mb-4">
         <button
           className={`px-4 py-2 ${
             activeTab === "add"
               ? "bg-[#11aaf6] text-white"
               : "bg-white border border-[#11aaf6] text-[#11aaf6]"
-          } `}
+          }`}
           onClick={() => setActiveTab("add")}
         >
           Add
@@ -90,7 +84,7 @@ const AddPackagePage = () => {
             activeTab === "list"
               ? "bg-[#11aaf6] text-white"
               : "bg-white border border-[#11aaf6] text-[#11aaf6]"
-          } `}
+          }`}
           onClick={() => setActiveTab("list")}
         >
           List
@@ -99,19 +93,13 @@ const AddPackagePage = () => {
 
       {activeTab === "add" ? (
         <div className="min-h-[95%] w-full max-h-[95%] overflow-auto">
-          <h1
-            style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
-            className="text-2xl text-blue-500 font-semibold"
-          >
-            Add Visa
-          </h1>
-          <AddForm handleActive={setActiveTab} />
+          <AddImportantPoints handleActive={setActiveTab} />
         </div>
       ) : (
         <div className="min-h-[95%] h-[95%] w-full max-h-[95%]">
-          <div className="min-h-[87%] w-full max-h-[87%] overflow-auto ">
-            <PackageList
-              data={packages}
+          <div className="min-h-[87%] w-full max-h-[87%] overflow-auto">
+            <ImportantPointsList
+              data={importantPoints}
               edit={handleEdit}
               deleted={handleDelete}
             />
@@ -123,10 +111,11 @@ const AddPackagePage = () => {
           />
         </div>
       )}
+
       {isModalOpen && (
-        <DeleteModal
+        <ImportantPointsDeleteModal
           id={deletedId}
-          setIsModelOpen={setIsModelOpen}
+          setIsModalOpen={setIsModalOpen}
           handleModal={confirmDelete}
         />
       )}
@@ -134,4 +123,4 @@ const AddPackagePage = () => {
   );
 };
 
-export default AddPackagePage;
+export default ImportantPoints;

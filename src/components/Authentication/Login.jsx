@@ -98,7 +98,7 @@ const tken = localStorage.getItem("deviceToken");
         {
           email: formData.email,
           password: formData.password,
-          device_token: token,
+          // device_token: token,
         }
       );
 

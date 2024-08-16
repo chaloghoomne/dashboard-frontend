@@ -12,8 +12,18 @@ import User from "./components/pages/user/user";
 import HomeLayoutGhoomne from "./components/pages/HomeLayoutGhoomne";
 import Country from "./components/pages/Packages/Country";
 import Plans from "./components/pages/Packages/Plans/Plans";
-
-
+import HeadingsAdd from "./components/pages/Headings/HeadingsAdd";
+import ImportantPoints from "./components/pages/important-points/ImportantPoints";
+import Partners from "./components/pages/Partners/Partners";
+import EditPartner from "./components/pages/Partners/components/PartnerEdit";
+import EditImportantPoints from "./components/pages/important-points/components/ImportantPointsEdit";
+import CountryEdit from "./components/pages/Packages/components/CountryEdit";
+import PlanEdit from "./components/pages/Packages/Plans/components.jsx/PlanEdit";
+import Users from "./components/pages/users/users";
+import RejectedRequests from "./components/pages/visa-requests/RejectedRequests";
+import PendingRequests from "./components/pages/visa-requests/PendingRequest";
+import AcceptedRequests from "./components/pages/visa-requests/AcceptedRequests";
+import BlackListRequest from "./components/pages/visa-requests/BlackListRequest";
 
 const MainlayoutGhoomne = () => {
   return (
@@ -33,13 +43,33 @@ const MainlayoutGhoomne = () => {
         }
       >
         <Route index element={<Dashboard />} />
+        <Route path="/home/users" element={<Users />} />
+        <Route path="/home/request" element={<AcceptedRequests />} />
+        <Route
+          path="/home/request/senttoimmigration"
+          element={<AcceptedRequests />}
+        />
+        <Route path="/home/request/pending" element={<PendingRequests />} />
+        <Route path="/home/request/blacklist" element={<BlackListRequest />} />
+        <Route path="/home/request/rejected" element={<RejectedRequests />} />
         <Route path="/home/requests/:id" element={<User />} />
+
         <Route path="/home/requests/accepted" element={<AcceptedUser />} />
         <Route path="/home/requests/rejected" element={<RejectedUser />} />
         <Route path="/home/requests/pending" element={<PendingUser />} />
         <Route path="/home/requests/blocked" element={<BlockedUser />} />
-        <Route path="/home/packages/country" element={<Country />} />
-         <Route path="/home/packages/plans" element={<Plans />} />
+        <Route path="/home/visa/country" element={<Country />} />
+        <Route path="/home/visa/country/:id" element={<CountryEdit />} />
+        <Route path="/home/visa/plans" element={<Plans />} />
+        <Route path="/home/visa/plans/:id" element={<PlanEdit />} />
+        <Route path="/home/headings" element={<HeadingsAdd />} />
+        <Route path="/home/important" element={<ImportantPoints />} />
+        <Route
+          path="/home/important-point/:id"
+          element={<EditImportantPoints />}
+        />
+        <Route path="/home/partners" element={<Partners />} />
+        <Route path="/home/partner/:id" element={<EditPartner />} />
       </Route>
     </Routes>
   );

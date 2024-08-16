@@ -1,25 +1,64 @@
-import React, { useState } from 'react';
-import StepOne from './StepOne';
-import StepTwo from './StepTwo';
-import StepThree from './StepThree';
+import React, { useEffect, useState } from "react";
+import StepOne from "./StepOne";
+import StepTwo from "./StepTwo";
+import StepThree from "./StepThree";
+import { BASE_URL } from "../../../../Api/urls";
+import { fetchDataFromAPI } from "../../../../Api/fetchData";
+import { toast } from "react-toastify";
+import PlanListing from "./components.jsx/PlanListing";
+import Pagination from "../components/Pagination";
+import { useNavigate } from "react-router-dom";
+import PlanDeleteModal from "./components.jsx/PlanDeleteModal";
 
 const Plans = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [plans, setPlans] = useState();
+  const [activeTab, setActiveTab] = useState("add");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [deletedId, setDeletedId] = useState("");
   const [formData, setFormData] = useState({
-    package: '',
-    type: '',
-    heading: '',
-    period: '',
-    validity: '',
-    processingTime: '',
-    price: '',
-    icon: '',
+    package: "",
+    tourType: "",
+    type: "",
+    entryType: "",
+    period: "",
+    validity: "",
+    processingTime: "",
+    price: "",
+    icon: "",
     image: null,
-    planDisclaimer: '',
-    importantInfo: '',
+    expressHeading: "",
+    expressPrice: "",
+    expressDays: "",
+    instantHeading: "",
+    instantPrice: "",
+    instantDays: "",
     faq: [],
-    documents: []
+    insuranceAmount: 500,
   });
+  console.log(formData.faq, "faq");
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}visa-categories?page=${currentPage}`
+        );
+        console.log(response, "response partners");
+        if (response) {
+          setPlans(response.data);
+          setTotalPages(response.totalPages);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, [currentPage, activeTab]);
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -28,36 +67,174 @@ const Plans = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  console.log(formData, "formDat");
 
-   const handleImageChange = (e, field) => {
-  setFormData({ ...formData, [field]: e.target.files[0] });
-};
+  const handleImageChange = (e, field) => {
+    setFormData({ ...formData, [field]: e.target.files[0] });
+  };
 
   const handleFaqChange = (faq) => {
+    console.log("hit");
     setFormData({ ...formData, faq });
   };
 
-  const handleDocumentsChange = (documents) => {
-    setFormData({ ...formData, documents });
+  const handleSubmit = async () => {
+    const newformData = new FormData();
+
+    newformData.append("package", formData.package);
+    newformData.append("tourType", formData.tourType);
+    newformData.append("type", formData.type);
+    newformData.append("entryType", formData.entryType);
+    newformData.append("period", formData.period);
+    newformData.append("validity", formData.validity);
+    newformData.append("processingTime", formData.processingTime);
+    newformData.append("price", formData.price);
+    newformData.append("icon", formData.icon);
+    newformData.append("image", formData.image);
+    newformData.append("expressHeading", formData.expressHeading);
+    newformData.append("expressPrice", formData.expressPrice);
+    newformData.append("expressDays", formData.expressDays);
+    newformData.append("instantHeading", formData.instantHeading);
+    newformData.append("instantPrice", formData.instantPrice);
+    newformData.append("instantDays", formData.instantDays);
+    newformData.append("insuranceAmount", formData.insuranceAmount);
+    formData.faq.forEach((item, index) => {
+      newformData.append(`faq[${index}][question]`, item.question);
+      newformData.append(`faq[${index}][answer]`, item.answer);
+    });
+    try {
+      const response = await fetchDataFromAPI(
+        "POST",
+        `${BASE_URL}add-visa-category`,
+        newformData
+      );
+      console.log(response);
+      if (response) {
+        toast.success(" Added successfully");
+        navigate(-1);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error");
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Convert comma-separated strings to arrays
-    const dataToSend = {
-      ...formData,
-      planDisclaimer: formData.planDisclaimer.split(',').map(item => item.trim()),
-      importantInfo: formData.importantInfo.split(',').map(item => item.trim())
-    };
-    // Send data to the backend
-    console.log(dataToSend,"datatosend");
+  const handleEdit = (id) => {
+    navigate(`/home/visa/plans/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    setIsModalOpen(true);
+    setDeletedId(id);
+  };
+
+  const confirmDelete = async () => {
+    // Implement delete API call here
+    try {
+      const response = await fetchDataFromAPI(
+        "DELETE",
+        `${BASE_URL}delete-visa-category/${deletedId}`
+      );
+      console.log(response);
+      if (response) {
+        toast.success("Successfully Deleted");
+        try {
+          const response = await fetchDataFromAPI(
+            "GET",
+            `${BASE_URL}visa-categories`
+          );
+          console.log(response);
+          if (response) {
+            setPlans(response.data);
+            setTotalPages(response.totalPages);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <div className="p-4 w-full max-h-[95%] h-[89%] bg-gray-300 overflow-auto min-h-[89%]">
-      {step === 1 && <StepOne formData={formData} handleChange={handleChange} handleImageChange={handleImageChange} nextStep={nextStep} />}
-      {step === 2 && <StepTwo formData={formData} handleChange={handleFaqChange} nextStep={nextStep} prevStep={prevStep} />}
-      {step === 3 && <StepThree formData={formData} handleChange={handleDocumentsChange} prevStep={prevStep} handleSubmit={handleSubmit} />}
+    <div className="p-4 w-full max-h-[95%] h-[89%] bg-slate-300 overflow-auto min-h-[89%]">
+      <div className="flex justify-center mb-4">
+        <button
+          className={`px-4 py-2 ${
+            activeTab === "add"
+              ? "bg-[#11aaf6] text-white"
+              : "bg-white border border-[#11aaf6] text-[#11aaf6]"
+          } `}
+          onClick={() => setActiveTab("add")}
+        >
+          Add
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            activeTab === "list"
+              ? "bg-[#11aaf6] text-white"
+              : "bg-white border border-[#11aaf6] text-[#11aaf6]"
+          } `}
+          onClick={() => setActiveTab("list")}
+        >
+          List
+        </button>
+      </div>
+      {activeTab === "add" && (
+        <>
+          <h1 className="text-2xl text-blue-500 font-semibold">
+            <h1
+              style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
+              className="text-2xl text-blue-500 font-semibold"
+            >
+              Add Visa
+            </h1>
+          </h1>
+
+          {step === 1 && (
+            <StepOne
+              formData={formData}
+              handleChange={handleChange}
+              handleImageChange={handleImageChange}
+              nextStep={nextStep}
+            />
+          )}
+          {step === 2 && (
+            <StepTwo
+              formData={formData}
+              handleChange={handleFaqChange}
+              nextStep={nextStep}
+              prevStep={prevStep}
+              handleSubmit={handleSubmit}
+            />
+          )}
+        </>
+      )}
+      {activeTab === "list" && (
+        <div className="min-h-[95%] h-[95%] w-full max-h-[95%] ">
+          <div className="min-h-[84%] w-full max-h-[84%] overflow-auto ">
+            <PlanListing
+              data={plans}
+              edit={handleEdit}
+              deleted={handleDelete}
+            />
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
+      {isModalOpen && (
+        <PlanDeleteModal
+          id={deletedId}
+          setIsModalOpen={setIsModalOpen}
+          handleModal={confirmDelete}
+        />
+      )}
     </div>
   );
 };

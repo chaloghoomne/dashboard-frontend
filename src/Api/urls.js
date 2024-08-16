@@ -1,16 +1,16 @@
 // export const BASE_URL='http://localhost:3000/api/v1/'
 
 // export const BASE_URL = "https://bharatapi.catchwoo.com/api/v1/";
-export const BASE_URL = "https://bharatapi.kickrtechnology.in/api/v1/"; 
+export const BASE_URL = "https://api.chaloghoomne.com/api/v1/";
 
 // export const BASE_URL= "https://api.bharatpreneurs.org/api/v1/";
 
 export const NetworkConfig = {
-ADDCONTENT: "/add-content",
+  ADDCONTENT: "/add-content",
   ADMINLOGIN: "admin-login",
-  FORGOTPASSWORD: "email",
-  FORGOTPASSWORDVERIFYOTP: "verify",
-  RESETADMINPASSWORD: "admin-forget-password",
+  FORGOTPASSWORD: "admin-forgot-password",
+  FORGOTPASSWORDVERIFYOTP: "admin-forgot-password",
+  RESETADMINPASSWORD: "admin-change-password",
   ACCEPTEDUSERS: "approved-profiles",
   USERSTATUS: "process-profile",
   REJECTEDUSERS: "rejected-profiles",
@@ -23,7 +23,7 @@ ADDCONTENT: "/add-content",
   UPDATECONTENT: "update-content",
   GETUSERS: "users",
   SEND_NOTIFICATION: "notify-all",
-  GET_POSTS: "get-posts",
+  GET_HEADING_BY_ID: "page-type",
   APPROVED_POSTS: "approved-post",
   REJECTED_POSTS: "rejected-post",
   PROCESS_POST: "process-post",
@@ -72,12 +72,12 @@ ADDCONTENT: "/add-content",
   ADD_EMPLOYEE: "employee",
   GET_SPONSORS: "sponsors",
   GET_SPEAKERS: "sponsors",
-  EMPLOYEE_LIST:"employee",
-  EVENT_LIST:"get-events",
-  EVENT_LIST_DELETE:"event",
-  EMPLOYEE_LIST_DELETE:"employee",
-  EDITEVENT:"event",
-  EDITEMPLOYEE:"employee",
-  APKFILE:"apk",
-  ADD_TICKET:"event-ticket"
+  EMPLOYEE_LIST: "employee",
+  EVENT_LIST: "get-events",
+  EVENT_LIST_DELETE: "event",
+  EMPLOYEE_LIST_DELETE: "employee",
+  EDITEVENT: "event",
+  EDITEMPLOYEE: "employee",
+  APKFILE: "apk",
+  ADD_TICKET: "event-ticket",
 };

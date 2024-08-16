@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import LoginLayoutButton from "../sharedComponents/LoginLayoutButton";
 import Input from "../sharedComponents/Input";
 const SetPasswordPage = () => {
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   const [error, setError] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -55,35 +55,45 @@ const SetPasswordPage = () => {
     }
   };
 
-  const onNewPasswordChange = (e)=>{
-setError((prev)=>({
-  ...prev,
-newPassword:''}))
-setFormData((prev)=>({
-  ...prev,
-  newPassword:e.target.value
-}))
-setError((prev)=>({
-  ...prev,
-  newPassword:validatePassword(e.target.value)?'':"Password must be 0f 8 characters long and include a number, a special character, a small and a capital letter"
-}))
-  }
-  const onConfirmPasswordChange = (e)=>{
-    setError((prev)=>({
+  const onNewPasswordChange = (e) => {
+    setError((prev) => ({
       ...prev,
-    confirmPassword:''}))
-    setFormData((prev)=>({
+      newPassword: "",
+    }));
+    setFormData((prev) => ({
       ...prev,
-      confirmPassword:e.target.value
-    }))
-    setError((prev)=>({
+      newPassword: e.target.value,
+    }));
+    setError((prev) => ({
       ...prev,
-      confirmPassword:e.target.value === formData.newPassword?'':"Passwords do not match"
-    }))
-      }
+      newPassword: validatePassword(e.target.value)
+        ? ""
+        : "Password must be 0f 8 characters long and include a number, a special character, a small and a capital letter",
+    }));
+  };
+  const onConfirmPasswordChange = (e) => {
+    setError((prev) => ({
+      ...prev,
+      confirmPassword: "",
+    }));
+    setFormData((prev) => ({
+      ...prev,
+      confirmPassword: e.target.value,
+    }));
+    setError((prev) => ({
+      ...prev,
+      confirmPassword:
+        e.target.value === formData.newPassword ? "" : "Passwords do not match",
+    }));
+  };
   const onSubmit = async (e) => {
     e.preventDefault();
-    if(!formData.newPassword || !formData.confirmPassword || formData.newPassword !==formData.confirmPassword)return;
+    if (
+      !formData.newPassword ||
+      !formData.confirmPassword ||
+      formData.newPassword !== formData.confirmPassword
+    )
+      return;
     try {
       const response = await fetchDataFromAPI(
         "POST",
@@ -94,53 +104,49 @@ setError((prev)=>({
           confirmPassword: formData.confirmPassword,
         }
       );
-      console.log(response)
+      console.log(response);
       toast.success(response.message);
-      navigate("/login")
+      navigate("/login");
     } catch (error) {
       toast.error(error.message);
     }
   };
   return (
-   <div className="w-full h-full flex justify-center items-center" >
+    <div className="w-full h-full flex justify-center items-center">
       <div className="w-[35%] h-[80%] p-5 bg-white/20 rounded-[100px]">
-    <div  className=" w-full h-full p-5 gap-2 bg-white rounded-[100px] justify-center items-center flex flex-col">
-     <p className="text-3xl text-[#FC6011]">CHANGE PASSWORD</p>
-      <p className="text-xl text-[#FC6011] mb-[25px]">Hope you are doing well !</p>
-     
-      
-<input
-  className="border p-1 w-[90%] rounded-lg focus:outline-none border-[#FC6011]"
-          placeholder="Password"
-        value={formData.newPassword}
-        onClick={() => togglePasswordVisibility("new")}
-        type={passwordVisible.new ? "text" : "password"}
-        onChange={onNewPasswordChange}
-      />
-      <input
-        className="border p-1 w-[90%] rounded-lg focus:outline-none border-[#FC6011]"
-          placeholder=" Confirm Password"
-        value={formData.confirmPassword}
-        onClick={() => togglePasswordVisibility("confirm")}
-        type={passwordVisible.confirm ? "text" : "password"}
-        onChange={onConfirmPasswordChange}
-       
-      />
-      
-     
-      
-      <button
-        className="bg-[#FC6011] mt-4 rounded-lg text-white p-2 w-[90%]"
-        onClick={onSubmit}
-      >Continue</button>
+        <div className=" w-full h-full p-5 gap-2 bg-white rounded-[100px] justify-center items-center flex flex-col">
+          <p className="text-3xl text-[#3180CA]">CHANGE PASSWORD</p>
+          <p className="text-xl text-[#3180CA] mb-[25px]">
+            Hope you are doing well !
+          </p>
 
-      
-      
-    </div>
-    </div>
+          <input
+            className="border p-1 w-[90%] rounded-lg focus:outline-none border-[#3180CA]"
+            placeholder="Password"
+            value={formData.newPassword}
+            onClick={() => togglePasswordVisibility("new")}
+            type={passwordVisible.new ? "text" : "password"}
+            onChange={onNewPasswordChange}
+          />
+          <input
+            className="border p-1 w-[90%] rounded-lg focus:outline-none border-[#3180CA]"
+            placeholder=" Confirm Password"
+            value={formData.confirmPassword}
+            onClick={() => togglePasswordVisibility("confirm")}
+            type={passwordVisible.confirm ? "text" : "password"}
+            onChange={onConfirmPasswordChange}
+          />
+
+          <button
+            className="bg-[#3180CA] mt-4 rounded-lg text-white p-2 w-[90%]"
+            onClick={onSubmit}
+          >
+            Continue
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default SetPasswordPage;
-

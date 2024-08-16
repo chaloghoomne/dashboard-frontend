@@ -77,7 +77,7 @@ const OTPInput = ({
       const id =  localStorage.getItem('id')
       try {
        body = {
-              id:parseInt(id),
+              email:value,
               otp: enteredOTP,
             };
         // if (method === "POST") {
