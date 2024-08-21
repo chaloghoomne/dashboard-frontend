@@ -133,6 +133,16 @@ const SidebarGhoomne = () => {
       ),
       sublist: [
         {
+          subitem: "Pending ",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "pending" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/request/pending",
+        },
+        {
           subitem: "Sent to Immigration ",
           icon: (
             <GoDotFill
@@ -145,26 +155,6 @@ const SidebarGhoomne = () => {
           url: "/home/request/senttoimmigration",
         },
         {
-          subitem: "Rejected ",
-          icon: (
-            <GoDotFill
-              color={activeSublist === "rejected" ? activecolor : "#faa773"}
-              size={20}
-            />
-          ),
-          url: "/home/request/rejected",
-        },
-        {
-          subitem: "Pending ",
-          icon: (
-            <GoDotFill
-              color={activeSublist === "pending" ? activecolor : "#faa773"}
-              size={20}
-            />
-          ),
-          url: "/home/request/pending",
-        },
-        {
           subitem: "Black List ",
           icon: (
             <GoDotFill
@@ -173,6 +163,16 @@ const SidebarGhoomne = () => {
             />
           ),
           url: "/home/request/blacklist",
+        },
+        {
+          subitem: "Approve/Rejected ",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "rejected" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/request/rejected",
         },
       ],
     },

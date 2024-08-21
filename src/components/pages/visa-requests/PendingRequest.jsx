@@ -28,12 +28,12 @@ const PendingRequests = () => {
     fetchPendingRequests();
   }, [currentPage]);
 
-  const handleAction = async (userId, action) => {
+  const handleAction = async (userId, action, data) => {
     try {
       const response = await fetchDataFromAPI(
         "PUT",
         `${BASE_URL}process-visa-order/${userId}`,
-        { status: `${action}` }
+        { status: `${action}`, description: data }
       );
       if (response) {
         toast.success(`${action.toUpperCase()}`);
@@ -62,6 +62,7 @@ const PendingRequests = () => {
       totalPages={totalPages}
       onPageChange={setCurrentPage}
       handleAction={handleAction}
+      type="pending"
     />
   );
 };

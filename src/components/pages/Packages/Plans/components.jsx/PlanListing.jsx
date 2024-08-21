@@ -41,16 +41,16 @@ const PlanListing = ({ data, deleted, edit }) => {
                 Icon
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                Visa-Type
+                Visa Category
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Price
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                Period
+                Stay Period
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                Validity
+                Visa Validity
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Processing Time

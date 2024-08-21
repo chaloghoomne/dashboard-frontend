@@ -70,7 +70,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       <div>
         <label className="block text-sm font-medium text-gray-700">
           {" "}
-          Visa Type
+          Visa Category
         </label>
         <select
           name="tourType"
@@ -79,7 +79,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           required
         >
-          <option value="">Visa Type</option>
+          <option value="">Visa Category</option>
           {tourtypes?.map((tour) => {
             return (
               <>
@@ -90,7 +90,9 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Type</label>
+        <label className="block text-sm font-medium text-gray-700">
+          Visa Placement
+        </label>
         <select
           name="type"
           value={formData.type}
@@ -98,7 +100,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           required
         >
-          <option value="">Select Type</option>
+          <option value="">Select Visa Placement</option>
           <option value="Recommended">Recommended</option>
           <option value="Best">Best</option>
           <option value="Popular">Popular</option>
@@ -122,7 +124,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Period
+          Stay Period
         </label>
         <input
           type="text"
@@ -135,7 +137,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Validity
+          Visa Validity
         </label>
         <input
           type="text"
@@ -172,7 +174,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Insurance Amount
+          Insurance Amount <span className="text-xs">(optional*)</span>
         </label>
         <input
           type="number"
@@ -180,7 +182,6 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           value={formData.insuranceAmount}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
         />
       </div>
       <div>

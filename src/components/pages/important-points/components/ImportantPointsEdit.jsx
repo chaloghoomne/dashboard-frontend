@@ -6,11 +6,13 @@ import { BASE_URL } from "../../../../Api/urls";
 const EditImportantPoints = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [countries, setCountries] = useState();
   const [formData, setFormData] = useState({
-    selectedSection: "Image",
+    type: "",
     image: "",
     heading: "",
     description: "",
+    packageId: "",
     points: [],
   });
   const [newPoint, setNewPoint] = useState("");
@@ -33,6 +35,22 @@ const EditImportantPoints = () => {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
+        console.log(response, "response partners");
+        if (response) {
+          console.log(response.data, "response");
+          setCountries(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, [formData]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -43,7 +61,7 @@ const EditImportantPoints = () => {
   };
 
   const handleAddPoint = () => {
-    if (newPoint.trim() !== "") {
+    if (newPoint) {
       setFormData({ ...formData, points: [...formData.points, newPoint] });
       setNewPoint("");
     }
@@ -53,11 +71,20 @@ const EditImportantPoints = () => {
     e.preventDefault();
     // Submit updated form data to API
     console.log("Updated form data:", formData);
+    const newformData = new FormData();
+    newformData.append("type", formData?.type);
+    newformData.append("heading", formData?.heading);
+    newformData.append("description", formData?.description);
+    formData?.points?.forEach((item, index) => {
+      newformData.append(`points[${index}]`, item);
+    });
+    newformData.append("image", formData?.image);
+    newformData.append("packageId", formData?.packageId);
     try {
       const response = await fetchDataFromAPI(
         "PUT",
         `${BASE_URL}edit-note/${id}`,
-        formData
+        newformData
       );
       console.log(response, "response");
       if (response) {
@@ -74,14 +101,37 @@ const EditImportantPoints = () => {
       <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl mb-4 font-semibold">Edit Important Point</h2>
         <form onSubmit={handleSubmit}>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Country
+            </label>
+            <select
+              name="packageId"
+              value={formData?.packageId}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              required
+            >
+              <option value="">Select Country</option>
+              {countries?.map((country) => {
+                return (
+                  <>
+                    <option value={country?._id}>{country?.country}</option>
+                  </>
+                );
+              })}
+              {/* Fetch and map package options from API */}
+            </select>
+          </div>
           <div className="mb-4">
             <label className="block mb-1 font-semibold">Selector</label>
             <select
-              name="selectedSection"
-              value={formData.selectedSection}
+              name="type"
+              value={formData?.type}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#11aaf6]"
             >
+              <option value="">Select Type</option>
               <option value="Image">Image</option>
               <option value="Personal Details">Personal Details</option>
               <option value="About Package">About Package</option>
@@ -90,12 +140,22 @@ const EditImportantPoints = () => {
 
           <div className="mb-4">
             <label className="block mb-1 font-semibold">Image</label>
+
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
               className="w-full p-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#11aaf6]"
             />
+            {typeof formData?.image === "string" ? (
+              <img src={formData?.image} alt="" className="w-24 h-24" />
+            ) : (
+              <img
+                src={URL.createObjectURL(formData?.image)}
+                alt=""
+                className="w-24 h-24"
+              />
+            )}
           </div>
 
           <div className="mb-4">

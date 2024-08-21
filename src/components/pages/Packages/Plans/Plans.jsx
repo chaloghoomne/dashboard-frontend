@@ -37,7 +37,7 @@ const Plans = () => {
     instantPrice: "",
     instantDays: "",
     faq: [],
-    insuranceAmount: 500,
+    insuranceAmount: "",
   });
   console.log(formData.faq, "faq");
 

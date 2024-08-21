@@ -6,6 +6,7 @@ import ImportantPointsList from "./components/ImportantPointsList";
 import Pagination from "../Packages/components/Pagination";
 import { fetchDataFromAPI } from "../../../Api/fetchData";
 import { BASE_URL, NetworkConfig } from "../../../Api/urls";
+import { toast } from "react-toastify";
 
 const ImportantPoints = () => {
   const [activeTab, setActiveTab] = useState("add");
@@ -49,6 +50,7 @@ const ImportantPoints = () => {
       );
       console.log(response);
       if (response) {
+        toast.success(`Deleted SuccessFully`);
         try {
           const response = await fetchDataFromAPI("GET", `${BASE_URL}notes`);
           console.log(response);

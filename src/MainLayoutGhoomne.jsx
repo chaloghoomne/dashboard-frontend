@@ -24,6 +24,7 @@ import RejectedRequests from "./components/pages/visa-requests/RejectedRequests"
 import PendingRequests from "./components/pages/visa-requests/PendingRequest";
 import AcceptedRequests from "./components/pages/visa-requests/AcceptedRequests";
 import BlackListRequest from "./components/pages/visa-requests/BlackListRequest";
+import ProfileEdit from "./components/pages/EditProfile/ProfileEdit";
 
 const MainlayoutGhoomne = () => {
   return (
@@ -53,7 +54,7 @@ const MainlayoutGhoomne = () => {
         <Route path="/home/request/blacklist" element={<BlackListRequest />} />
         <Route path="/home/request/rejected" element={<RejectedRequests />} />
         <Route path="/home/requests/:id" element={<User />} />
-
+        <Route path="/home/editprofile" element={<ProfileEdit />} />
         <Route path="/home/requests/accepted" element={<AcceptedUser />} />
         <Route path="/home/requests/rejected" element={<RejectedUser />} />
         <Route path="/home/requests/pending" element={<PendingUser />} />

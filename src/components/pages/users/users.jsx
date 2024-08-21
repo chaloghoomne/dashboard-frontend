@@ -4,6 +4,8 @@ import { FaEye, FaTrash } from "react-icons/fa";
 import Pagination from "../Packages/components/Pagination";
 import { fetchDataFromAPI } from "../../../Api/fetchData";
 import { BASE_URL } from "../../../Api/urls";
+import ImportantPointsDeleteModal from "../important-points/components/ImportantDeleteModal";
+import { toast } from "react-toastify";
 
 Modal.setAppElement("#root"); // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 
@@ -17,6 +19,8 @@ const Users = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [users, setUsers] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deletedId, setDeletedId] = useState(null);
   console.log(selectedBookings, "selectedBookings");
 
   useEffect(() => {
@@ -89,6 +93,40 @@ const Users = ({ data }) => {
         {text.substring(0, length)}...
       </span>
     );
+  };
+
+  const confirmDelete = async () => {
+    try {
+      const response = await fetchDataFromAPI(
+        "DELETE",
+        `${BASE_URL}delete-user/${deletedId}`
+      );
+      console.log(response);
+      if (response) {
+        toast.success("Deleted SuccessFully");
+        try {
+          const response = await fetchDataFromAPI(
+            "GET",
+            `${BASE_URL}users?page=${currentPage}`
+          );
+          console.log(response);
+          if (response) {
+            setUsers(response.data);
+            setTotalPages(response.totalPages);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setIsModalOpen(true);
+    setDeletedId(id);
   };
 
   return (
@@ -169,7 +207,10 @@ const Users = ({ data }) => {
                   />
                 </td>
                 <td className="px-6 py-1 items-center  flex justify-center whitespace-nowrap">
-                  <FaTrash className="cursor-pointer text-red-500" />
+                  <FaTrash
+                    onClick={() => handleDelete(user?._id)}
+                    className="cursor-pointer text-red-500"
+                  />
                 </td>
               </tr>
             ))}
@@ -193,7 +234,7 @@ const Users = ({ data }) => {
         <img
           src={selectedImage}
           alt="User"
-          className="w-full h-full object-cover"
+          className=" w-full h-96 object-contain"
         />
       </Modal>
 
@@ -210,61 +251,65 @@ const Users = ({ data }) => {
             ❌
           </button> */}
         </div>
-        <table className="min-w-full divide-y overflow-auto divide-gray-200">
-          <thead className="bg-[#11aaf6] text-center">
-            <tr className="text-center">
-              {[
-                "Booking ID",
-                "Booking Date",
-                "Status",
-                "Insurance",
-                "Travellers Count",
-                "Country",
-                "Application Type",
-                "Total Amount",
-              ].map((heading) => (
-                <th
-                  key={heading}
-                  className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider"
-                >
-                  {heading}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y text-center divide-gray-200">
-            {selectedBookings?.map((booking, index) => (
-              <tr key={index}>
-                <td className="px-6 py-1 whitespace-nowrap">{booking?._id}</td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  {booking?.createdAt?.slice(0, 10)}
-                </td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  {booking?.status}
-                </td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  {booking?.insurance ? (
-                    <span className="text-green-500"> Yes</span>
-                  ) : (
-                    <span className="text-red-600">No</span>
-                  )}
-                </td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  {booking?.travellersCount}
-                </td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  {booking?.country}
-                </td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  {booking?.applicationType}
-                </td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  {Math.floor(booking?.totalAmount)}
-                </td>
+        <div className="max-h-96 overflow-auto">
+          <table className="min-w-full divide-y  overflow-auto divide-gray-200">
+            <thead className="bg-[#11aaf6] text-center">
+              <tr className="text-center">
+                {[
+                  "Booking ID",
+                  "Booking Date",
+                  "Status",
+                  "Insurance",
+                  "Travellers Count",
+                  "Country",
+                  "Application Type",
+                  "Total Amount",
+                ].map((heading) => (
+                  <th
+                    key={heading}
+                    className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    {heading}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y text-center divide-gray-200">
+              {selectedBookings?.map((booking, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?._id}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.createdAt?.slice(0, 10)}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.status}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.insurance ? (
+                      <span className="text-green-500"> Yes</span>
+                    ) : (
+                      <span className="text-red-600">No</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.travellersCount}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.country}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.applicationType}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {Math.floor(booking?.totalAmount)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Modal>
 
       {/* Field Modal */}
@@ -288,6 +333,14 @@ const Users = ({ data }) => {
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
+
+      {isModalOpen && (
+        <ImportantPointsDeleteModal
+          id={deletedId}
+          setIsModalOpen={setIsModalOpen}
+          handleModal={confirmDelete}
+        />
+      )}
     </div>
   );
 };
