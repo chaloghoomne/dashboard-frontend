@@ -70,7 +70,10 @@ const EditPartner = () => {
     newformData.append("title", formData.title);
     newformData.append("link", formData.link);
     newformData.append("image", formData.image);
-    newformData.append("travellersCount", formData.travellersCount);
+    {
+      formData.type === "partners" &&
+        newformData.append("travellersCount", formData.travellersCount);
+    }
 
     try {
       const response = await fetchDataFromAPI(

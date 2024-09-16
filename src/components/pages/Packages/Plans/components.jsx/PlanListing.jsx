@@ -5,9 +5,10 @@ import PlanModal from "./PlanModal";
 import { FaEye } from "react-icons/fa";
 import ShowModalCountry from "../../components/ShowModalCountry";
 
-const PlanListing = ({ data, deleted, edit }) => {
+const PlanListing = ({ data, deleted, edit, view }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFAQ, setSelectedFAQ] = useState(null);
+  const [selectedDocuments, setSelectedDocuments] = useState(null);
   const [fullDescription, setFullDescription] = useState(null);
 
   const handleImageClick = (imageUrl) => {
@@ -22,6 +23,10 @@ const PlanListing = ({ data, deleted, edit }) => {
     setSelectedFAQ(faq);
   };
 
+  const handleDocumentsClick = (documents) => {
+    setSelectedDocuments(documents);
+  };
+
   return (
     <div className="relative w-full h-full">
       <div className="w-full max-h-[90%] overflow-auto min-h-[90%]">
@@ -31,17 +36,22 @@ const PlanListing = ({ data, deleted, edit }) => {
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 S No
               </th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                Country
-              </th>
+              {!view && (
+                <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                  Country
+                </th>
+              )}
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Image
               </th>
+
+              {!view && (
+                <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                  Visa Category
+                </th>
+              )}
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                Icon
-              </th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                Visa Category
+                Visa Type Heading
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Price
@@ -56,20 +66,33 @@ const PlanListing = ({ data, deleted, edit }) => {
                 Processing Time
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                Created At
+                Long Description
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                Actions
+                Documents
               </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                FAQs
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Created At
+              </th>
+              {!view && (
+                <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                  Actions
+                </th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white divide-y text-center divide-gray-200">
             {data?.map((pkg, index) => (
               <tr key={pkg?.id}>
                 <td className="px-6 py-1 whitespace-nowrap">{index + 1}</td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  {pkg?.package?.country}
-                </td>
+                {!view && (
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {pkg?.package?.country}
+                  </td>
+                )}
                 <td className="px-6 py-1 whitespace-nowrap pl-14">
                   <FaEye
                     size={20}
@@ -78,15 +101,15 @@ const PlanListing = ({ data, deleted, edit }) => {
                     onClick={() => handleImageClick(pkg?.image)}
                   />
                 </td>
-                <td className="px-6 py-1 flex justify-center items-center whitespace-nowrap">
-                  <FaEye
-                    size={20}
-                    color="blue"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleImageClick(pkg?.icon)}
-                  />
+
+                {!view && (
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {pkg?.tourType}
+                  </td>
+                )}
+                <td className="px-6 py-1 whitespace-nowrap">
+                  {pkg?.visaTypeHeading}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap">{pkg?.tourType}</td>
                 <td className="px-6 py-1 whitespace-nowrap">₹ {pkg?.price}</td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {pkg?.period} <span className="text-xs">Days</span>
@@ -97,15 +120,40 @@ const PlanListing = ({ data, deleted, edit }) => {
                 <td className="px-6 py-1 whitespace-nowrap">
                   {pkg?.processingTime} <span className="text-xs">Days</span>
                 </td>
+                <td
+                  onClick={() => handleDescriptionClick(pkg?.longDescription)}
+                  className="px-6 cursor-pointer py-1 whitespace-nowrap"
+                >
+                  {pkg?.longDescription?.slice(0, 20)}...{" "}
+                  <span className="text-xs"></span>
+                </td>
+                <td className="px-6 py-1 whitespace-nowrap">
+                  <span
+                    className="text-xs text-blue-400 underline cursor-pointer"
+                    onClick={() => handleDocumentsClick(pkg?.documents)}
+                  >
+                    View Documents
+                  </span>
+                </td>
+                <td className="px-6 py-1 whitespace-nowrap">
+                  <span
+                    className="text-xs text-blue-400 underline cursor-pointer"
+                    onClick={() => handleFAQClick(pkg?.faq)}
+                  >
+                    View FAQs
+                  </span>
+                </td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {pkg?.createdAt?.slice(0, 10)}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap flex justify-center items-center">
-                  <PlanActions
-                    onEdit={() => edit(pkg?._id)}
-                    onDelete={() => deleted(pkg?._id)}
-                  />
-                </td>
+                {!view && (
+                  <td className="px-6 py-1 whitespace-nowrap flex justify-center items-center">
+                    <PlanActions
+                      onEdit={() => edit(pkg?._id)}
+                      onDelete={() => deleted(pkg?._id)}
+                    />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -132,17 +180,55 @@ const PlanListing = ({ data, deleted, edit }) => {
         </ShowModalCountry>
 
         {/* Modal for FAQs */}
-        {/* <PlanModal isOpen={!!selectedFAQ} onClose={() => setSelectedFAQ(null)}>
-          <div>
-            <h2 className="text-xl font-bold mb-4">FAQs</h2>
-            {selectedFAQ?.map((faq, index) => (
-              <div key={index} className="mb-2">
-                <p className="font-semibold">{faq?.question}</p>
-                <p>{faq?.answer}</p>
-              </div>
-            ))}
-          </div>
-        </PlanModal> */}
+        {selectedFAQ && (
+          <PlanModal
+            isOpen={!!selectedFAQ}
+            onClose={() => setSelectedFAQ(null)}
+          >
+            <div className="max-h-96 overflow-y-auto">
+              <h2 className="text-xl font-bold mb-4">FAQs</h2>
+              {selectedFAQ.map((faq, index) => (
+                <div key={index} className="mb-4">
+                  <p className="font-semibold">{faq?.question}</p>
+                  <p onClick={() => handleDescriptionClick(faq?.answer)}>
+                    {faq?.answer?.slice(0, 20)}...
+                    <span className="text-blue-400 cursor-pointer underline">
+                      Read More
+                    </span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </PlanModal>
+        )}
+
+        {/* Modal for Documents */}
+        {selectedDocuments && (
+          <PlanModal
+            isOpen={!!selectedDocuments}
+            onClose={() => setSelectedDocuments(null)}
+          >
+            <div className="max-h-96 w-[80%] overflow-y-auto">
+              <h2 className="text-xl font-bold mb-4">Documents</h2>
+              {selectedDocuments.map((doc, index) => (
+                <div key={index} className="mb-6">
+                  <img
+                    src={doc?.icon}
+                    alt={doc?.name}
+                    className="w-32 h-32 mb-2"
+                  />
+                  <h3 className="font-semibold">{doc?.name}</h3>
+                  <p onClick={() => handleDescriptionClick(doc?.description)}>
+                    {doc?.description?.slice(0, 20)}...
+                    <span className="text-blue-400 cursor-pointer underline">
+                      Read More
+                    </span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </PlanModal>
+        )}
       </div>
     </div>
   );

@@ -36,10 +36,13 @@ const Plans = () => {
     instantHeading: "",
     instantPrice: "",
     instantDays: "",
+    visaTypeHeading: "",
     faq: [],
-    insuranceAmount: "",
+    insuranceAmount: 0,
+    documents: [],
+    longDescription: "",
   });
-  console.log(formData.faq, "faq");
+  // console.log(formData.faq, "faq");
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -73,9 +76,18 @@ const Plans = () => {
     setFormData({ ...formData, [field]: e.target.files[0] });
   };
 
-  const handleFaqChange = (faq) => {
+  const handleFaqChange = (FAQ) => {
+    console.log("faq", FAQ);
+
+    setFormData({ ...formData, faq: FAQ });
+  };
+  const handleDocumentsChange = (docs) => {
+    console.log("docs", docs);
+    setFormData({ ...formData, documents: docs });
+  };
+  const handleLongDescriptionChange = (longDescription) => {
     console.log("hit");
-    setFormData({ ...formData, faq });
+    setFormData({ ...formData, longDescription: longDescription });
   };
 
   const handleSubmit = async () => {
@@ -98,9 +110,17 @@ const Plans = () => {
     newformData.append("instantPrice", formData.instantPrice);
     newformData.append("instantDays", formData.instantDays);
     newformData.append("insuranceAmount", formData.insuranceAmount);
-    formData.faq.forEach((item, index) => {
+    newformData.append("visaTypeHeading", formData.visaTypeHeading);
+    newformData.append("longDescription", formData.longDescription);
+    formData?.faq?.forEach((item, index) => {
       newformData.append(`faq[${index}][question]`, item.question);
       newformData.append(`faq[${index}][answer]`, item.answer);
+    });
+    formData?.documents?.forEach((item, index) => {
+      newformData.append(`documents[${index}][name]`, item.name);
+      newformData.append(`documents[${index}][icon]`, item.icon);
+      newformData.append(`documents[${index}][description]`, item.description);
+      newformData.append(`documents[${index}][show]`, item.show);
     });
     try {
       const response = await fetchDataFromAPI(
@@ -129,7 +149,6 @@ const Plans = () => {
   };
 
   const confirmDelete = async () => {
-    // Implement delete API call here
     try {
       const response = await fetchDataFromAPI(
         "DELETE",
@@ -141,9 +160,9 @@ const Plans = () => {
         try {
           const response = await fetchDataFromAPI(
             "GET",
-            `${BASE_URL}visa-categories`
+            `${BASE_URL}visa-categories?page=${currentPage}`
           );
-          console.log(response);
+          console.log(response, "response partners");
           if (response) {
             setPlans(response.data);
             setTotalPages(response.totalPages);
@@ -205,9 +224,12 @@ const Plans = () => {
             <StepTwo
               formData={formData}
               handleChange={handleFaqChange}
+              handleLongDescriptionChange={handleLongDescriptionChange}
+              handleDocumentsChange={handleDocumentsChange}
               nextStep={nextStep}
               prevStep={prevStep}
               handleSubmit={handleSubmit}
+              setFormData={() => setFormData()}
             />
           )}
         </>

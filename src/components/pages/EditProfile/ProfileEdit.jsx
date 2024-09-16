@@ -77,12 +77,12 @@ const ProfileEdit = () => {
   const handlePasswordChangeSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match");
+      toast.error("New password and confirm password do not match");
       return;
     }
 
     const passwordData = {
-      password: oldPassword,
+      oldPassword,
       newPassword,
       confirmPassword,
     };
@@ -90,10 +90,10 @@ const ProfileEdit = () => {
     try {
       const response = await fetchDataFromAPI(
         "POST",
-        `${BASE_URL}${NetworkConfig.CHANGE_PASSWORD}`,
+        `${BASE_URL}admin-reset-password`,
         passwordData
       );
-      if (response.status === 1) {
+      if (response) {
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");

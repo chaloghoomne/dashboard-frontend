@@ -164,8 +164,17 @@ const Users = ({ data }) => {
               <tr key={user.id}>
                 <td className="px-6 py-1 whitespace-nowrap">{index + 1}</td>
                 <td className="px-6 py-1 whitespace-nowrap">
-                  {truncateText(
-                    `${user?.firstName || ""} ${user?.lastName || ""}`
+                  {user?.firstName ? (
+                    <>
+                      {" "}
+                      {truncateText(
+                        `${user?.firstName || ""} ${user?.lastName || ""}`
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-red-500 cursor-pointer">
+                      Not Updated
+                    </span>
                   )}
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
@@ -187,10 +196,18 @@ const Users = ({ data }) => {
                   {truncateText(user?.occupation)}
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
-                  {truncateText(
-                    `${user?.addressLineOne || ""} ${
-                      user?.addressLineTwo || ""
-                    }`
+                  {user?.addressLineOne ? (
+                    <>
+                      {truncateText(
+                        `${user?.addressLineOne || ""} ${
+                          user?.addressLineTwo || ""
+                        }`
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-red-500 cursor-pointer">
+                      Not Updated
+                    </span>
                   )}
                 </td>
                 <td className="px-6 py-1 items-center flex justify-center whitespace-nowrap">

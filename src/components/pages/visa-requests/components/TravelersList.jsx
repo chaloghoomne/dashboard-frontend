@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import { FaEye, FaTrash, FaCheck, FaTimes, FaDownload } from "react-icons/fa";
-import { MdBlock } from "react-icons/md";
+import { MdAttachEmail, MdBlock } from "react-icons/md";
 import Pagination from "../../Packages/components/Pagination";
 import { fetchDataFromAPI } from "../../../../Api/fetchData";
 import { BASE_URL } from "../../../../Api/urls";
@@ -159,14 +159,16 @@ const UserList = ({
                   {type === "pending" && (
                     <>
                       <FaBackward
-                        className="cursor-pointer text-red-500 mr-2"
+                        className="cursor-pointer text-red-500 mr-4"
                         onClick={() => openActionModal("sent-back", user?._id)}
+                        title="Send Back"
                       />
                       <FaForward
                         className="cursor-pointer text-green-500 mr-2"
                         onClick={() =>
                           handleAction(user?._id, "sent-to-immigration")
                         }
+                        title="Send to Immigration"
                       />
                     </>
                   )}
@@ -175,14 +177,17 @@ const UserList = ({
                       <FaCheck
                         className="cursor-pointer text-green-500 mr-2"
                         onClick={() => openActionModal("approved", user?._id)}
+                        title="Approved"
                       />
                       <FaTimes
                         className="cursor-pointer text-red-500 mr-2"
                         onClick={() => openActionModal("rejected", user?._id)}
+                        title="Rejected"
                       />
                       <MdBlock
                         className="cursor-pointer text-red-500"
                         size={20}
+                        title="BlackList"
                         onClick={() => openActionModal("blacklist", user?._id)}
                       />
                     </>
@@ -193,7 +198,16 @@ const UserList = ({
                       onClick={() =>
                         handleBlockAction(user?._id, "sent-to-immigration")
                       }
+                      title="Sent to Immigration again"
                     />
+                  )}
+                  {type === "draft" && (
+                    <a
+                      href={`mailto:${user?.user?.email}?subject=Your%20Visa%20Booking%20Status`}
+                      title="Send Email"
+                    >
+                      <MdAttachEmail size={22} color="blue" />
+                    </a>
                   )}
                   {type === "approve" && (
                     <MdDelete
@@ -304,11 +318,11 @@ const UserList = ({
                       <div className="flex items-center justify-center">
                         <FaEye
                           className="cursor-pointer"
-                          onClick={() => openImageModal(item?.file)}
+                          onClick={() => openImageModal(item?.image)}
                         />
                         <FaDownload
                           onClick={() =>
-                            downloadImageWithFileSaver(item?.file, item?.name)
+                            downloadImageWithFileSaver(item?.image, item?.name)
                           }
                           className="cursor-pointer ml-2"
                         />

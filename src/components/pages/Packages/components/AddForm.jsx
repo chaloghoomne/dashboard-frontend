@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchDataFromAPI } from "../../../../Api/fetchData";
 import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
 
 const AddForm = ({ handleActive }) => {
+  const [headings, setHeadings] = useState([]);
+  const [descriptions, setDescriptions] = useState([]);
+  const [points, setPoints] = useState([]);
+  const [selectedPoints, setSelectedPoints] = useState([]);
+
   const [formData, setFormData] = useState({
     country: "",
     heading: "",
@@ -14,20 +19,87 @@ const AddForm = ({ handleActive }) => {
     showCoTraveller: "",
     tourTypes: [],
     documents: [],
+    docHeading: "",
+    docDescription: "",
+    docPoints: [],
   });
   const [documents, setDocuments] = useState([]);
-  const handleAddDocument = () => {
-    setDocuments([...documents, { name: "" }]);
+
+  console.log(formData, "select");
+  const handlePointChange = (e, pointItem) => {
+    if (e.target.checked) {
+      // Add the point to selected points
+      setSelectedPoints([...selectedPoints, pointItem.point]);
+    } else {
+      // Remove the point from selected points
+      setSelectedPoints(
+        selectedPoints.filter((point) => point !== pointItem.point)
+      );
+    }
   };
 
   console.log(documents);
 
-  const handleDocumentChange = (index, e) => {
-    const updatedDocuments = documents.map((item, i) =>
-      i === index ? { ...item, [e.target.name]: e.target.value } : item
-    );
-    setDocuments(updatedDocuments);
-  };
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}package-note-by-type/heading`
+        );
+        console.log(response, "response headings");
+        if (response) {
+          setHeadings(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}package-note-by-type/description`
+        );
+        console.log(response, "response descriptions");
+        if (response) {
+          setDescriptions(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}package-note-by-type/point`
+        );
+        console.log(response, "response point");
+        if (response) {
+          setPoints(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
+
+  // const handleDocumentChange = (index, e) => {
+  //   const updatedDocuments = documents.map((item, i) =>
+  //     i === index ? { ...item, [e.target.name]: e.target.value } : item
+  //   );
+  //   setDocuments(updatedDocuments);
+  // };
 
   const handleRemoveDocument = (index) => {
     const updatedDocuments = documents.filter((item, i) => i !== index);
@@ -48,6 +120,24 @@ const AddForm = ({ handleActive }) => {
     const updatedTourTypes = [...formData.tourTypes];
     updatedTourTypes[index] = { ...updatedTourTypes[index], [name]: value };
     setFormData({ ...formData, tourTypes: updatedTourTypes });
+  };
+
+  const handleAddDocument = () => {
+    setDocuments([...documents, { name: "", image: null }]);
+  };
+
+  const handleDocumentChange = (index, e) => {
+    const updatedDocuments = documents.map((item, i) =>
+      i === index ? { ...item, [e.target.name]: e.target.value } : item
+    );
+    setDocuments(updatedDocuments);
+  };
+
+  const handleDocumentImageChange = (index, e) => {
+    const updatedDocuments = documents.map((item, i) =>
+      i === index ? { ...item, image: e.target.files[0] } : item
+    );
+    setDocuments(updatedDocuments);
   };
 
   const handleTourTypeImageChange = (index, e) => {
@@ -72,16 +162,10 @@ const AddForm = ({ handleActive }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(formData, documents, "sdfghjkl");
     e.preventDefault();
 
     if (formData?.tourTypes?.length < 1) {
       toast.error(`Please Add at least One Visa Category`);
-      return;
-    }
-
-    if (documents?.length < 1) {
-      toast.error(`Please Add Documents`);
       return;
     }
 
@@ -91,6 +175,8 @@ const AddForm = ({ handleActive }) => {
     data.append("description", formData.description);
     data.append("price", formData.price);
     data.append("image", formData.image);
+    data.append("docHeading", formData.docHeading);
+    data.append("docDescription", formData.docDescription);
     documents.forEach((item, index) =>
       data.append(`documents[${index}][name]`, item.name)
     );
@@ -100,7 +186,8 @@ const AddForm = ({ handleActive }) => {
       //  data.append(`tourTypes[${index}][tourTypes]`, tourType.image);
     });
     formData.tourTypes.forEach((item) => data.append("tourTypes", item.image));
-
+    documents.forEach((item) => data.append("documents", item.image));
+    selectedPoints.forEach((item) => data.append("docPoints", item));
     try {
       const response = await fetchDataFromAPI(
         "POST",
@@ -277,7 +364,7 @@ const AddForm = ({ handleActive }) => {
           Add Visa Category
         </button>
       </div>
-      <div>
+      {/* <div>
         <h3
           style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
           className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
@@ -288,7 +375,7 @@ const AddForm = ({ handleActive }) => {
           {documents?.map((item, index) => (
             <div
               key={index}
-              className="flex w-full justify-between gap-5 space-y-2 my-2"
+              className="flex flex-col w-full justify-between gap-5 space-y-2 my-2"
             >
               <input
                 type="text"
@@ -299,26 +386,20 @@ const AddForm = ({ handleActive }) => {
                 placeholder="Document Name"
                 required
               />
-              {/* <div>
-  <label className="block text-sm font-medium text-gray-700">Document Icon</label>
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => handleDocumentChangeImage(index, e, 'icon')}
-    className="mt-1 block w-full"
-    required
-  />
-</div> */}
-
-              {/* <input
-              type="text"
-              name="description"
-              value={item.description}
-              onChange={(e) => handleDocumentChange(index, e)}
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="Document Description (comma-separated points)"
-              required
-            /> */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleDocumentImageChange(index, e)}
+                className="mt-1 block w-full"
+                required
+              />
+              {item.image && (
+                <img
+                  src={URL.createObjectURL(item.image)}
+                  alt={item.name}
+                  className="mt-2 w-20 h-20 object-cover"
+                />
+              )}
               <button
                 type="button"
                 onClick={() => handleRemoveDocument(index)}
@@ -337,21 +418,85 @@ const AddForm = ({ handleActive }) => {
           </button>
         </div>
         <div className="flex justify-between">
-          {/* <button
+          <button
           type="button"
           onClick={prevStep}
           className="px-4 py-2 bg-gray-300 text-black rounded-md"
         >
           Back
-        </button> */}
-          {/* <button
+        </button>
+          <button
             onClick={() => handleNext()}
             className="px-4 py-2 mt-5 bg-[#11aaf6] text-white rounded-md"
           >
             Save
-          </button> */}
+          </button>
         </div>
+      </div> */}
+      {/* <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Select Documents Heading
+        </label>
+        <select
+          name="docHeading"
+          value={formData.docHeading}
+          onChange={handleChange}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          required
+        >
+          <option value="">Select Heading</option>
+          {headings?.map((country) => {
+            return (
+              <>
+                <option value={country?.heading}>{country?.heading}</option>
+              </>
+            );
+          })}
+        </select>
       </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Select Documents Description
+        </label>
+        <select
+          name="docDescription"
+          value={formData.docDescription}
+          onChange={handleChange}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          required
+        >
+          <option value="">Select Description</option>
+          {descriptions?.map((country) => {
+            return (
+              <>
+                <option value={country?.description}>
+                  {country?.description}
+                </option>
+              </>
+            );
+          })}
+        </select>
+      </div>
+      <div>
+        <h3 className="block text-sm font-medium text-gray-700">
+          Select Points
+        </h3>
+        {points.map((pointItem, index) => (
+          <div key={index}>
+            <input
+              type="checkbox"
+              id={`point-${index}`}
+              name="docPoints"
+              value={pointItem.point}
+              onChange={(e) => handlePointChange(e, pointItem)}
+              checked={selectedPoints.includes(pointItem.point)}
+              className="mr-2"
+            />
+            <label htmlFor={`point-${index}`}>{pointItem.point}</label>
+          </div>
+        ))}
+      </div> */}
+
       <button
         type="submit"
         className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"

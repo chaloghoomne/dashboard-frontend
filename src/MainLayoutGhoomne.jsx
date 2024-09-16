@@ -25,6 +25,13 @@ import PendingRequests from "./components/pages/visa-requests/PendingRequest";
 import AcceptedRequests from "./components/pages/visa-requests/AcceptedRequests";
 import BlackListRequest from "./components/pages/visa-requests/BlackListRequest";
 import ProfileEdit from "./components/pages/EditProfile/ProfileEdit";
+import Docs from "./components/pages/Packages/documents/Docs";
+import Subscribers from "./components/pages/subscribers/Subscribers";
+import Notifications from "./components/pages/notifications/Notifications";
+import GetNotifications from "./components/pages/notifications/GetNotifications";
+import NotificationSend from "./components/pages/notifications/SendNotificationsUsers";
+import ShowFull from "./components/pages/Packages/components/ShowFull";
+import DraftRequests from "./components/draft-visa-request/DraftRequest";
 
 const MainlayoutGhoomne = () => {
   return (
@@ -60,16 +67,23 @@ const MainlayoutGhoomne = () => {
         <Route path="/home/requests/pending" element={<PendingUser />} />
         <Route path="/home/requests/blocked" element={<BlockedUser />} />
         <Route path="/home/visa/country" element={<Country />} />
+        <Route path="/home/visa/showfull/:id" element={<ShowFull />} />
         <Route path="/home/visa/country/:id" element={<CountryEdit />} />
         <Route path="/home/visa/plans" element={<Plans />} />
+        <Route path="/home/visa/documents" element={<Docs />} />
         <Route path="/home/visa/plans/:id" element={<PlanEdit />} />
         <Route path="/home/headings" element={<HeadingsAdd />} />
+        <Route path="/home/subscriber" element={<Subscribers />} />
         <Route path="/home/important" element={<ImportantPoints />} />
         <Route
           path="/home/important-point/:id"
           element={<EditImportantPoints />}
         />
         <Route path="/home/partners" element={<Partners />} />
+        <Route path="/home/pending" element={<DraftRequests />} />
+        <Route path="/home/notification" element={<Notifications />} />
+        <Route path="/home/getnotification" element={<GetNotifications />} />
+        <Route path="/home/notification/add" element={<NotificationSend />} />
         <Route path="/home/partner/:id" element={<EditPartner />} />
       </Route>
     </Routes>

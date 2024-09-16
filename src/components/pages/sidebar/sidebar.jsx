@@ -7,12 +7,15 @@ import { HiOutlineLightBulb } from "react-icons/hi";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { BiLogOut } from "react-icons/bi";
 import { IoTicketSharp } from "react-icons/io5";
+import { IoMdNotifications } from "react-icons/io";
+
 import { GoDotFill } from "react-icons/go";
 import { MdLabelImportant } from "react-icons/md";
 import { GiThreeFriends } from "react-icons/gi";
 import { LiaHeadingSolid } from "react-icons/lia";
 import { RiGitPullRequestFill } from "react-icons/ri";
 import { FaCcVisa } from "react-icons/fa6";
+import { FaUsersViewfinder } from "react-icons/fa6";
 
 import { fetchDataFromAPI } from "../../../Api/fetchData";
 import { BASE_URL, NetworkConfig } from "../../../Api/urls";
@@ -155,7 +158,7 @@ const SidebarGhoomne = () => {
           url: "/home/request/senttoimmigration",
         },
         {
-          subitem: "Black List ",
+          subitem: "Blacklist Check ",
           icon: (
             <GoDotFill
               color={activeSublist === "blacklist" ? activecolor : "#faa773"}
@@ -204,6 +207,16 @@ const SidebarGhoomne = () => {
           ),
           url: "/home/visa/plans",
         },
+        {
+          subitem: "Documents",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "documents" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/visa/documents",
+        },
       ],
     },
     {
@@ -235,6 +248,39 @@ const SidebarGhoomne = () => {
       icon: (
         <MdLabelImportant
           color={activeItem === "important" ? "white" : "black"}
+          size={20}
+        />
+      ),
+    },
+    {
+      id: 1,
+      name: "Subscribers",
+      to: "/home/subscriber",
+      icon: (
+        <FaUsersViewfinder
+          color={activeItem === "subscriber" ? "white" : "black"}
+          size={20}
+        />
+      ),
+    },
+    {
+      id: 1,
+      name: "Pending  Visa Request ",
+      to: "/home/pending",
+      icon: (
+        <FaCcVisa
+          color={activeItem === "pending" ? "white" : "black"}
+          size={20}
+        />
+      ),
+    },
+    {
+      id: 1,
+      name: "Notifications",
+      to: "/home/notification",
+      icon: (
+        <IoMdNotifications
+          color={activeItem === "notification" ? "white" : "black"}
           size={20}
         />
       ),

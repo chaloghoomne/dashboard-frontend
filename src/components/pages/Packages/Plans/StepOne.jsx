@@ -124,6 +124,19 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
+          Visa Type Heading
+        </label>
+        <input
+          type="text"
+          name="visaTypeHeading"
+          value={formData.visaTypeHeading}
+          onChange={handleChange}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
           Stay Period
         </label>
         <input
@@ -184,7 +197,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         />
       </div>
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700">Icon</label>
         <input
           type="file"
@@ -193,7 +206,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           className="mt-1 bg-white block p-1 w-full"
           required
         />
-      </div>
+      </div> */}
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Image</label>
@@ -211,6 +224,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
         >
           Express Visa Details
+          <span className="text-sm ml-3">(optional*)</span>
         </h3>
         <label className="block text-sm font-medium text-gray-700">
           Express Heading
@@ -221,7 +235,6 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           value={formData.expressHeading}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
         />
       </div>
       <div>
@@ -234,12 +247,11 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           value={formData.expressPrice}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
         />
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Express Days
+          Express Processing Time
         </label>
         <input
           type="text"
@@ -247,7 +259,6 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           value={formData.expressDays}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
         />
       </div>
       <div>
@@ -255,7 +266,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
           className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
         >
-          Instant Visa Details
+          Instant Visa Details <span className="text-sm ml-3">(optional*)</span>
         </h3>
         <label className="block text-sm font-medium text-gray-700">
           Instant Heading
@@ -266,7 +277,6 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           value={formData.instantHeading}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
         />
       </div>
       <div>
@@ -279,12 +289,11 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           value={formData.instantPrice}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
         />
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Instant Days
+          Instant Processing Time
         </label>
         <input
           type="text"
@@ -292,7 +301,6 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           value={formData.instantDays}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
         />
       </div>
 

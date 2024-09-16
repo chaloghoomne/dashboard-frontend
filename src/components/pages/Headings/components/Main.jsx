@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 const Main = ({ type }) => {
   const [title, setTitle] = useState("");
+  const [heading, setHeading] = useState("");
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
 
@@ -20,6 +21,7 @@ const Main = ({ type }) => {
           setTitle(response.data.title);
           setDescription(response.data.description);
           setShortDescription(response.data.shortDescription);
+          setHeading(response.data.heading);
         }
       } catch (error) {
         console.log(error);
@@ -34,6 +36,7 @@ const Main = ({ type }) => {
       title: title,
       description: description,
       shortDescription: shortDescription,
+      heading: heading,
     };
     e.preventDefault();
     try {
@@ -72,6 +75,7 @@ const Main = ({ type }) => {
             required
           />
         </div>
+
         <div className="mb-4">
           <label className="block text-gray-700">Description</label>
           <textarea
@@ -86,6 +90,16 @@ const Main = ({ type }) => {
           <textarea
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Heading</label>
+          <input
+            type="text"
+            value={heading}
+            onChange={(e) => setHeading(e.target.value)}
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             required
           />

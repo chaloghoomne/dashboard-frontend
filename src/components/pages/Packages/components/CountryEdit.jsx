@@ -7,6 +7,10 @@ import { toast } from "react-toastify";
 const CountryEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [headings, setHeadings] = useState([]);
+  const [descriptions, setDescriptions] = useState([]);
+  const [points, setPoints] = useState([]);
+  const [selectedPoints, setSelectedPoints] = useState([]);
   const [formData, setFormData] = useState({
     country: "",
     heading: "",
@@ -16,18 +20,122 @@ const CountryEdit = () => {
     tourTypes: [],
     showCoTraveller: "",
     rating: "",
+    docHeading: "",
+    docDescription: "",
+    docPoints: [],
   });
 
   const [documents, setDocuments] = useState([]);
   const handleAddDocument = () => {
-    setDocuments([...documents, { name: "" }]);
+    setDocuments([...documents, { name: "", image: null }]);
+  };
+
+  const handlePointChange = (e, pointItem) => {
+    if (e.target.checked) {
+      // Add the point to selected points
+      setSelectedPoints([...selectedPoints, pointItem.point]);
+    } else {
+      // Remove the point from selected points
+      setSelectedPoints(
+        selectedPoints.filter((point) => point !== pointItem.point)
+      );
+    }
   };
 
   console.log(documents);
 
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}package-note-by-type/heading`
+        );
+        console.log(response, "response headings");
+        if (response) {
+          setHeadings(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}package-note-by-type/description`
+        );
+        console.log(response, "response descriptions");
+        if (response) {
+          setDescriptions(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}package-note-by-type/point`
+        );
+        console.log(response, "response point");
+        if (response) {
+          setPoints(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
+
+  console.log(documents);
+
   const handleDocumentChange = (index, e) => {
-    const updatedDocuments = documents.map((item, i) =>
+    const updatedDocuments = formData.documents.map((item, i) =>
       i === index ? { ...item, [e.target.name]: e.target.value } : item
+    );
+    setFormData({ ...formData, documents: updatedDocuments });
+    // const { name, value } = e.target;
+    // const updatedTourTypes = [...formData.documents];
+    // updatedTourTypes[index] = { ...updatedTourTypes[index], [name]: value };
+    // setFormData({ ...formData, documents: updatedTourTypes });
+  };
+
+  const handleDocumentImageChange = async (index, e) => {
+    const data = new FormData();
+    data.append("documents", e.target.files[0]);
+    data.append("index", index);
+
+    try {
+      const response = await fetchDataFromAPI(
+        "PUT",
+        `${BASE_URL}document-image/${id}`,
+        data
+      );
+      if (response) {
+        const updatedTourTypes = [...formData.documents];
+        updatedTourTypes[index] = {
+          ...updatedTourTypes[index],
+          image: response.data,
+        };
+        setFormData({ ...formData, documents: updatedTourTypes });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error In Updating ");
+    }
+    const updatedDocuments = documents.map((item, i) =>
+      i === index ? { ...item, image: e.target.files[0] } : item
     );
     setDocuments(updatedDocuments);
   };
@@ -50,14 +158,23 @@ const CountryEdit = () => {
           description: response.data.description,
           price: response.data.price,
           image: response.data.image,
+          // docPoints: response.data.docPoints,
+          docDescription: response.data.docDescription,
+          docHeading: response.data.docHeading,
+
           // showCoTraveller: response.data.showCoTraveller,
           // rating: response.data.rating,
           tourTypes: response.data.tourTypes.map((tourType) => ({
             name: tourType.name,
             image: tourType.image,
           })),
+          documents: response.data.documents.map((doc) => ({
+            name: doc.name,
+            image: doc.image,
+          })),
         });
         setDocuments(response.data.documents);
+        setSelectedPoints(response.data.docPoints);
       } catch (error) {
         console.log(error);
       }
@@ -127,15 +244,19 @@ const CountryEdit = () => {
     data.append("price", formData.price);
     data.append("image", formData.image);
 
-    documents.forEach((item, index) =>
-      data.append(`documents[${index}][name]`, item.name)
-    );
+    formData.documents.forEach((item, index) => {
+      data.append(`documents[${index}][name]`, item.name);
+      data.append(`documents[${index}][image]`, item.image);
+    });
     // data.append("rating", formData.rating);
     // data.append("showCoTraveller", formData.showCoTraveller);
     formData.tourTypes.forEach((tourType, index) => {
       data.append(`tourTypes[${index}][name]`, tourType.name);
       data.append(`tourTypes[${index}][image]`, tourType.image);
     });
+    data.append("docHeading", formData.docHeading);
+    data.append("docDescription", formData.docDescription);
+    selectedPoints.forEach((item) => data.append("docPoints", item));
     // formData.tourTypes.forEach((item) => {
     //   if (typeof item.image === "string") {
     //     console.log("");
@@ -229,7 +350,7 @@ const CountryEdit = () => {
               src={
                 typeof formData?.image === "string"
                   ? formData?.image
-                  : URL.createObjectURL(formData.image)
+                  : URL.createObjectURL(formData?.image)
               }
               alt="Current"
               className="mt-2 w-20 h-20 object-cover"
@@ -327,7 +448,7 @@ const CountryEdit = () => {
             Add Visa Category
           </button>
         </div>
-        <div>
+        {/* <div>
           <h3
             style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
             className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
@@ -335,10 +456,10 @@ const CountryEdit = () => {
             Visa Documents
           </h3>
           <div className="space-y-2">
-            {documents?.map((item, index) => (
+            {formData?.documents?.map((item, index) => (
               <div
                 key={index}
-                className="flex w-full justify-between gap-5 space-y-2 my-2"
+                className="flex flex-col w-full justify-between gap-5 space-y-2 my-2"
               >
                 <input
                   type="text"
@@ -349,26 +470,23 @@ const CountryEdit = () => {
                   placeholder="Document Name"
                   required
                 />
-                {/* <div>
-  <label className="block text-sm font-medium text-gray-700">Document Icon</label>
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => handleDocumentChangeImage(index, e, 'icon')}
-    className="mt-1 block w-full"
-    required
-  />
-</div> */}
-
-                {/* <input
-              type="text"
-              name="description"
-              value={item.description}
-              onChange={(e) => handleDocumentChange(index, e)}
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="Document Description (comma-separated points)"
-              required
-            /> */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleDocumentImageChange(index, e)}
+                  className="mt-1 block w-full"
+                />
+                {item.image && (
+                  <img
+                    src={
+                      typeof item?.image === "string"
+                        ? item?.image
+                        : URL.createObjectURL(item?.image)
+                    }
+                    alt={item.name}
+                    className="mt-2 w-20 h-20 object-cover"
+                  />
+                )}
                 <button
                   type="button"
                   onClick={() => handleRemoveDocument(index)}
@@ -387,21 +505,84 @@ const CountryEdit = () => {
             </button>
           </div>
           <div className="flex justify-between">
-            {/* <button
+            <button
           type="button"
           onClick={prevStep}
           className="px-4 py-2 bg-gray-300 text-black rounded-md"
         >
           Back
-        </button> */}
-            {/* <button
+        </button>
+            <button
             onClick={() => handleNext()}
             className="px-4 py-2 mt-5 bg-[#11aaf6] text-white rounded-md"
           >
             Save
-          </button> */}
+          </button>
           </div>
+        </div> */}
+        {/* <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Select Documents Heading
+          </label>
+          <select
+            name="docHeading"
+            value={formData.docHeading}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="">Select Heading</option>
+            {headings?.map((country) => {
+              return (
+                <>
+                  <option value={country?.heading}>{country?.heading}</option>
+                </>
+              );
+            })}
+          </select>
         </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Select Documents Description
+          </label>
+          <select
+            name="docDescription"
+            value={formData.docDescription}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="">Select Description</option>
+            {descriptions?.map((country) => {
+              return (
+                <>
+                  <option value={country?.description}>
+                    {country?.description}
+                  </option>
+                </>
+              );
+            })}
+          </select>
+        </div>
+        <div>
+          <h3 className="block text-sm font-medium text-gray-700">
+            Select Points
+          </h3>
+          {points.map((pointItem, index) => (
+            <div key={index}>
+              <input
+                type="checkbox"
+                id={`point-${index}`}
+                name="docPoints"
+                value={pointItem.point}
+                onChange={(e) => handlePointChange(e, pointItem)}
+                checked={selectedPoints.includes(pointItem.point)}
+                className="mr-2"
+              />
+              <label htmlFor={`point-${index}`}>{pointItem.point}</label>
+            </div>
+          ))}
+        </div> */}
         <button
           type="submit"
           className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"

@@ -3,13 +3,17 @@ import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import Actions from "./Actions";
 import ShowModalCountry from "./ShowModalCountry";
+import PlanModal from "../Plans/components.jsx/PlanModal";
+import { useNavigate } from "react-router-dom";
 
 const PackageList = ({ data, deleted, edit }) => {
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [isDescriptionModalOpen, setDescriptionModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState({});
   const [description, setDescription] = useState("");
-
+  const [selectedDocuments, setSelectedDocuments] = useState(null);
+  const [showfull, setShowFull] = useState();
+  const navigate = useNavigate();
   const handleImageClick = (imageUrl) => {
     setModalContent({ type: "image", content: imageUrl });
     setImageModalOpen(true);
@@ -18,6 +22,14 @@ const PackageList = ({ data, deleted, edit }) => {
   const handleDescriptionClick = (fullDescription) => {
     setDescription(fullDescription);
     setDescriptionModalOpen(true);
+  };
+
+  const handleDocumentsClick = (documents) => {
+    setSelectedDocuments(documents);
+  };
+
+  const handleAll = (id, tourTypes) => {
+    navigate(`/home/visa/showfull/${id}`, { state: { tourTypes } });
   };
 
   return (
@@ -42,6 +54,12 @@ const PackageList = ({ data, deleted, edit }) => {
                 Price
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Visa Categories
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Full Details
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Created At
               </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
@@ -51,7 +69,7 @@ const PackageList = ({ data, deleted, edit }) => {
           </thead>
           <tbody className="bg-white divide-y text-center divide-gray-200">
             {data?.map((pkg, index) => (
-              <tr key={pkg.id}>
+              <tr key={pkg._id}>
                 <td className="px-6 py-1 whitespace-nowrap">{index + 1}</td>
                 <td className="px-6 py-1 whitespace-nowrap">{pkg?.country}</td>
                 <td className="px-6 py-1 whitespace-nowrap flex justify-center items-center">
@@ -79,6 +97,22 @@ const PackageList = ({ data, deleted, edit }) => {
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">{pkg?.price}</td>
                 <td className="px-6 py-1 whitespace-nowrap">
+                  <span
+                    className="text-xs text-blue-400 underline cursor-pointer"
+                    onClick={() => handleDocumentsClick(pkg?.tourTypes)}
+                  >
+                    Visa categories
+                  </span>
+                </td>
+                <td className="px-6 py-1 whitespace-nowrap">
+                  <span
+                    className="text-xs text-blue-400 underline cursor-pointer"
+                    onClick={() => handleAll(pkg._id, pkg?.tourTypes)}
+                  >
+                    view
+                  </span>
+                </td>
+                <td className="px-6 py-1 whitespace-nowrap">
                   {pkg?.createdAt?.slice(0, 10)}
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap flex justify-center items-center">
@@ -91,6 +125,26 @@ const PackageList = ({ data, deleted, edit }) => {
             ))}
           </tbody>
         </table>
+        {selectedDocuments && (
+          <PlanModal
+            isOpen={!!selectedDocuments}
+            onClose={() => setSelectedDocuments(null)}
+          >
+            <div className="max-h-96 w-[80%] overflow-y-auto">
+              <h2 className="text-xl font-bold mb-4">Visa Categories</h2>
+              {selectedDocuments.map((doc, index) => (
+                <div key={index} className="mb-6">
+                  <img
+                    src={doc?.image}
+                    alt={doc?.name}
+                    className="w-32 h-32 mb-2"
+                  />
+                  <h3 className="font-semibold">{doc?.name}</h3>
+                </div>
+              ))}
+            </div>
+          </PlanModal>
+        )}
       </div>
 
       <ShowModalCountry

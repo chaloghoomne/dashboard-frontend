@@ -20,7 +20,10 @@ const AddPackagePage = () => {
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
-        const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}places?page=${currentPage}`
+        );
         console.log(response, "response partners");
         if (response) {
           console.log(response.data, "response");
@@ -56,7 +59,10 @@ const AddPackagePage = () => {
       if (response) {
         toast.success("Successfully Deleted");
         try {
-          const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
+          const response = await fetchDataFromAPI(
+            "GET",
+            `${BASE_URL}places?page=${currentPage}`
+          );
           console.log(response);
           if (response) {
             setPackages(response.data);

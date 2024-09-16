@@ -135,6 +135,7 @@ const EditImportantPoints = () => {
               <option value="Image">Image</option>
               <option value="Personal Details">Personal Details</option>
               <option value="About Package">About Package</option>
+              <option value="Instructions">Instructions</option>
             </select>
           </div>
 
