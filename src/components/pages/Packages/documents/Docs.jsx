@@ -345,6 +345,7 @@ import axios from "axios";
 import { fetchDataFromAPI } from "../../../../Api/fetchData";
 import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
+import PlanEdit from "../Plans/components.jsx/PlanEdit";
 
 const Docs = () => {
   const [documents, setDocuments] = useState([]);
@@ -353,6 +354,7 @@ const Docs = () => {
     name: "",
     icon: null,
     description: "",
+    show:false,
   });
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const [showIconModal, setShowIconModal] = useState(false);
@@ -380,12 +382,13 @@ const Docs = () => {
     data.append("name", formData.name);
     data.append("icon", formData.icon);
     data.append("description", formData.description);
+    data.append("show", false);
 
     if (formData.id) {
       try {
         const response = await fetchDataFromAPI(
           "PUT",
-          `${BASE_URL}edit-document${formData.id}`,
+          `${BASE_URL}edit-document/${formData.id}`,
           data
         );
         console.log(response);
@@ -420,7 +423,7 @@ const Docs = () => {
     try {
       const response = await fetchDataFromAPI(
         "GET",
-        `${BASE_URL}document${id}`
+        `${BASE_URL}document/${id}`
       );
       console.log(response);
       if (response) {
@@ -445,6 +448,7 @@ const Docs = () => {
       );
       console.log(response);
       if (response) {
+        toast.success("Deleted Succesfully")
         fetchDocuments();
       }
     } catch (error) {

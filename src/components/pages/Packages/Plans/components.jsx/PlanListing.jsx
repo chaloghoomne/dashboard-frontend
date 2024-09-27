@@ -7,7 +7,7 @@ import ShowModalCountry from "../../components/ShowModalCountry";
 
 const PlanListing = ({ data, deleted, edit, view }) => {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedFAQ, setSelectedFAQ] = useState(null);
+
   const [selectedDocuments, setSelectedDocuments] = useState(null);
   const [fullDescription, setFullDescription] = useState(null);
 
@@ -19,12 +19,10 @@ const PlanListing = ({ data, deleted, edit, view }) => {
     setFullDescription(description);
   };
 
-  const handleFAQClick = (faq) => {
-    setSelectedFAQ(faq);
-  };
 
   const handleDocumentsClick = (documents) => {
-    setSelectedDocuments(documents);
+    const filtered = documents?.filter((item)=>item.show === true  || item.show === "true" )
+    setSelectedDocuments(filtered);
   };
 
   return (
@@ -71,9 +69,7 @@ const PlanListing = ({ data, deleted, edit, view }) => {
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Documents
               </th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
-                FAQs
-              </th>
+              
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Created At
               </th>
@@ -135,14 +131,7 @@ const PlanListing = ({ data, deleted, edit, view }) => {
                     View Documents
                   </span>
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap">
-                  <span
-                    className="text-xs text-blue-400 underline cursor-pointer"
-                    onClick={() => handleFAQClick(pkg?.faq)}
-                  >
-                    View FAQs
-                  </span>
-                </td>
+                
                 <td className="px-6 py-1 whitespace-nowrap">
                   {pkg?.createdAt?.slice(0, 10)}
                 </td>
@@ -180,27 +169,7 @@ const PlanListing = ({ data, deleted, edit, view }) => {
         </ShowModalCountry>
 
         {/* Modal for FAQs */}
-        {selectedFAQ && (
-          <PlanModal
-            isOpen={!!selectedFAQ}
-            onClose={() => setSelectedFAQ(null)}
-          >
-            <div className="max-h-96 overflow-y-auto">
-              <h2 className="text-xl font-bold mb-4">FAQs</h2>
-              {selectedFAQ.map((faq, index) => (
-                <div key={index} className="mb-4">
-                  <p className="font-semibold">{faq?.question}</p>
-                  <p onClick={() => handleDescriptionClick(faq?.answer)}>
-                    {faq?.answer?.slice(0, 20)}...
-                    <span className="text-blue-400 cursor-pointer underline">
-                      Read More
-                    </span>
-                  </p>
-                </div>
-              ))}
-            </div>
-          </PlanModal>
-        )}
+       
 
         {/* Modal for Documents */}
         {selectedDocuments && (

@@ -34,6 +34,7 @@ const PlanEdit = () => {
     insuranceAmount: 0,
     longDescription: "",
     documents: [],
+    childPrice:""
   });
 
   const [step, setStep] = useState(1);
@@ -42,7 +43,7 @@ const PlanEdit = () => {
   const [faqs, setFaqs] = useState([]);
   const [documents, setDocuments] = useState([]);
   console.log(formData, "formData");
-
+  console.log(documents,"jkjkjk")
   useEffect(() => {
     const fetchPackageData = async () => {
       const packageData = await fetchDataFromAPI(
@@ -83,10 +84,10 @@ const PlanEdit = () => {
   console.log(documents, "vvv");
 
   const handleDocumentSelect = (index) => {
-    const updatedDocuments = documents?.map((doc, i) =>
+    const updatedDocuments = formData?.documents?.map((doc, i) =>
       i === index ? { ...doc, show: !doc.show } : doc
     );
-    setDocuments(updatedDocuments);
+    // setDocuments(updatedDocuments);
     setFormData({ ...formData, documents: updatedDocuments });
     // setSelectedDocuments(selected);
   };
@@ -173,6 +174,7 @@ const PlanEdit = () => {
     //     data.append(key, formData[key]);
     //   }
     // });
+
     const newformData = new FormData();
 
     newformData.append("package", formData.package);
@@ -183,15 +185,16 @@ const PlanEdit = () => {
     newformData.append("validity", formData.validity);
     newformData.append("processingTime", formData.processingTime);
     newformData.append("price", formData.price);
+    newformData.append("childPrice", formData.childPrice);
     newformData.append("icon", formData.icon);
     newformData.append("image", formData.image);
-    newformData.append("expressHeading", formData.expressHeading);
-    newformData.append("expressPrice", formData.expressPrice);
-    newformData.append("expressDays", formData.expressDays);
-    newformData.append("instantHeading", formData.instantHeading);
-    newformData.append("instantPrice", formData.instantPrice);
-    newformData.append("instantDays", formData.instantDays);
-    newformData.append("insuranceAmount", formData.insuranceAmount);
+    { formData.expressHeading && newformData.append("expressHeading", formData.expressHeading);}
+    { formData.expressPrice && newformData.append("expressPrice", formData.expressPrice);}
+{  formData.expressDays &&   newformData.append("expressDays", formData.expressDays);}
+    {  formData.instantHeading  &&newformData.append("instantHeading", formData.instantHeading);}
+{  formData.instantPrice &&  newformData.append("instantPrice", formData.instantPrice);}
+  { formData.instantDays &&  newformData.append("instantDays", formData.instantDays);}
+  {  newformData.append("insuranceAmount", formData.insuranceAmount);}
     newformData.append("visaTypeHeading", formData.visaTypeHeading);
     newformData.append("longDescription", formData.longDescription);
     formData?.faq?.forEach((item, index) => {
@@ -363,11 +366,22 @@ const PlanEdit = () => {
               />
             </div>
             <div>
+        <label className="block text-sm font-medium text-gray-700"> Child Price</label>
+        <input
+          type="number"
+          name="childPrice"
+          value={formData.childPrice}
+          onChange={handleChange}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+        
+        />
+      </div>
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Insurance Amount
               </label>
               <input
-                type="number"
+                type="text"
                 name="insuranceAmount"
                 value={formData.insuranceAmount}
                 onChange={handleChange}
@@ -417,6 +431,13 @@ const PlanEdit = () => {
               )}
             </div>
             <div>
+            <h3
+          style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
+          className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
+        >
+          Express Visa Details
+          <span className="text-sm ml-3">(optional*)</span>
+        </h3>
               <label className="block text-sm font-medium text-gray-700">
                 Express Heading
               </label>
@@ -426,7 +447,7 @@ const PlanEdit = () => {
                 value={formData.expressHeading}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+             
               />
             </div>
             <div>
@@ -439,7 +460,7 @@ const PlanEdit = () => {
                 value={formData.expressPrice}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+            
               />
             </div>
             <div>
@@ -452,10 +473,16 @@ const PlanEdit = () => {
                 value={formData.expressDays}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+           
               />
             </div>
             <div>
+            <h3
+          style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
+          className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
+        >
+          Instant Visa Details <span className="text-sm ml-3">(optional*)</span>
+        </h3>
               <label className="block text-sm font-medium text-gray-700">
                 Instant Heading
               </label>
@@ -465,7 +492,7 @@ const PlanEdit = () => {
                 value={formData.instantHeading}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+        
               />
             </div>
             <div>
@@ -478,7 +505,7 @@ const PlanEdit = () => {
                 value={formData.instantPrice}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+              
               />
             </div>
             <div>
@@ -491,7 +518,7 @@ const PlanEdit = () => {
                 value={formData.instantDays}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+            
               />
             </div>
             <button
@@ -504,7 +531,7 @@ const PlanEdit = () => {
         )}
         {step === 2 && (
           <form onSubmit={handleNext} className="space-y-4">
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               {formData.faq.map((item, index) => (
                 <div key={index} className="flex space-x-2">
                   <input
@@ -541,12 +568,12 @@ const PlanEdit = () => {
               >
                 Add FAQ
               </button>
-            </div>
+            </div> */}
             <div className="space-y-4">
               <h2 className="text-xl font-bold text-blue-500">
                 Select Documents to Show
               </h2>
-              {documents.map((doc, index) => (
+              {formData?.documents.map((doc, index) => (
                 <div key={doc.id} className="flex items-center space-x-2">
                   <input
                     type="checkbox"

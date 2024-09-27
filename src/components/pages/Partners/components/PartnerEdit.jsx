@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../../Api/urls";
 import { fetchDataFromAPI } from "../../../../Api/fetchData";
+import { toast } from "react-toastify";
 
 const EditPartner = () => {
   const { id } = useParams();
@@ -63,6 +64,14 @@ const EditPartner = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(formData.title?.length > 30 ){
+      toast.error("you can add title upto 30 characters")
+      return;
+          }
+          if(!formData?.link.includes("http")){
+            toast.error("Enter a valid Link")
+            return;
+                }
     // Submit updated form data to API
     const newformData = new FormData();
     newformData.append("type", formData.type);
@@ -83,6 +92,7 @@ const EditPartner = () => {
       );
       console.log(response, "response");
       if (response) {
+        toast.success("SuccessFully Updated")
         setFormData(response.data);
         navigate("/home/partners");
       }
@@ -193,7 +203,7 @@ const EditPartner = () => {
           type="submit"
           className="bg-[#11aaf6] text-white px-4 py-2 rounded hover:bg-[#0e8fd3]"
         >
-          Add Partner
+          Update Partner
         </button>
       </form>
     </div>

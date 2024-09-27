@@ -90,7 +90,7 @@ const StepTwo = ({
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <h2 className="text-xl font-bold text-blue-500">FAQ Section</h2>
         {faq.map((item, index) => (
           <div key={index} className="flex space-x-2">
@@ -135,7 +135,7 @@ const StepTwo = ({
         >
           Save FAQ
         </button>
-      </div>
+      </div> */}
 
       <div className="space-y-4">
         <h2 className="text-xl font-bold text-blue-500">
@@ -145,7 +145,7 @@ const StepTwo = ({
           <div key={doc.id} className="flex items-center space-x-2">
             <input
               type="checkbox"
-              checked={doc.show || false}
+              checked={doc.show ? true: false}
               onChange={() => handleDocumentSelect(index)}
             />
             <span>{doc.name}</span>

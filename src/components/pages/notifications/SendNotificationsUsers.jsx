@@ -97,8 +97,8 @@ const NotificationSend = () => {
         }
       );
       console.log(response);
-      if (response.message === "Notifications sent successfully") {
-        toast.success(response.message);
+      if (response) {
+        toast.success("Notifications sent successfully");
         setTitle("");
         setContent("");
         setImage(null);
@@ -205,6 +205,7 @@ const NotificationSend = () => {
                 </p>
                 <input
                   type="file"
+                  accept="image/*"
                   required
                   onChange={(e) => setImage(e.target.files[0])}
                   className="p-2 border rounded-xl border-[#DFEAF2] w-96"

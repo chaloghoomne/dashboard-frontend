@@ -41,6 +41,7 @@ const Plans = () => {
     insuranceAmount: 0,
     documents: [],
     longDescription: "",
+    childPrice:""
   });
   // console.log(formData.faq, "faq");
 
@@ -101,6 +102,7 @@ const Plans = () => {
     newformData.append("validity", formData.validity);
     newformData.append("processingTime", formData.processingTime);
     newformData.append("price", formData.price);
+    newformData.append("childPrice", formData.childPrice);
     newformData.append("icon", formData.icon);
     newformData.append("image", formData.image);
     newformData.append("expressHeading", formData.expressHeading);

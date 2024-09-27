@@ -138,6 +138,7 @@ const Users = ({ data }) => {
               {[
                 "S No",
                 "Name",
+                "Bookings",
                 "Gender",
                 "Phone",
                 "Email",
@@ -147,7 +148,7 @@ const Users = ({ data }) => {
                 "Address",
                 "Image",
 
-                "Bookings",
+               
                 "Delete",
               ].map((heading) => (
                 <th
@@ -176,6 +177,13 @@ const Users = ({ data }) => {
                       Not Updated
                     </span>
                   )}
+                </td>
+                
+                <td className="px-6 py-1 items-center pl-12 justify-center whitespace-nowrap">
+                  <FaEye
+                    className="cursor-pointer"
+                    onClick={() => openBookingsModal(user?._id)}
+                  />
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {truncateText(user?.gender)}
@@ -210,19 +218,13 @@ const Users = ({ data }) => {
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-1 items-center flex justify-center whitespace-nowrap">
+                <td className="px-6 py-1 items-center   justify-center whitespace-nowrap">
                   <FaEye
                     className="cursor-pointer"
                     onClick={() => openImageModal(user?.image)}
                   />
                 </td>
 
-                <td className="px-6 py-1 items-center pl-12 justify-center whitespace-nowrap">
-                  <FaEye
-                    className="cursor-pointer"
-                    onClick={() => openBookingsModal(user?._id)}
-                  />
-                </td>
                 <td className="px-6 py-1 items-center  flex justify-center whitespace-nowrap">
                   <FaTrash
                     onClick={() => handleDelete(user?._id)}

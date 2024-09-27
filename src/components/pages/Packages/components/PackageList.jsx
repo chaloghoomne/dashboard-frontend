@@ -13,10 +13,16 @@ const PackageList = ({ data, deleted, edit }) => {
   const [description, setDescription] = useState("");
   const [selectedDocuments, setSelectedDocuments] = useState(null);
   const [showfull, setShowFull] = useState();
+  const [selectedFAQ, setSelectedFAQ] = useState(null);
   const navigate = useNavigate();
   const handleImageClick = (imageUrl) => {
     setModalContent({ type: "image", content: imageUrl });
     setImageModalOpen(true);
+  };
+
+
+  const handleFAQClick = (faq) => {
+    setSelectedFAQ(faq);
   };
 
   const handleDescriptionClick = (fullDescription) => {
@@ -56,9 +62,14 @@ const PackageList = ({ data, deleted, edit }) => {
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Visa Categories
               </th>
+
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                FAQs
+              </th>
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Full Details
               </th>
+ 
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
                 Created At
               </th>
@@ -96,12 +107,21 @@ const PackageList = ({ data, deleted, edit }) => {
                   )}
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">{pkg?.price}</td>
+                
                 <td className="px-6 py-1 whitespace-nowrap">
                   <span
                     className="text-xs text-blue-400 underline cursor-pointer"
                     onClick={() => handleDocumentsClick(pkg?.tourTypes)}
                   >
                     Visa categories
+                  </span>
+                </td>
+                <td className="px-6 py-1 whitespace-nowrap">
+                  <span
+                    className="text-xs text-blue-400 underline cursor-pointer"
+                    onClick={() => handleFAQClick(pkg?.faq)}
+                  >
+                    View FAQs
                   </span>
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
@@ -146,6 +166,28 @@ const PackageList = ({ data, deleted, edit }) => {
           </PlanModal>
         )}
       </div>
+
+      {selectedFAQ && (
+          <PlanModal
+            isOpen={!!selectedFAQ}
+            onClose={() => setSelectedFAQ(null)}
+          >
+            <div className="max-h-96 overflow-y-auto">
+              <h2 className="text-xl font-bold mb-4">FAQs</h2>
+              {selectedFAQ.map((faq, index) => (
+                <div key={index} className="mb-4">
+                  <p className="font-semibold">{faq?.question}</p>
+                  <p onClick={() => handleDescriptionClick(faq?.answer)}>
+                    {faq?.answer?.slice(0, 20)}...
+                    <span className="text-blue-400 cursor-pointer underline">
+                      Read More
+                    </span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </PlanModal>
+        )}
 
       <ShowModalCountry
         isOpen={isImageModalOpen}

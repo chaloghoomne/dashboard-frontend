@@ -258,6 +258,7 @@ const UserList = ({
                 "Passport Issue Date",
                 "Passport Number",
                 "Gender",
+                "Age Group",
                 "Mother's Name",
                 "Father's Name",
               ].map((heading) => (
@@ -302,6 +303,9 @@ const UserList = ({
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {booking?.gender}
+                </td>
+                <td className="px-6 py-1 whitespace-nowrap">
+                  {booking?.ageGroup}
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {booking?.motherName}

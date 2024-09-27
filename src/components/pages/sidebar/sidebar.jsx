@@ -180,6 +180,17 @@ const SidebarGhoomne = () => {
       ],
     },
     {
+      id: 1,
+      name: "Draft  Visa Request ",
+      to: "/home/pending",
+      icon: (
+        <FaCcVisa
+          color={activeItem === "pending" ? "white" : "black"}
+          size={20}
+        />
+      ),
+    },
+    {
       id: 3,
       name: "Visa",
       to: "/home/visa/country",
@@ -263,17 +274,7 @@ const SidebarGhoomne = () => {
         />
       ),
     },
-    {
-      id: 1,
-      name: "Pending  Visa Request ",
-      to: "/home/pending",
-      icon: (
-        <FaCcVisa
-          color={activeItem === "pending" ? "white" : "black"}
-          size={20}
-        />
-      ),
-    },
+   
     {
       id: 1,
       name: "Notifications",

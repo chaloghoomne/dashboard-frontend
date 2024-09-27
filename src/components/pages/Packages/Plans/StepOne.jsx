@@ -186,11 +186,22 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
         />
       </div>
       <div>
+        <label className="block text-sm font-medium text-gray-700"> Child Price</label>
+        <input
+          type="number"
+          name="childPrice"
+          value={formData.childPrice}
+          onChange={handleChange}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+      
+        />
+      </div>
+      <div>
         <label className="block text-sm font-medium text-gray-700">
           Insurance Amount <span className="text-xs">(optional*)</span>
         </label>
         <input
-          type="number"
+          type="text"
           name="insuranceAmount"
           value={formData.insuranceAmount}
           onChange={handleChange}

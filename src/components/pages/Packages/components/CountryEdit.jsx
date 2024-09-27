@@ -11,6 +11,7 @@ const CountryEdit = () => {
   const [descriptions, setDescriptions] = useState([]);
   const [points, setPoints] = useState([]);
   const [selectedPoints, setSelectedPoints] = useState([]);
+  const [faq, setFaq] = useState([]);
   const [formData, setFormData] = useState({
     country: "",
     heading: "",
@@ -172,9 +173,13 @@ const CountryEdit = () => {
             name: doc.name,
             image: doc.image,
           })),
+          faq: response?.data?.faq?.map((doc) => ({
+            question: doc.question,
+            answer: doc.answer,
+          })),
         });
-        setDocuments(response.data.documents);
-        setSelectedPoints(response.data.docPoints);
+        setFaq(response?.data?.faq);
+        setSelectedPoints(response?.data?.docPoints);
       } catch (error) {
         console.log(error);
       }
@@ -237,6 +242,8 @@ const CountryEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
     const data = new FormData();
     data.append("country", formData.country);
     data.append("heading", formData.heading);
@@ -253,6 +260,10 @@ const CountryEdit = () => {
     formData.tourTypes.forEach((tourType, index) => {
       data.append(`tourTypes[${index}][name]`, tourType.name);
       data.append(`tourTypes[${index}][image]`, tourType.image);
+    });
+    formData?.faq?.forEach((item, index) => {
+      data.append(`faq[${index}][question]`, item.question);
+      data.append(`faq[${index}][answer]`, item.answer);
     });
     data.append("docHeading", formData.docHeading);
     data.append("docDescription", formData.docDescription);
@@ -279,6 +290,30 @@ const CountryEdit = () => {
       toast.error("Error In Updating ");
     }
   };
+
+  const handleAddQuestion = () => {
+    setFaq([...faq, { question: "", answer: "" }]);
+  };
+
+  const handleQuestionChange = (index, e) => {
+    const updatedFaq = faq.map((item, i) =>
+      i === index ? { ...item, [e.target.name]: e.target.value } : item
+    );
+    setFaq(updatedFaq);
+  };
+
+  const handleRemoveQuestion = (index) => {
+    const updatedFaq = faq.filter((item, i) => i !== index);
+    setFaq(updatedFaq);
+  };
+
+
+  const saveFaq = () => {
+    setFormData({...formData,faq});
+    
+    toast.success(`Faq Saved SuccessFully!  `);
+  };
+
 
   return (
     <div className="min-h-[95%] w-full bg-slate-300 p-6 max-h-[95%] overflow-auto">
@@ -583,6 +618,54 @@ const CountryEdit = () => {
             </div>
           ))}
         </div> */}
+
+
+<div className="space-y-2">
+        <h2 className="text-xl font-bold text-blue-500">FAQ Section</h2>
+        {faq?.map((item, index) => (
+          <div key={index} className="flex space-x-2">
+            <input
+              type="text"
+              name="question"
+              value={item.question}
+              onChange={(e) => handleQuestionChange(index, e)}
+              className="block w-1/2 p-2 border border-gray-300 rounded-md"
+              placeholder="Question"
+              required
+            />
+            <input
+              type="text"
+              name="answer"
+              value={item.answer}
+              onChange={(e) => handleQuestionChange(index, e)}
+              className="block w-1/2 p-2 border border-gray-300 rounded-md"
+              placeholder="Answer"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => handleRemoveQuestion(index)}
+              className="text-red-500 hover:text-red-700"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={handleAddQuestion}
+          className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"
+        >
+          Add FAQ
+        </button>
+        <button
+          type="button"
+          onClick={saveFaq}
+          className="px-4 py-2 bg-blue-500 ml-5 text-black rounded-md"
+        >
+          Save FAQ
+        </button>
+      </div>
         <button
           type="submit"
           className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"

@@ -39,6 +39,14 @@ const AddPartnerForm = ({ handleActive }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(formData.title?.length > 30 ){
+toast.error("you can add title upto 30 characters")
+return;
+    }
+    if(!formData?.link.includes("http")){
+      toast.error("Enter a valid Link")
+      return;
+          }
     if (validateForm()) {
       const newformData = new FormData();
       newformData.append("type", formData.type);
