@@ -98,7 +98,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           value={formData.type}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
+       
         >
           <option value="">Select Visa Placement</option>
           <option value="Recommended">Recommended</option>
@@ -137,26 +137,28 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Stay Period
+          Stay Period <span className="text-xs">(number)</span>
         </label>
         <input
           type="text"
           name="period"
           value={formData.period}
           onChange={handleChange}
+          placeholder="60 "
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           required
         />
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Visa Validity
+          Visa Validity <span className="text-xs">(number)</span>
         </label>
         <input
           type="text"
           name="validity"
           value={formData.validity}
           onChange={handleChange}
+            placeholder="90"
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           required
         />
@@ -170,6 +172,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           name="processingTime"
           value={formData.processingTime}
           onChange={handleChange}
+              placeholder="3 To 5 "
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           required
         />
@@ -220,7 +223,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       </div> */}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Image</label>
+        <label className="block text-sm font-medium text-gray-700">Image <span className="text-xs">(1230*450px)</span></label>
         <input
           type="file"
           accept="image/*"
@@ -262,13 +265,14 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Express Processing Time
+          Express Processing Time <span className="text-xs">(number)</span>
         </label>
         <input
           type="text"
           name="expressDays"
           value={formData.expressDays}
           onChange={handleChange}
+          placeholder="3"
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         />
       </div>
@@ -304,13 +308,14 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Instant Processing Time
+          Instant Processing Time <span className="text-xs">(number)</span>
         </label>
         <input
           type="text"
           name="instantDays"
           value={formData.instantDays}
           onChange={handleChange}
+          placeholder="2"
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         />
       </div>

@@ -132,8 +132,8 @@ const Plans = () => {
       );
       console.log(response);
       if (response) {
-        toast.success(" Added successfully");
-        navigate(-1);
+        toast.success("Added successfully");
+       window.location.href =  `/home/visa/plans`;
       }
     } catch (error) {
       console.log(error);

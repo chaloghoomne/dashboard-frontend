@@ -21,7 +21,7 @@ const ModalNotify = ({ show, onClose, content, title }) => {
   return (
     <div className="fixed w-full h-full inset-0 flex items-center justify-center z-50">
       <div className="fixed inset-0 bg-black opacity-50"></div>
-      <div className="bg-white h-full rounded-lg shadow-lg p-6 z-10 min-w-[60%] max-h-[80%]  max-w-lg ">
+      <div className="bg-white h-full rounded-lg shadow-lg p-6 z-10 min-w-[60%] max-h-[80%]  max-w-lg">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">{title}</h2>
           <button
@@ -44,6 +44,7 @@ const ModalNotify = ({ show, onClose, content, title }) => {
                       </th>
                       <th className="py-2 min-w-32 px-4 border-b">Last Name</th>
                       <th className="py-2 min-w-44 px-4 border-b">Email</th>
+                      <th className="py-2 min-w-44 px-4 border-b">Date</th>
                     </>
                   </tr>
                 </thead>

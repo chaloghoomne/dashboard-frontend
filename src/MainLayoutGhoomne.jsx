@@ -32,6 +32,18 @@ import GetNotifications from "./components/pages/notifications/GetNotifications"
 import NotificationSend from "./components/pages/notifications/SendNotificationsUsers";
 import ShowFull from "./components/pages/Packages/components/ShowFull";
 import DraftRequests from "./components/draft-visa-request/DraftRequest";
+import VisaCategories from "./components/pages/Packages/visa category/VisaCategories";
+import RefundPolicy from "./components/pages/refund-policy/RefundPolicy";
+import PrivacyPolicy from "./components/pages/privacy-policy/PrivacyPolicy";
+import AddBlog from "./components/pages/blogs/AddBlog";
+import BlogList from "./components/pages/blogs/BlogList";
+import EditBlog from "./components/pages/blogs/EditBlog";
+import TermsConditions from "./components/pages/terms-condition/TermsConditions";
+import AboutUs from "./components/pages/our-details/About";
+
+import TravelAgentList from "./components/pages/forms/TravelAgentListing";
+import ContactUs from "./components/pages/our-details/Contact";
+import CareerList from "./components/pages/forms/CareerListing";
 
 const MainlayoutGhoomne = () => {
   return (
@@ -67,6 +79,7 @@ const MainlayoutGhoomne = () => {
         <Route path="/home/requests/pending" element={<PendingUser />} />
         <Route path="/home/requests/blocked" element={<BlockedUser />} />
         <Route path="/home/visa/country" element={<Country />} />
+        <Route path="/home/visa/visaCategories" element={<VisaCategories />} />
         <Route path="/home/visa/showfull/:id" element={<ShowFull />} />
         <Route path="/home/visa/country/:id" element={<CountryEdit />} />
         <Route path="/home/visa/plans" element={<Plans />} />
@@ -85,6 +98,17 @@ const MainlayoutGhoomne = () => {
         <Route path="/home/getnotification" element={<GetNotifications />} />
         <Route path="/home/notification/add" element={<NotificationSend />} />
         <Route path="/home/partner/:id" element={<EditPartner />} />
+        <Route path="/home/policies/privacy" element={<PrivacyPolicy />} />
+        <Route path="/home/policies/refund" element={<RefundPolicy />} />
+        <Route path="/home/policies/terms" element={<TermsConditions />} />
+        <Route path="/home/details/about" element={<AboutUs />} />
+        <Route path="/home/details/contact" element={<ContactUs />} />
+        <Route path="/home/forms/career" element={<CareerList />} />
+        <Route path="/home/forms/travel" element={<TravelAgentList />} />
+        <Route path="/home/transaction" element={<RefundPolicy />} />
+        <Route path="/home/blogs" element={<AddBlog />} />
+        <Route path="/home/blog/list" element={<BlogList />} />
+        <Route path="/home/blog/edit/:blogId" element={<EditBlog />} />
       </Route>
     </Routes>
   );

@@ -12,9 +12,11 @@ Modal.setAppElement("#root"); // Make sure to bind modal to your appElement (htt
 const Users = ({ data }) => {
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
   const [bookingsModalIsOpen, setBookingsModalIsOpen] = useState(false);
+  const [transactionsModalIsOpen, setTransactionsModalIsOpen] = useState(false);
   const [fieldModalIsOpen, setFieldModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedBookings, setSelectedBookings] = useState([]);
+  const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [selectedField, setSelectedField] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
@@ -65,6 +67,26 @@ const Users = ({ data }) => {
     setBookingsModalIsOpen(true);
   };
 
+  const openTransactionsModal = async (id) => {
+    try {
+      const response = await fetchDataFromAPI(
+        "GEt",
+        `${BASE_URL}admin-users-transactions/${id}`,
+       
+      );
+      console.log(response, "response transaction");
+      if (response) {
+        
+        setSelectedTransactions(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setTransactionsModalIsOpen(true);
+  };
+
+
   const openFieldModal = (field) => {
     setSelectedField(field);
     setFieldModalIsOpen(true);
@@ -73,6 +95,7 @@ const Users = ({ data }) => {
   const closeModal = () => {
     setImageModalIsOpen(false);
     setBookingsModalIsOpen(false);
+    setTransactionsModalIsOpen(false)
     setFieldModalIsOpen(false);
   };
 
@@ -139,6 +162,7 @@ const Users = ({ data }) => {
                 "S No",
                 "Name",
                 "Bookings",
+                "Transactions",
                 "Gender",
                 "Phone",
                 "Email",
@@ -185,6 +209,12 @@ const Users = ({ data }) => {
                     onClick={() => openBookingsModal(user?._id)}
                   />
                 </td>
+                <td className="px-6 py-1 items-center pl-12 justify-center whitespace-nowrap">
+                  <FaEye
+                    className="cursor-pointer"
+                    onClick={() => openTransactionsModal(user?._id)}
+                  />
+                </td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {truncateText(user?.gender)}
                 </td>
@@ -218,7 +248,7 @@ const Users = ({ data }) => {
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-1 items-center   justify-center whitespace-nowrap">
+                <td className="px-6 py-1 pl-14 items-center   justify-center whitespace-nowrap">
                   <FaEye
                     className="cursor-pointer"
                     onClick={() => openImageModal(user?.image)}
@@ -324,6 +354,70 @@ const Users = ({ data }) => {
                   <td className="px-6 py-1 whitespace-nowrap">
                     {Math.floor(booking?.totalAmount)}
                   </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={transactionsModalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Transactions Modal"
+        className="modal"
+        overlayClassName="modal-overlay"
+      >
+        <div>
+          {/* <button onClick={closeModal} className="close-modal-btn">
+            ❌
+          </button> */}
+        </div>
+        <div className="max-h-96 overflow-auto">
+          <table className="min-w-full divide-y  overflow-auto divide-gray-200">
+            <thead className="bg-[#11aaf6] text-center">
+              <tr className="text-center">
+                {[
+                  "Transaction ID",
+                  "Transaction Date",
+                  "Amount",
+                  "Status",
+                  "Receipt Id",
+                    "Order Id"
+                 
+                ].map((heading) => (
+                  <th
+                    key={heading}
+                    className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    {heading}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y text-center divide-gray-200">
+              {selectedTransactions?.map((booking, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?._id}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.createdAt?.slice(0, 10)}
+                  </td>
+                  
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.amount}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.status}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.orderId}
+                  </td>
+                  <td className="px-6 py-1 whitespace-nowrap">
+                    {booking?.receiptId}
+                  </td>
+                  
                 </tr>
               ))}
             </tbody>

@@ -346,9 +346,11 @@ import { fetchDataFromAPI } from "../../../../Api/fetchData";
 import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
 import PlanEdit from "../Plans/components.jsx/PlanEdit";
+import Loader from "../../../Loader/Loader";
 
 const Docs = () => {
   const [documents, setDocuments] = useState([]);
+  const [showLoader,setShowLoader] = useState(false)
   const [formData, setFormData] = useState({
     id: null,
     name: "",
@@ -377,6 +379,7 @@ const Docs = () => {
   };
 
   const handleSubmit = async (e) => {
+    setShowLoader(true)
     e.preventDefault();
     const data = new FormData();
     data.append("name", formData.name);
@@ -394,6 +397,16 @@ const Docs = () => {
         console.log(response);
         if (response) {
           toast.success(" Updated  successfully");
+          setShowLoader(false)
+          try {
+            const response = await fetchDataFromAPI("GET", `${BASE_URL}documents`);
+            console.log(response, "response descriptions");
+            if (response) {
+              setDocuments(response.data);
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -467,7 +480,10 @@ const Docs = () => {
   };
 
   return (
-    <div className="container mx-auto min-h-[89%] overflow-auto bg-slate-300 p-4">
+    <>
+   { showLoader?
+   <Loader />:
+   <div className="container mx-auto min-h-[89%] overflow-auto bg-slate-300 p-4">
       <h1 className="text-2xl font-bold mb-4 text-blue-500">Documents</h1>
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -596,7 +612,9 @@ const Docs = () => {
           </div>
         </div>
       )}
-    </div>
+    </div>}
+    </>
+    
   );
 };
 

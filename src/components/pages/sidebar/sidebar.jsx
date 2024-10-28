@@ -3,12 +3,15 @@ import logo from "../../../assets/logo.jpg";
 import { useNavigate } from "react-router-dom";
 import { RiDashboardFill } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa6";
+import { LiaBlogSolid } from "react-icons/lia";
 import { HiOutlineLightBulb } from "react-icons/hi";
+import { MdContactPhone } from "react-icons/md";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { BiLogOut } from "react-icons/bi";
 import { IoTicketSharp } from "react-icons/io5";
+import { SiGoogleforms } from "react-icons/si";
 import { IoMdNotifications } from "react-icons/io";
-
+import { MdPolicy } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { MdLabelImportant } from "react-icons/md";
 import { GiThreeFriends } from "react-icons/gi";
@@ -219,6 +222,16 @@ const SidebarGhoomne = () => {
           url: "/home/visa/plans",
         },
         {
+          subitem: "Visa Categories",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "visaCategories" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/visa/visaCategories",
+        },
+        {
           subitem: "Documents",
           icon: (
             <GoDotFill
@@ -252,17 +265,17 @@ const SidebarGhoomne = () => {
         />
       ),
     },
-    {
-      id: 1,
-      name: "Important Points",
-      to: "/home/important",
-      icon: (
-        <MdLabelImportant
-          color={activeItem === "important" ? "white" : "black"}
-          size={20}
-        />
-      ),
-    },
+    // {
+    //   id: 1,
+    //   name: "Important Points",
+    //   to: "/home/important",
+    //   icon: (
+    //     <MdLabelImportant
+    //       color={activeItem === "important" ? "white" : "black"}
+    //       size={20}
+    //     />
+    //   ),
+    // },
     {
       id: 1,
       name: "Subscribers",
@@ -274,7 +287,135 @@ const SidebarGhoomne = () => {
         />
       ),
     },
+    {
+      id: 1,
+      name: "Blogs",
+      to: "/home/blogs",
+      icon: (
+        <LiaBlogSolid
+          color={activeItem === "blogs" ? "white" : "black"}
+          size={20}
+        />
+      ),
+    },
+    {
+      id: 3,
+      name: "Policies",
+      to: "/home/policies/privacy",
+      icon: (
+        <MdPolicy color={activeItem === "policies" ? "white" : "black"} size={20} />
+      ),
+      sublist: [
+        {
+          subitem: "Privacy Policy",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "privacy" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/policies/privacy",
+        },
+        {
+          subitem: "Refund Policy",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "refund" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/policies/refund",
+        },
+        {
+          subitem: "Terms Conditions",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "terms" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/policies/terms",
+        },
+       
+      ],
+    },
+    {
+      id: 3,
+      name: "Our Details",
+      to: "/home/details/contact",
+      icon: (
+        <MdContactPhone color={activeItem === "details" ? "white" : "black"} size={20} />
+      ),
+      sublist: [
+        {
+          subitem: "Contact Us",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "contact" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/details/contact",
+        },
+        {
+          subitem: "About Us",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "about" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/details/about",
+        },
+        
+       
+      ],
+    },
+    {
+      id: 3,
+      name: "Forms",
+      to: "/home/forms/career",
+      icon: (
+        <SiGoogleforms color={activeItem === "forms" ? "white" : "black"} size={20} />
+      ),
+      sublist: [
+        {
+          subitem: "Career Listing",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "career" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/forms/career",
+        },
+        {
+          subitem: "Travel Agent Listing",
+          icon: (
+            <GoDotFill
+              color={activeSublist === "travel" ? activecolor : "#faa773"}
+              size={20}
+            />
+          ),
+          url: "/home/forms/travel",
+        },
+        
+       
+      ],
+    },
+    // {
+    //   id: 1,
+    //   name: "Transactions",
+    //   to: "/home/transaction",
+    //   icon: (
+    //     <LiaBlogSolid
+    //       color={activeItem === "transaction" ? "white" : "black"}
+    //       size={20}
+    //     />
+    //   ),
+    // },
    
+
     {
       id: 1,
       name: "Notifications",
