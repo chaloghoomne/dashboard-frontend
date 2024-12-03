@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
     title: '',
     description: '',
     image: null, // New field for the image
-    sections: [{ heading: '', point: [''] }],
+    sections: [{ heading: '', point: [''],summary:[''] }],
     pageType: 'privacy', // Added type field
   });
 
@@ -17,9 +17,14 @@ const PrivacyPolicy = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}page-by-type/privacy`);
+        const sanitizedSections = response.data.data.sections.map((section) => ({
+          ...section,
+          summary: section.summary || [], // Initialize summary as an empty array if missing
+        }));
         setFormData({
           ...response.data.data,
-          pageType: 'privacy', // Ensures the type is set to "privacy"
+          sections:sanitizedSections,
+          pageType: 'privacy',
         });
       } catch (error) {
         console.error('Error fetching privacy policy:', error);
@@ -29,7 +34,7 @@ const PrivacyPolicy = () => {
   }, []);
 
   // Handle form changes
-  const handleInputChange = (e, index = null, pointIndex = null) => {
+  const handleInputChange = (e, index = null, pointIndex = null,summaryIndex=null) => {
     const { name, value, files } = e.target;
 
     if (name === 'image') {
@@ -45,7 +50,7 @@ const PrivacyPolicy = () => {
       });
     } else {
       // Update section heading or point
-      if (pointIndex === null) {
+      if (pointIndex === null && summaryIndex===null) {
         const updatedSections = formData.sections.map((section, i) =>
           i === index ? { ...section, [name]: value } : section
         );
@@ -53,12 +58,26 @@ const PrivacyPolicy = () => {
           ...formData,
           sections: updatedSections,
         });
-      } else {
+      } 
+      else if(pointIndex!=null && summaryIndex===null) {
+        console.log("point")
         const updatedPoints = formData.sections[index].point.map((point, pi) =>
           pi === pointIndex ? value : point
         );
         const updatedSections = formData.sections.map((section, i) =>
           i === index ? { ...section, point: updatedPoints } : section
+        );
+        setFormData({
+          ...formData,
+          sections: updatedSections,
+        });
+      }else{
+        console.log("Summary")
+        const updatedSummary= formData.sections[index].summary.map((summary, pi) =>
+          pi === summaryIndex ? value : summary
+        );
+        const updatedSections = formData.sections.map((section, i) =>
+          i === index ? { ...section, summary: updatedSummary } : section
         );
         setFormData({
           ...formData,
@@ -86,12 +105,35 @@ const PrivacyPolicy = () => {
       sections: updatedSections,
     });
   };
-
   // Remove a point from a section
   const removePoint = (index, pointIndex) => {
     const updatedPoints = formData.sections[index].point.filter((_, pi) => pi !== pointIndex);
     const updatedSections = formData.sections.map((section, i) =>
       i === index ? { ...section, point: updatedPoints } : section
+    );
+    setFormData({
+      ...formData,
+      sections: updatedSections,
+    });
+  };
+
+
+    // Add new Summary in a section
+    const addSummary = (index) => {
+      const updatedSections = formData.sections.map((section, i) =>
+        i === index ? { ...section, summary: [...section.summary, ''] } : section
+      );
+      setFormData({
+        ...formData,
+        sections: updatedSections,
+      });
+    };
+
+  // Remove a Summary from a section
+  const removeSummary = (index, summaryIndex) => {
+    const updatedSummary = formData.sections[index].summary.filter((_, pi) => pi !== summaryIndex);
+    const updatedSections = formData.sections.map((section, i) =>
+      i === index ? { ...section, summary: updatedSummary } : section
     );
     setFormData({
       ...formData,
@@ -111,6 +153,7 @@ const PrivacyPolicy = () => {
     data.append('sections', JSON.stringify(formData.sections)); // Convert sections array to string
 
     try {
+      console.log("Data send : ",data);
       const result = await axios.post(`${BASE_URL}add-page`, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -218,7 +261,6 @@ const PrivacyPolicy = () => {
                 </button>
               </div>
             ))}
-
             {/* Add Point Button */}
             <button
               type="button"
@@ -227,6 +269,38 @@ const PrivacyPolicy = () => {
             >
               Add Point
             </button>
+
+            {/* Summary */}
+            {section?.summary?.map((summary, summaryIndex) => (
+              <div key={summaryIndex} className="mt-4 flex items-center">
+                <label className="block w-full flex flex-col text-blue-600">Summary {summaryIndex + 1}
+                <textarea
+                  value={summary}
+                  onChange={(e) => handleInputChange(e, index,null ,summaryIndex)}
+                  className="mt-2 min-w-full p-2 bg-white border border-gray-700 text-black rounded"
+                  rows="2"
+                  required
+                />
+                </label>
+                {/* Remove Point Button */}
+                <button
+                  type="button"
+                  onClick={() => removeSummary(index, summaryIndex)}
+                  className="ml-4 bg-red-500 hover:bg-red-600 text-xs text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            {/* Add Point Button */}
+            <button
+              type="button"
+              onClick={() => addSummary(index)}
+              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+            >
+              Add Summary
+            </button>
+            
           </div>
         ))}
 
