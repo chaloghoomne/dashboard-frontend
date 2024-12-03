@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import Actions from "./Actions"; // Import modified Actions component
 import PlanModal from "../Plans/components.jsx/PlanModal"; // Modal component
@@ -17,7 +17,7 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
   const [selectedDocuments, setSelectedDocuments] = useState(null);
   const [selectedFAQ, setSelectedFAQ] = useState(null);
   const navigate = useNavigate();
-
+  console.log("asdfghjkl;", data);
   const handleImageClick = (imageUrl) => {
     setModalContent({ type: "image", content: imageUrl });
     setImageModalOpen(true);
@@ -40,12 +40,19 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
     navigate(`/home/visa/showfull/${id}`, { state: { tourTypes } });
   };
 
+  useEffect(() => {
+    setPackages(data);
+  }, [data]);
+
   const handleRankChange = async (id, rank) => {
     try {
       const result = await axios.put(`${BASE_URL}rank-package/${id}`, { rank });
       if (result) {
         toast.success("Rank Updated Successfully");
-        const response = await fetchDataFromAPI("GET", `${BASE_URL}places?page=1`);
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}places?page=1`
+        );
         if (response) {
           setPackages(response.data);
         }
@@ -62,32 +69,62 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
           <thead className="bg-[#11aaf6] text-center">
             <tr className="text-center">
               {/* Table Headers */}
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">S No</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Country</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Image</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Description</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Price</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Visa Categories</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">FAQs</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Full Details</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Rank</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Created At</th>
-              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                S No
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Country
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Description
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Price
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Visa Categories
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                FAQs
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Full Details
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Rank
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Created At
+              </th>
+              <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y text-center divide-gray-200">
             {packages?.map((pkg, index) => (
               <tr key={pkg._id}>
-                <td className="px-6 py-1 whitespace-nowrap">{index + 1}</td>
+                <td className="px-6 py-1 whitespace-nowrap">{pkg?.s_no}</td>
                 <td className="px-6 py-1 whitespace-nowrap">{pkg?.country}</td>
                 <td className="px-6 py-1 whitespace-nowrap flex justify-center items-center">
-                  <FaEye size={20} color="blue" onClick={() => handleImageClick(pkg?.image)} style={{ cursor: "pointer" }} />
+                  <FaEye
+                    size={20}
+                    color="blue"
+                    onClick={() => handleImageClick(pkg?.image)}
+                    style={{ cursor: "pointer" }}
+                  />
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {pkg?.description.length > 20 ? (
                     <>
                       {pkg?.description.slice(0, 20)}...
-                      <button onClick={() => handleDescriptionClick(pkg?.description)} className="text-blue-500 ml-1 underline">
+                      <button
+                        onClick={() => handleDescriptionClick(pkg?.description)}
+                        className="text-blue-500 ml-1 underline"
+                      >
                         Read more
                       </button>
                     </>
@@ -97,22 +134,35 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">{pkg?.price}</td>
                 <td className="px-6 py-1 whitespace-nowrap">
-                  <span className="text-xs text-blue-400 underline cursor-pointer" onClick={() => handleDocumentsClick(pkg?.tourTypes)}>
+                  <span
+                    className="text-xs text-blue-400 underline cursor-pointer"
+                    onClick={() => handleDocumentsClick(pkg?.tourTypes)}
+                  >
                     Visa categories
                   </span>
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
-                  <span className="text-xs text-blue-400 underline cursor-pointer" onClick={() => handleFAQClick(pkg?.faq)}>
+                  <span
+                    className="text-xs text-blue-400 underline cursor-pointer"
+                    onClick={() => handleFAQClick(pkg?.faq)}
+                  >
                     View FAQs
                   </span>
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
-                  <span className="text-xs text-blue-400 underline cursor-pointer" onClick={() => handleAll(pkg._id, pkg?.tourTypes)}>
+                  <span
+                    className="text-xs text-blue-400 underline cursor-pointer"
+                    onClick={() => handleAll(pkg._id, pkg?.tourTypes)}
+                  >
                     view
                   </span>
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
-                  <select value={pkg.rank || ""} onChange={(e) => handleRankChange(pkg._id, e.target.value)} className="border border-gray-300 rounded-md px-2 py-1">
+                  <select
+                    value={pkg.rank || ""}
+                    onChange={(e) => handleRankChange(pkg._id, e.target.value)}
+                    className="border border-gray-300 rounded-md px-2 py-1"
+                  >
                     <option value="">Select Rank</option>
                     {[...Array(30).keys()].map((rank) => (
                       <option key={rank + 1} value={rank + 1}>
@@ -121,9 +171,14 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
                     ))}
                   </select>
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap">{pkg?.createdAt?.slice(0, 10)}</td>
+                <td className="px-6 py-1 whitespace-nowrap">
+                  {pkg?.createdAt?.slice(0, 10)}
+                </td>
                 <td className="px-6 py-1 whitespace-nowrap flex justify-center items-center">
-                  <Actions onEdit={() => edit(pkg?._id)} onDelete={() => deleted(pkg?._id)} />
+                  <Actions
+                    onEdit={() => edit(pkg?._id)}
+                    onDelete={() => deleted(pkg?._id)}
+                  />
                 </td>
               </tr>
             ))}
@@ -132,12 +187,19 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
 
         {/* Modals for Documents, FAQs, Images, and Description */}
         {selectedDocuments && (
-          <PlanModal isOpen={!!selectedDocuments} onClose={() => setSelectedDocuments(null)}>
+          <PlanModal
+            isOpen={!!selectedDocuments}
+            onClose={() => setSelectedDocuments(null)}
+          >
             <div className="max-h-96 w-[80%] overflow-y-auto">
               <h2 className="text-xl font-bold mb-4">Visa Categories</h2>
               {selectedDocuments.map((doc, index) => (
                 <div key={index} className="mb-6">
-                  <img src={doc?.image} alt={doc?.name} className="w-32 h-32 mb-2" />
+                  <img
+                    src={doc?.image}
+                    alt={doc?.name}
+                    className="w-32 h-32 mb-2"
+                  />
                   <h3 className="font-semibold">{doc?.name}</h3>
                 </div>
               ))}
@@ -146,7 +208,10 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
         )}
 
         {selectedFAQ && (
-          <PlanModal isOpen={!!selectedFAQ} onClose={() => setSelectedFAQ(null)}>
+          <PlanModal
+            isOpen={!!selectedFAQ}
+            onClose={() => setSelectedFAQ(null)}
+          >
             <div className="max-h-96 overflow-y-auto">
               <h2 className="text-xl font-bold mb-4">FAQs</h2>
               {selectedFAQ.map((faq, index) => (
@@ -160,15 +225,25 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
         )}
 
         {isImageModalOpen && (
-          <PlanModal isOpen={isImageModalOpen} onClose={() => setImageModalOpen(false)}>
+          <PlanModal
+            isOpen={isImageModalOpen}
+            onClose={() => setImageModalOpen(false)}
+          >
             <div className="flex justify-center items-center">
-              <img src={modalContent?.content} alt="Package Image" className="max-w-full max-h-[80vh]" />
+              <img
+                src={modalContent?.content}
+                alt="Package Image"
+                className="max-w-full max-h-[80vh]"
+              />
             </div>
           </PlanModal>
         )}
 
         {isDescriptionModalOpen && (
-          <PlanModal isOpen={isDescriptionModalOpen} onClose={() => setDescriptionModalOpen(false)}>
+          <PlanModal
+            isOpen={isDescriptionModalOpen}
+            onClose={() => setDescriptionModalOpen(false)}
+          >
             <div className="max-h-96 w-[80%] overflow-y-auto">
               <h2 className="text-xl font-bold mb-4">Description</h2>
               <p>{description}</p>

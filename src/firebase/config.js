@@ -22,7 +22,7 @@ const messaging = getMessaging(app);
 
 const VITE_APP_VAPID_KEY =
   "BGF_EOWSTdrqTErGAr-ORoVfIJY5XdXj279ITME_svm-fTyoLgoBlHcVcLJcr9vyCeLtHmD2I2duSxIfDpqc9Uk";
-console.log(VITE_APP_VAPID_KEY, "VITE_APP_VAPID_KEY/////////////");
+// console.log(VITE_APP_VAPID_KEY, "VITE_APP_VAPID_KEY/////////////");
 
 // export async function generateToken() {
 //   const permission = await Notification.requestPermission();

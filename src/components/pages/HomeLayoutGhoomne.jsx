@@ -55,7 +55,7 @@ function HomeLayoutGhoomne() {
       {/* Sidebar */}
       {show && (
         <div
-          className={`  flex  flex-col min-w-[20%]  max-w-[20%] bg-purple max-h-[100%]  `}
+          className={`flex  flex-col min-w-[20%]  max-w-[20%] bg-purple max-h-[100%]  `}
         >
           <SidebarGhoomne />
         </div>
