@@ -29,6 +29,7 @@ const ImportantPointsList = ({ data, edit, deleted }) => {
         <thead className="bg-[#11aaf6] text-white text-md font-normal">
           <tr className="bg-gray-200">
             <th className="px-4 min-w-32 bg-[#11aaf6] py-2">S No</th>
+            <th className="px-4 min-w-32 bg-[#11aaf6] py-2">Country</th>
             <th className="px-4 min-w-32 bg-[#11aaf6] py-2">Image</th>
             <th className="px-4 min-w-56 bg-[#11aaf6] py-2">Heading</th>
             <th className="px-4 min-w-56 bg-[#11aaf6] py-2">Description</th>
@@ -40,6 +41,7 @@ const ImportantPointsList = ({ data, edit, deleted }) => {
           {data.map((point) => (
             <tr key={point.id} className="border-b text-center">
               <td className="px-4 py-2">{point?.s_no}</td>
+              <td className="px-4 py-2">{point?.packageName}</td>
               <td className="px-4 py-2">
                 <button className="text-blue-500 hover:underline">
                   <FaEye

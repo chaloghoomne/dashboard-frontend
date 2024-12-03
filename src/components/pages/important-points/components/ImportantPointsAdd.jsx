@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchDataFromAPI } from "../../../../Api/fetchData";
 import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
@@ -9,9 +9,27 @@ const AddImportantPoints = ({ handleActive }) => {
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState([]);
   const [newPoint, setNewPoint] = useState("");
+  const [packageId, setPackageId] = useState(null);
+  const [countries, setCountries] = useState();
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
+        console.log(response, "response partners");
+        if (response) {
+          console.log(response.data, "response");
+          setCountries(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
 
   const handleAddPoint = () => {
-    if (newPoint.trim() !== "") {
+    if (newPoint) {
       setPoints([...points, newPoint]);
       setNewPoint("");
     }
@@ -22,9 +40,11 @@ const AddImportantPoints = ({ handleActive }) => {
     formData.append("type", selectedSection);
     formData.append("heading", heading);
     formData.append("description", description);
-    formData.append("points", points);
+    points?.forEach((item, index) => {
+      formData.append(`points[${index}]`, item);
+    });
     formData.append("image", image);
-
+    formData.append("packageId", packageId);
     try {
       const response = await fetchDataFromAPI(
         "POST",
@@ -52,6 +72,28 @@ const AddImportantPoints = ({ handleActive }) => {
         <h1 className="text-2xl text-blue-500  font-semibold">
           Add Important Points
         </h1>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Country
+          </label>
+          <select
+            name="package"
+            value={packageId}
+            onChange={(e) => setPackageId(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="">Select Country</option>
+            {countries?.map((country) => {
+              return (
+                <>
+                  <option value={country?._id}>{country?.country}</option>
+                </>
+              );
+            })}
+            {/* Fetch and map package options from API */}
+          </select>
+        </div>
         <div className="mb-6 flex flex-col">
           <label htmlFor="">Selector</label>{" "}
           <select

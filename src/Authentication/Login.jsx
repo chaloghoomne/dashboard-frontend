@@ -9,12 +9,12 @@ import { IoMdEyeOff } from "react-icons/io";
 import { generateToken } from "../firebase/config";
 
 const LoginPage = () => {
-  console.log("hellooooo")
+  console.log("hellooooo");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [show,setShow] = useState(true)
+  const [show, setShow] = useState(true);
   const [token, setToken] = useState();
   const [error, setError] = useState({
     email: "",
@@ -28,16 +28,16 @@ const LoginPage = () => {
     });
   }, []);
 
-const generateDeviceToken = async()=>{
-   const resp = await generateToken();
-   console.log("resp",resp)
+  const generateDeviceToken = async () => {
+    const resp = await generateToken();
+    console.log("resp", resp);
     const tken = localStorage.getItem("deviceToken");
     setToken(tken);
-}
+  };
 
   useEffect(() => {
-    console.log("asdasd")
-   generateDeviceToken()
+    console.log("asdasd");
+    generateDeviceToken();
   }, []);
 
   const isvalidEmail = (email) => {
@@ -71,8 +71,14 @@ const generateDeviceToken = async()=>{
   };
 
   const validateInputs = () => {
-    const emailError = !formData.email ? "Email field must not be empty" : !isvalidEmail(formData.email) ? "Please enter a valid email" : "";
-    const passwordError = !formData.password ? "Password field must not be empty" : "";
+    const emailError = !formData.email
+      ? "Email field must not be empty"
+      : !isvalidEmail(formData.email)
+      ? "Please enter a valid email"
+      : "";
+    const passwordError = !formData.password
+      ? "Password field must not be empty"
+      : "";
 
     setError({
       email: emailError,
@@ -110,9 +116,8 @@ const generateDeviceToken = async()=>{
         navigate("/home");
       }
     } catch (error) {
-       toast.error("Invalid Credentials");
+      toast.error("Invalid Credentials");
       console.log(error);
-     
     }
   };
 
@@ -122,31 +127,44 @@ const generateDeviceToken = async()=>{
         <div className="w-full h-full p-5 gap-2 bg-white rounded-[100px] justify-center items-center flex flex-col">
           {/* <img src={logo} className="pb-10 w-40" alt="" /> */}
           <div className="flex flex-col w-[90%]  ">
-          <input
-            className="w-full mb-2 border focus:outline-none border-[#9D9D9D] p-2 text-md rounded-lg"
-            placeholder="Email Address"
-            type="text"
-            autoComplete="on"
-            value={formData.email}
-            onChange={handleEmailChange}
-          />
-          {error.email && <span className="text-red-500 relative bottom-3">{error.email}</span>}
+            <input
+              className="w-full mb-2 border focus:outline-none border-[#9D9D9D] p-2 text-md rounded-lg"
+              placeholder="Email Address"
+              type="text"
+              autoComplete="on"
+              value={formData.email}
+              onChange={handleEmailChange}
+            />
+            {error.email && (
+              <span className="text-red-500 relative bottom-3">
+                {error.email}
+              </span>
+            )}
           </div>
           <div className="flex relative rounded-lg  border border-[#9D9D9D] flex-col w-[90%]  ">
-          <input
-            className=" p-2 w-[90%] rounded-lg focus:outline-none "
-            placeholder="Password"
-            type={`${show?"password":"text"}`}
-            autoComplete="on"
-            onChange={handlePasswordChange}
-            value={formData.password}
-          />
-          <div onClick={()=>setShow(!show)} className="absolute cursor-pointer right-3 top-2">
-            {show?<IoMdEyeOff size={22} color="black" />:<IoEye  size={22} color="black"/> }
+            <input
+              className=" p-2 w-[90%] rounded-lg focus:outline-none "
+              placeholder="Password"
+              type={`${show ? "password" : "text"}`}
+              autoComplete="on"
+              onChange={handlePasswordChange}
+              value={formData.password}
+            />
+            <div
+              onClick={() => setShow(!show)}
+              className="absolute cursor-pointer right-3 top-2"
+            >
+              {show ? (
+                <IoMdEyeOff size={22} color="black" />
+              ) : (
+                <IoEye size={22} color="black" />
+              )}
+            </div>
+            {error.password && (
+              <p className="text-red-500 relative bottom-1">{error.password}</p>
+            )}
           </div>
-           {error.password && <p className="text-red-500 relative bottom-1">{error.password}</p>}
-          </div>
-         
+
           <p
             className="text-[#FC6011] relative right-5 text-end self-end cursor-pointer opacity-[100%] text-md z-[2]"
             style={{ opacity: "100%" }}

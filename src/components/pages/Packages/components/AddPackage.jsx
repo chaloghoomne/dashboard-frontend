@@ -17,20 +17,24 @@ const AddPackagePage = () => {
   const [isModalOpen, setIsModelOpen] = useState(false);
   const [deletedId, setDeletedId] = useState("");
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
-        console.log(response, "response partners");
-        if (response) {
-          console.log(response.data, "response");
-          setPackages(response.data);
-          setTotalPages(response.totalPages);
-        }
-      } catch (error) {
-        console.log(error);
+  const fetchProfileImage = async () => {
+    try {
+      const response = await fetchDataFromAPI(
+        "GET",
+        `${BASE_URL}places?page=${currentPage}`
+      );
+      console.log(response, "response partners");
+      if (response) {
+        console.log(response.data, "response");
+        setPackages(response.data);
+        setTotalPages(response.totalPages);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     fetchProfileImage();
   }, [currentPage, activeTab]);
 
@@ -56,7 +60,10 @@ const AddPackagePage = () => {
       if (response) {
         toast.success("Successfully Deleted");
         try {
-          const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
+          const response = await fetchDataFromAPI(
+            "GET",
+            `${BASE_URL}places?page=${currentPage}`
+          );
           console.log(response);
           if (response) {
             setPackages(response.data);
@@ -120,6 +127,7 @@ const AddPackagePage = () => {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
+            fetchPackages={fetchProfileImage}
           />
         </div>
       )}

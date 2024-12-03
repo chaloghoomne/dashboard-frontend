@@ -62,7 +62,11 @@ const PartnersList = ({ data, edit, deleted }) => {
               </td>
               <td className="px-4 py-2">{partner?.type}</td>
               <td className="px-4 py-2">{partner?.link}</td>
-              <td className="px-4 py-2">{partner?.travellersCount}</td>
+              <td className="px-4 py-2">
+                {partner?.travellersCount
+                  ? partner?.travellersCount
+                  : "Not Required"}
+              </td>
               <td className="px-4 py-2">
                 <button
                   onClick={() => edit(partner._id)}

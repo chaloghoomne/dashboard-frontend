@@ -28,7 +28,9 @@ const BlackListRequest = () => {
     };
     fetchAcceptedRequests();
   }, [currentPage]);
+
   const handleAction = async (userId, action) => {
+    console.log(userId, "sdfghjk");
     try {
       const response = await fetchDataFromAPI(
         "PUT",
@@ -40,7 +42,7 @@ const BlackListRequest = () => {
         try {
           const response = await fetchDataFromAPI(
             "GET",
-            `${BASE_URL}visa-orders?page=${currentPage}&status=pending`
+            `${BASE_URL}visa-orders?page=${currentPage}&status=blacklist`
           );
           if (response) {
             setUsers(response.data);
@@ -61,7 +63,7 @@ const BlackListRequest = () => {
       currentPage={currentPage}
       totalPages={totalPages}
       type="blackList"
-      handleAction={handleAction}
+      handleBlockAction={handleAction}
       onPageChange={setCurrentPage}
     />
   );

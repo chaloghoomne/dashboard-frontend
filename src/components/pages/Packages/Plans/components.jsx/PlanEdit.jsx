@@ -29,15 +29,21 @@ const PlanEdit = () => {
     instantHeading: "",
     instantPrice: "",
     instantDays: "",
+    visaTypeHeading: "",
     faq: [],
-    insuranceAmount: "",
+    insuranceAmount: 0,
+    longDescription: "",
+    documents: [],
+    childPrice:""
   });
 
   const [step, setStep] = useState(1);
   const [countries, setCountries] = useState([]);
   const [tourtypes, setTourtypes] = useState([]);
   const [faqs, setFaqs] = useState([]);
-
+  const [documents, setDocuments] = useState([]);
+  console.log(formData, "formData");
+  console.log(documents,"jkjkjk")
   useEffect(() => {
     const fetchPackageData = async () => {
       const packageData = await fetchDataFromAPI(
@@ -46,9 +52,60 @@ const PlanEdit = () => {
       );
       console.log("package data", packageData);
       setFormData(packageData.data);
+      setDocuments(packageData?.data?.documents);
     };
 
     fetchPackageData();
+  }, []);
+
+  useEffect(() => {
+    // Create a copy of the second documents array
+    console.log();
+    const updatedDocs2 = documents.map((doc2, index) => {
+      // Find the corresponding document from the first documents array
+      const correspondingDoc1 = formData?.documents.find(
+        (doc1) => doc1.name === doc2.name
+      );
+      console.log(correspondingDoc1, "nnn");
+      // If a corresponding document is found, update the "show" key
+      if (correspondingDoc1) {
+        return {
+          ...doc2,
+          show: correspondingDoc1.show,
+        };
+      }
+      return doc2;
+    });
+
+    // Update the state with the modified documents2 array
+    setDocuments(updatedDocs2);
+  }, []);
+
+  console.log(documents, "vvv");
+
+  const handleDocumentSelect = (index) => {
+    const updatedDocuments = formData?.documents?.map((doc, i) =>
+      i === index ? { ...doc, show: !doc.show } : doc
+    );
+    // setDocuments(updatedDocuments);
+    setFormData({ ...formData, documents: updatedDocuments });
+    // setSelectedDocuments(selected);
+  };
+
+  const fetchDocuments = async () => {
+    try {
+      const response = await fetchDataFromAPI("GET", `${BASE_URL}documents`);
+      console.log(response, "response descriptions");
+      if (response) {
+        setDocuments(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDocuments();
   }, []);
 
   useEffect(() => {
@@ -105,24 +162,57 @@ const PlanEdit = () => {
   };
 
   const handleSubmit = async () => {
-    const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (key === "faq" || key === "tourTypes") {
-        formData[key].forEach((item, index) => {
-          Object.keys(item).forEach((subKey) => {
-            data.append(`${key}[${index}][${subKey}]`, item[subKey]);
-          });
-        });
-      } else {
-        data.append(key, formData[key]);
-      }
+    // const data = new FormData();
+    // Object.keys(formData).forEach((key) => {
+    //   if (key === "faq" || key === "tourTypes") {
+    //     formData[key].forEach((item, index) => {
+    //       Object.keys(item).forEach((subKey) => {
+    //         data.append(`${key}[${index}][${subKey}]`, item[subKey]);
+    //       });
+    //     });
+    //   } else {
+    //     data.append(key, formData[key]);
+    //   }
+    // });
+
+    const newformData = new FormData();
+
+    newformData.append("package", formData.package);
+    newformData.append("tourType", formData.tourType);
+    newformData.append("type", formData.type);
+    newformData.append("entryType", formData.entryType);
+    newformData.append("period", formData.period);
+    newformData.append("validity", formData.validity);
+    newformData.append("processingTime", formData.processingTime);
+    newformData.append("price", formData.price);
+    newformData.append("childPrice", formData.childPrice);
+    newformData.append("icon", formData.icon);
+    newformData.append("image", formData.image);
+    { formData.expressHeading && newformData.append("expressHeading", formData.expressHeading);}
+    { formData.expressPrice && newformData.append("expressPrice", formData.expressPrice);}
+{  formData.expressDays &&   newformData.append("expressDays", formData.expressDays);}
+    {  formData.instantHeading  &&newformData.append("instantHeading", formData.instantHeading);}
+{  formData.instantPrice &&  newformData.append("instantPrice", formData.instantPrice);}
+  { formData.instantDays &&  newformData.append("instantDays", formData.instantDays);}
+  {  newformData.append("insuranceAmount", formData.insuranceAmount);}
+    newformData.append("visaTypeHeading", formData.visaTypeHeading);
+    newformData.append("longDescription", formData.longDescription);
+    formData?.faq?.forEach((item, index) => {
+      newformData.append(`faq[${index}][question]`, item.question);
+      newformData.append(`faq[${index}][answer]`, item.answer);
+    });
+    formData?.documents?.forEach((item, index) => {
+      newformData.append(`documents[${index}][name]`, item.name);
+      newformData.append(`documents[${index}][icon]`, item.icon);
+      newformData.append(`documents[${index}][description]`, item.description);
+      newformData.append(`documents[${index}][show]`, item.show);
     });
 
     try {
       const response = await fetchDataFromAPI(
         "PUT",
         `${BASE_URL}edit-visa-category/${id}`,
-        data
+        newformData
       );
       if (response) {
         toast.success("Package updated successfully");
@@ -212,7 +302,20 @@ const PlanEdit = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Period
+                Visa Type Heading
+              </label>
+              <input
+                type="text"
+                name="visaTypeHeading"
+                value={formData.visaTypeHeading}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Stay Period
               </label>
               <input
                 type="text"
@@ -225,7 +328,7 @@ const PlanEdit = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Validity
+                Visa Validity
               </label>
               <input
                 type="text"
@@ -263,19 +366,29 @@ const PlanEdit = () => {
               />
             </div>
             <div>
+        <label className="block text-sm font-medium text-gray-700"> Child Price</label>
+        <input
+          type="number"
+          name="childPrice"
+          value={formData.childPrice}
+          onChange={handleChange}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+        
+        />
+      </div>
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Insurance Amount
               </label>
               <input
-                type="number"
+                type="text"
                 name="insuranceAmount"
                 value={formData.insuranceAmount}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
               />
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">
                 Icon
               </label>
@@ -295,7 +408,7 @@ const PlanEdit = () => {
                   className="w-32 object-cover h-32"
                 />
               )}
-            </div>
+            </div> */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Image
@@ -318,6 +431,13 @@ const PlanEdit = () => {
               )}
             </div>
             <div>
+            <h3
+          style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
+          className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
+        >
+          Express Visa Details
+          <span className="text-sm ml-3">(optional*)</span>
+        </h3>
               <label className="block text-sm font-medium text-gray-700">
                 Express Heading
               </label>
@@ -327,7 +447,7 @@ const PlanEdit = () => {
                 value={formData.expressHeading}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+             
               />
             </div>
             <div>
@@ -340,7 +460,7 @@ const PlanEdit = () => {
                 value={formData.expressPrice}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+            
               />
             </div>
             <div>
@@ -353,10 +473,16 @@ const PlanEdit = () => {
                 value={formData.expressDays}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+           
               />
             </div>
             <div>
+            <h3
+          style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
+          className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
+        >
+          Instant Visa Details <span className="text-sm ml-3">(optional*)</span>
+        </h3>
               <label className="block text-sm font-medium text-gray-700">
                 Instant Heading
               </label>
@@ -366,7 +492,7 @@ const PlanEdit = () => {
                 value={formData.instantHeading}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+        
               />
             </div>
             <div>
@@ -379,7 +505,7 @@ const PlanEdit = () => {
                 value={formData.instantPrice}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+              
               />
             </div>
             <div>
@@ -392,7 +518,7 @@ const PlanEdit = () => {
                 value={formData.instantDays}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
+            
               />
             </div>
             <button
@@ -405,7 +531,7 @@ const PlanEdit = () => {
         )}
         {step === 2 && (
           <form onSubmit={handleNext} className="space-y-4">
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               {formData.faq.map((item, index) => (
                 <div key={index} className="flex space-x-2">
                   <input
@@ -442,6 +568,37 @@ const PlanEdit = () => {
               >
                 Add FAQ
               </button>
+            </div> */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold text-blue-500">
+                Select Documents to Show
+              </h2>
+              {formData?.documents.map((doc, index) => (
+                <div key={doc.id} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={
+                      doc.show === "true" || doc.show === true ? true : false
+                    }
+                    onChange={() => handleDocumentSelect(index)}
+                  />
+                  <span>{doc.name}</span>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-bold text-blue-500">
+                Long Description
+              </h2>
+              <textarea
+                name="longDescription"
+                value={formData?.longDescription}
+                onChange={(e) => handleChange(e)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Enter the long description here..."
+                rows="4"
+                required
+              ></textarea>
             </div>
             <div className="flex justify-between">
               <button

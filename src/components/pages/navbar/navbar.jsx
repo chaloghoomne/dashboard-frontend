@@ -44,7 +44,7 @@ const Navbar = ({ handlesidebar }) => {
         );
         console.log(response);
         if (response) {
-          setProfileImageUrl(response.data.profile_url);
+          setProfileImageUrl(response?.data?.profile_url);
         }
       } catch (error) {
         console.log(error);
@@ -62,7 +62,7 @@ const Navbar = ({ handlesidebar }) => {
     } catch (error) {
       console.log(error);
     }
-    navigate(`/home/notifications/users`);
+    navigate(`/home/getnotification`);
   };
 
   return (

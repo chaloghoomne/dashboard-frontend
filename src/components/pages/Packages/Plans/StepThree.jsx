@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const StepThree = ({ formData, handleChange, prevStep, handleSubmit }) => {
   const [documents, setDocuments] = useState(formData.documents);
 
   const handleAddDocument = () => {
-    setDocuments([...documents, { heading: '', icon: '', description: '' }]);
+    setDocuments([...documents, { name: "" }]);
   };
 
-  console.log(documents)
+  console.log(documents);
 
- const handleDocumentChangeImage = (index, e, field) => {
-  const updatedDocuments = documents.map((item, i) =>
-    i === index ? { ...item, [field]: e.target.files[0] } : item
-  );
-  setDocuments(updatedDocuments);
-};
+  // const handleDocumentChangeImage = (index, e, field) => {
+  //   const updatedDocuments = documents.map((item, i) =>
+  //     i === index ? { ...item, [field]: e.target.files[0] } : item
+  //   );
+  //   setDocuments(updatedDocuments);
+  // };
 
   const handleDocumentChange = (index, e) => {
     const updatedDocuments = documents.map((item, i) =>
@@ -22,7 +22,6 @@ const StepThree = ({ formData, handleChange, prevStep, handleSubmit }) => {
     );
     setDocuments(updatedDocuments);
   };
-
 
   const handleRemoveDocument = (index) => {
     const updatedDocuments = documents.filter((item, i) => i !== index);
@@ -49,7 +48,7 @@ const StepThree = ({ formData, handleChange, prevStep, handleSubmit }) => {
               placeholder="Document Heading"
               required
             />
-           <div>
+            {/* <div>
   <label className="block text-sm font-medium text-gray-700">Document Icon</label>
   <input
     type="file"
@@ -58,10 +57,9 @@ const StepThree = ({ formData, handleChange, prevStep, handleSubmit }) => {
     className="mt-1 block w-full"
     required
   />
-</div>
+</div> */}
 
-
-            <input
+            {/* <input
               type="text"
               name="description"
               value={item.description}
@@ -69,7 +67,7 @@ const StepThree = ({ formData, handleChange, prevStep, handleSubmit }) => {
               className="p-2 border border-gray-300 rounded-md"
               placeholder="Document Description (comma-separated points)"
               required
-            />
+            /> */}
             <button
               type="button"
               onClick={() => handleRemoveDocument(index)}
@@ -88,18 +86,18 @@ const StepThree = ({ formData, handleChange, prevStep, handleSubmit }) => {
         </button>
       </div>
       <div className="flex justify-between">
-        <button
+        {/* <button
           type="button"
           onClick={prevStep}
           className="px-4 py-2 bg-gray-300 text-black rounded-md"
         >
           Back
-        </button>
+        </button> */}
         <button
           type="submit"
           className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"
         >
-          Submit
+          Save
         </button>
       </div>
     </form>

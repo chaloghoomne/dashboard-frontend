@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 const CountryEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [headings, setHeadings] = useState([]);
+  const [descriptions, setDescriptions] = useState([]);
+  const [faq, setFaq] = useState([]);
   const [formData, setFormData] = useState({
     country: "",
     heading: "",
@@ -16,34 +19,85 @@ const CountryEdit = () => {
     tourTypes: [],
     showCoTraveller: "",
     rating: "",
+    docHeading: "",
+    docDescription: "",
+    docPoints: [],
   });
 
+  const [visaCategories, setVisaCategories] = useState([]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchDataFromAPI(
-          "GET",
-          `${BASE_URL}place/${id}`
-        );
-        setFormData({
-          country: response.data.country,
-          heading: response.data.heading,
-          description: response.data.description,
-          price: response.data.price,
-          image: response.data.image,
-          showCoTraveller: response.data.showCoTraveller,
-          rating: response.data.rating,
-          tourTypes: response.data.tourTypes.map((tourType) => ({
-            name: tourType.name,
-            image: tourType.image,
-          })),
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
+    fetchHeadings();
+    fetchDescriptions();
+    fetchVisaCategories();
+    fetchPackageData();
   }, [id]);
+
+  const fetchHeadings = async () => {
+    try {
+      const response = await fetchDataFromAPI(
+        "GET",
+        `${BASE_URL}package-note-by-type/heading`
+      );
+      if (response) {
+        setHeadings(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchDescriptions = async () => {
+    try {
+      const response = await fetchDataFromAPI(
+        "GET",
+        `${BASE_URL}package-note-by-type/description`
+      );
+      if (response) {
+        setDescriptions(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchVisaCategories = async () => {
+    try {
+      const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types`);
+      if (response) {
+        setVisaCategories(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchPackageData = async () => {
+    try {
+      const response = await fetchDataFromAPI(
+        "GET",
+        `${BASE_URL}place/${id}`
+      );
+      if (response && response.data) {
+        const { data } = response;
+        setFormData({
+          country: data.country,
+          heading: data.heading,
+          description: data.description,
+          price: data.price,
+          image: data.image,
+          docDescription: data.docDescription,
+          docHeading: data.docHeading,
+          tourTypes: data.tourTypes.map(type => type._id), // Store only IDs
+          faq: data.faq || [],
+        });
+        setFaq(data.faq || []);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error fetching package data");
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,54 +108,35 @@ const CountryEdit = () => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
 
-  const handleTourTypeChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedTourTypes = [...formData.tourTypes];
-    updatedTourTypes[index] = { ...updatedTourTypes[index], [name]: value };
-    setFormData({ ...formData, tourTypes: updatedTourTypes });
-  };
-
-  const handleTourTypeImageChange = (index, e) => {
-    const updatedTourTypes = [...formData.tourTypes];
-    updatedTourTypes[index] = {
-      ...updatedTourTypes[index],
-      image: e.target.files[0],
-    };
-    setFormData({ ...formData, tourTypes: updatedTourTypes });
-  };
-
-  const addTourType = () => {
-    setFormData({
-      ...formData,
-      tourTypes: [...formData.tourTypes, { name: "", image: null }],
-    });
-  };
-
-  const removeTourType = (index) => {
-    const updatedTourTypes = formData.tourTypes.filter((_, i) => i !== index);
+  const handleVisaCategoryChange = (id) => {
+    const updatedTourTypes = formData.tourTypes.includes(id)
+      ? formData.tourTypes.filter(typeId => typeId !== id)
+      : [...formData.tourTypes, id];
+    
     setFormData({ ...formData, tourTypes: updatedTourTypes });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const data = new FormData();
     data.append("country", formData.country);
     data.append("heading", formData.heading);
     data.append("description", formData.description);
     data.append("price", formData.price);
-    data.append("image", formData.image);
-    data.append("rating", formData.rating);
-    data.append("showCoTraveller", formData.showCoTraveller);
-    formData.tourTypes.forEach((tourType, index) => {
-      data.append(`tourTypes[${index}][name]`, tourType.name);
+    if (formData.image instanceof File) {
+      data.append("image", formData.image);
+    }
+
+    formData.tourTypes.forEach((typeId) => {
+      data.append("tourTypes[]", typeId);
     });
-    formData.tourTypes.forEach((item) => {
-      if (typeof item.image === "string") {
-        console.log("");
-      } else {
-        data.append("tourTypes", item.image);
-      }
+
+    formData.faq.forEach((item, index) => {
+      data.append(`faq[${index}][question]`, item.question);
+      data.append(`faq[${index}][answer]`, item.answer);
     });
+
     try {
       const response = await fetchDataFromAPI(
         "PUT",
@@ -111,21 +146,43 @@ const CountryEdit = () => {
       if (response) {
         toast.success("Updated successfully");
         navigate(-1);
+      } else {
+        toast.error("Failed to update");
       }
     } catch (error) {
       console.log(error);
-      alert("Error In Updating ");
+      toast.error("Error in updating");
     }
+  };
+
+  const handleAddQuestion = () => {
+    setFaq([...faq, { question: "", answer: "" }]);
+  };
+
+  const handleQuestionChange = (index, e) => {
+    const updatedFaq = faq.map((item, i) =>
+      i === index ? { ...item, [e.target.name]: e.target.value } : item
+    );
+    setFaq(updatedFaq);
+  };
+
+  const handleRemoveQuestion = (index) => {
+    const updatedFaq = faq.filter((_, i) => i !== index);
+    setFaq(updatedFaq);
+  };
+
+  const saveFaq = () => {
+    setFormData({...formData, faq});
+    toast.success("FAQ saved successfully!");
   };
 
   return (
     <div className="min-h-[95%] w-full bg-slate-300 p-6 max-h-[95%] overflow-auto">
       <h1 className="text-2xl text-blue-500 font-semibold">Edit Package</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Form fields */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Country
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Country</label>
           <input
             type="text"
             name="country"
@@ -173,106 +230,64 @@ const CountryEdit = () => {
             required
           />
         </div>
+        
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Image
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Image</label>
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
             className="mt-1 block w-full"
           />
-          {formData?.image && (
+          {formData.image && (
             <img
-              src={
-                typeof formData?.image === "string"
-                  ? formData?.image
-                  : URL.createObjectURL(formData.image)
-              }
+              src={typeof formData.image === "string" ? formData.image : URL.createObjectURL(formData.image)}
               alt="Current"
               className="mt-2 w-20 h-20 object-cover"
             />
           )}
         </div>
-        {/* <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Rating
-          </label>
-          <input
-            type="number"
-            name="rating"
-            value={formData.rating}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
+        
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-blue-500">Select Visa Categories</h2>
+          {visaCategories.map((item) => (
+            <div key={item._id} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={formData.tourTypes.includes(item._id)}
+                onChange={() => handleVisaCategoryChange(item._id)}
+              />
+              <span>{item.name}</span>
+            </div>
+          ))}
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Show Co-Traveller
-          </label>
-          <select
-            name="showCoTraveller"
-            value={formData.showCoTraveller}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            required
-          >
-            <option value="">Select </option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-          </select>
-        </div> */}
-        <div>
-          <h3 className="text-lg font-medium text-gray-700">
-            {" "}
-            Visa Categories
-          </h3>
-          {formData.tourTypes.map((tourType, index) => (
-            <div
-              key={index}
-              className="mt-4 p-4 border border-gray-300 rounded-md space-y-2"
-            >
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Visa Category Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={tourType.name}
-                  onChange={(e) => handleTourTypeChange(index, e)}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Visa Category Image
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleTourTypeImageChange(index, e)}
-                  className="mt-1 block w-full"
-                />
-                {tourType?.image && (
-                  <img
-                    src={
-                      typeof tourType?.image === "string"
-                        ? tourType?.image
-                        : URL.createObjectURL(tourType?.image)
-                    }
-                    alt={tourType.name}
-                    className="mt-2 w-20 h-20 object-cover"
-                  />
-                )}
-              </div>
+
+        <div className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-500">FAQ Section</h2>
+          {faq.map((item, index) => (
+            <div key={index} className="flex space-x-2">
+              <input
+                type="text"
+                name="question"
+                value={item.question}
+                onChange={(e) => handleQuestionChange(index, e)}
+                className="block w-1/2 p-2 border border-gray-300 rounded-md"
+                placeholder="Question"
+                required
+              />
+              <input
+                type="text"
+                name="answer"
+                value={item.answer}
+                onChange={(e) => handleQuestionChange(index, e)}
+                className="block w-1/2 p-2 border border-gray-300 rounded-md"
+                placeholder="Answer"
+                required
+              />
               <button
                 type="button"
-                onClick={() => removeTourType(index)}
-                className="mt-2 px-4 py-2 bg-red-500 text-white rounded-md"
+                onClick={() => handleRemoveQuestion(index)}
+                className="text-red-500 hover:text-red-700"
               >
                 Remove
               </button>
@@ -280,12 +295,20 @@ const CountryEdit = () => {
           ))}
           <button
             type="button"
-            onClick={addTourType}
-            className="mt-4 px-4 py-2 bg-[#11aaf6] text-white rounded-md"
+            onClick={handleAddQuestion}
+            className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"
           >
-            Add Visa Category
+            Add FAQ
+          </button>
+          <button
+            type="button"
+            onClick={saveFaq}
+            className="px-4 py-2 bg-blue-500 ml-5 text-white rounded-md"
+          >
+            Save FAQ
           </button>
         </div>
+
         <button
           type="submit"
           className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"

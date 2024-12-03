@@ -44,6 +44,7 @@ const RejectedRequests = () => {
       currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={setCurrentPage}
+      type="approve"
     />
   );
 };

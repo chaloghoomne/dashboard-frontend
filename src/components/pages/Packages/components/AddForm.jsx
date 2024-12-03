@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchDataFromAPI } from "../../../../Api/fetchData";
 import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
 
 const AddForm = ({ handleActive }) => {
+  const [headings, setHeadings] = useState([]);
+  const [descriptions, setDescriptions] = useState([]);
+  const [faq, setFaq] = useState([]);
   const [formData, setFormData] = useState({
     country: "",
     heading: "",
@@ -12,8 +15,62 @@ const AddForm = ({ handleActive }) => {
     image: null,
     rating: "",
     showCoTraveller: "",
-    tourTypes: [],
+    tourTypes: [], // Stores selected visa category IDs
+    docHeading: "",
+    docDescription: "",
+    docPoints: [],
+    faq: []
   });
+  const [visaCategories, setVisaCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchHeadings = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}package-note-by-type/heading`
+        );
+        if (response) {
+          setHeadings(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchHeadings();
+  }, []);
+
+  useEffect(() => {
+    const fetchDescriptions = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}package-note-by-type/description`
+        );
+        if (response) {
+          setDescriptions(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDescriptions();
+  }, []);
+
+  useEffect(() => {
+    fetchVisaCategories();
+  }, []);
+
+  const fetchVisaCategories = async () => {
+    try {
+      const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types`);
+      if (response) {
+        setVisaCategories(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,74 +81,82 @@ const AddForm = ({ handleActive }) => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
 
-  const handleTourTypeChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedTourTypes = [...formData.tourTypes];
-    updatedTourTypes[index] = { ...updatedTourTypes[index], [name]: value };
-    setFormData({ ...formData, tourTypes: updatedTourTypes });
-  };
+  const handleVisaCategoryChange = (id) => {
+    const isSelected = formData.tourTypes.includes(id);
 
-  const handleTourTypeImageChange = (index, e) => {
-    const updatedTourTypes = [...formData.tourTypes];
-    updatedTourTypes[index] = {
-      ...updatedTourTypes[index],
-      image: e.target.files[0],
-    };
-    setFormData({ ...formData, tourTypes: updatedTourTypes });
-  };
+    // Add or remove category based on checkbox status
+    const updatedTourTypes = isSelected
+      ? formData.tourTypes.filter((categoryId) => categoryId !== id)
+      : [...formData.tourTypes, id];
 
-  const addTourType = () => {
-    setFormData({
-      ...formData,
-      tourTypes: [...formData.tourTypes, { name: "", image: null }],
-    });
-  };
-
-  const removeTourType = (index) => {
-    const updatedTourTypes = formData.tourTypes.filter((_, i) => i !== index);
     setFormData({ ...formData, tourTypes: updatedTourTypes });
   };
 
   const handleSubmit = async (e) => {
-    console.log(formData);
     e.preventDefault();
+
+    if (formData?.tourTypes?.length < 1) {
+      toast.error(`Please Add at least One Visa Category`);
+      return;
+    }
+
+    const validFaq = faq.filter((item) => item.question.trim() || item.answer.trim());
     const data = new FormData();
     data.append("country", formData.country);
     data.append("heading", formData.heading);
     data.append("description", formData.description);
     data.append("price", formData.price);
     data.append("image", formData.image);
-    data.append("rating", formData.rating);
-    data.append("showCoTraveller", formData.showCoTraveller);
-    formData.tourTypes.forEach((tourType, index) => {
-      data.append(`tourTypes[${index}][name]`, tourType.name);
-      //  data.append(`tourTypes[${index}][tourTypes]`, tourType.image);
+    // data.append("docHeading", formData.docHeading);
+    // data.append("docDescription", formData.docDescription);
+
+    // Append selected visa categories
+    formData.tourTypes.forEach((id) => {
+      data.append("tourTypes[]", id);
     });
-    formData.tourTypes.forEach((item) => data.append("tourTypes", item.image));
+
+    validFaq?.forEach((item, index) => {
+      data.append(`faq[${index}][question]`, item.question);
+      data.append(`faq[${index}][answer]`, item.answer);
+    });
 
     try {
-      const response = await fetchDataFromAPI(
-        "POST",
-        `${BASE_URL}add-place`,
-        data
-      );
-      console.log(response);
+      const response = await fetchDataFromAPI("POST", `${BASE_URL}add-place`, data);
       if (response) {
-        toast.success(" Added successfully");
+        toast.success("Added successfully");
         handleActive("list");
       }
     } catch (error) {
       console.log(error);
-      alert("Error In Adding ");
+      toast.error("Country Already Exist");
     }
+  };
+
+  const handleAddQuestion = () => {
+    setFaq([...faq, { question: "", answer: "" }]);
+  };
+
+  const handleQuestionChange = (index, e) => {
+    const updatedFaq = faq.map((item, i) =>
+      i === index ? { ...item, [e.target.name]: e.target.value } : item
+    );
+    setFaq(updatedFaq);
+  };
+
+  const handleRemoveQuestion = (index) => {
+    const updatedFaq = faq.filter((item, i) => i !== index);
+    setFaq(updatedFaq);
+  };
+
+  const saveFaq = () => {
+    setFormData({ ...formData, faq });
+    toast.success("Faq Saved Successfully!");
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Country
-        </label>
+        <label className="block text-sm font-medium text-gray-700">Country</label>
         <input
           type="text"
           name="country"
@@ -101,10 +166,8 @@ const AddForm = ({ handleActive }) => {
           required
         />
       </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Heading
-        </label>
+      {/* <div>
+        <label className="block text-sm font-medium text-gray-700">Heading</label>
         <input
           type="text"
           name="heading"
@@ -113,11 +176,9 @@ const AddForm = ({ handleActive }) => {
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           required
         />
-      </div>
+      </div> */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Description
-        </label>
+        <label className="block text-sm font-medium text-gray-700">Description</label>
         <textarea
           name="description"
           value={formData.description}
@@ -126,20 +187,22 @@ const AddForm = ({ handleActive }) => {
           required
         />
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700">Price</label>
         <input
-          type="number"
+          type="text"
           name="price"
           value={formData.price}
           onChange={handleChange}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           required
+          pattern="[0-9]*"
         />
       </div>
       <div className="">
-        <label className="block text-sm font-medium text-gray-700">Image</label>
+        <label className="block text-sm font-medium text-gray-700">
+          Image <span className="text-xs">(280*192px)</span>
+        </label>
         <input
           type="file"
           accept="image/*"
@@ -148,84 +211,55 @@ const AddForm = ({ handleActive }) => {
           required
         />
       </div>
-      {/* <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Rating
-        </label>
-        <input
-          type="number"
-          name="rating"
-          value={formData.rating}
-          onChange={handleChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
-        />
-      </div> */}
-      {/* <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Show Co-Traveller
-        </label>
-        <select
-          name="showCoTraveller"
-          value={formData.showCoTraveller}
-          onChange={handleChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          required
-        >
-          <option value="">Select </option>
-          <option value={true}>Yes</option>
-          <option value={false}>No</option>
-        </select>
-      </div> */}
-      <div>
-        <h3
-          style={{ textShadow: "2px 2px 4px rgba(66, 185, 245, 0.5)" }}
-          className="text-2xl text-center drop-shadow-xl mt-8 font-medium text-gray-800"
-        >
-          Visa Categories
-        </h3>
-        {/* <h3 className="text-lg font-medium text-gray-700">Tour Types</h3> */}
-        {formData.tourTypes.map((tourType, index) => (
-          <div
-            key={index}
-            className="mt-4 p-4 border border-gray-300 rounded-md space-y-2"
-          >
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Visa Category Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={tourType.name}
-                onChange={(e) => handleTourTypeChange(index, e)}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Visa Category Image
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleTourTypeImageChange(index, e)}
-                className="mt-1 block w-full"
-                required
-              />
-              {tourType.image && (
-                <img
-                  src={URL.createObjectURL(tourType.image)}
-                  alt={tourType.name}
-                  className="mt-2 w-20 h-20 object-cover"
-                />
-              )}
-            </div>
+
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold text-blue-500">Select Visa Categories to Show</h2>
+        {visaCategories.map((item) => (
+          <div key={item._id} className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={formData.tourTypes.includes(item._id)}
+              onChange={() => handleVisaCategoryChange(item._id)}
+            />
+            <span>{item.name}</span>
+          </div>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        className="px-4 py-2 bg-blue-500  text-black rounded-md"
+        onClick={() => toast.success("Visa Categories Saved")}
+      >
+        Save Visa Categories
+      </button>
+
+      <div className="space-y-2">
+        <h2 className="text-xl font-bold text-blue-500">FAQ Section</h2>
+        {faq.map((item, index) => (
+          <div key={index} className="flex space-x-2">
+            <input
+              type="text"
+              name="question"
+              value={item.question}
+              onChange={(e) => handleQuestionChange(index, e)}
+              className="block w-1/2 p-2 border border-gray-300 rounded-md"
+              placeholder="Question"
+              required
+            />
+            <input
+              type="text"
+              name="answer"
+              value={item.answer}
+              onChange={(e) => handleQuestionChange(index, e)}
+              className="block w-1/2 p-2 border border-gray-300 rounded-md"
+              placeholder="Answer"
+              required
+            />
             <button
               type="button"
-              onClick={() => removeTourType(index)}
-              className="mt-2 px-4 py-2 bg-red-500 text-white rounded-md"
+              onClick={() => handleRemoveQuestion(index)}
+              className="text-red-500 hover:text-red-700"
             >
               Remove
             </button>
@@ -233,17 +267,25 @@ const AddForm = ({ handleActive }) => {
         ))}
         <button
           type="button"
-          onClick={addTourType}
-          className="mt-4 px-4 py-2 bg-[#11aaf6] text-white rounded-md"
+          onClick={handleAddQuestion}
+          className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"
         >
-          Add Visa Category
+          Add Question
+        </button>
+        <button
+          type="button"
+          onClick={saveFaq}
+          className="px-4 py-2 ml-4 bg-green-500 text-white rounded-md"
+        >
+          Save Faq
         </button>
       </div>
+
       <button
         type="submit"
-        className="px-4 py-2 bg-[#11aaf6] text-white rounded-md"
+        className="px-4 py-2 bg-green-600 w-44 text-white rounded-md"
       >
-        Submit
+        Save All
       </button>
     </form>
   );
