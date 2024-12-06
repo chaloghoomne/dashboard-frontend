@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
     title: '',
     description: '',
     image: null, // New field for the image
-    sections: [{ heading: '', point: [''],summary:[''] }],
+    sections: [{ heading: '', point: [''], summary: [''] }],
     pageType: 'privacy', // Added type field
   });
 
@@ -23,7 +23,7 @@ const PrivacyPolicy = () => {
         }));
         setFormData({
           ...response.data.data,
-          sections:sanitizedSections,
+          sections: sanitizedSections,
           pageType: 'privacy',
         });
       } catch (error) {
@@ -34,7 +34,7 @@ const PrivacyPolicy = () => {
   }, []);
 
   // Handle form changes
-  const handleInputChange = (e, index = null, pointIndex = null,summaryIndex=null) => {
+  const handleInputChange = (e, index = null, pointIndex = null, summaryIndex = null) => {
     const { name, value, files } = e.target;
 
     if (name === 'image') {
@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
       });
     } else {
       // Update section heading or point
-      if (pointIndex === null && summaryIndex===null) {
+      if (pointIndex === null && summaryIndex === null) {
         const updatedSections = formData.sections.map((section, i) =>
           i === index ? { ...section, [name]: value } : section
         );
@@ -58,8 +58,8 @@ const PrivacyPolicy = () => {
           ...formData,
           sections: updatedSections,
         });
-      } 
-      else if(pointIndex!=null && summaryIndex===null) {
+      }
+      else if (pointIndex != null && summaryIndex === null) {
         console.log("point")
         const updatedPoints = formData.sections[index].point.map((point, pi) =>
           pi === pointIndex ? value : point
@@ -71,9 +71,9 @@ const PrivacyPolicy = () => {
           ...formData,
           sections: updatedSections,
         });
-      }else{
+      } else {
         console.log("Summary")
-        const updatedSummary= formData.sections[index].summary.map((summary, pi) =>
+        const updatedSummary = formData.sections[index].summary.map((summary, pi) =>
           pi === summaryIndex ? value : summary
         );
         const updatedSections = formData.sections.map((section, i) =>
@@ -91,9 +91,20 @@ const PrivacyPolicy = () => {
   const addSection = () => {
     setFormData({
       ...formData,
-      sections: [...formData.sections, { heading: '', point: [''] }],
+      sections: [...formData.sections, { heading: '', point: [''], summary: [''] }],
     });
   };
+
+  //remove section 
+  const removeSection = (index) => {
+    console.log("Section to be removed : ", formData.sections)
+    const updatedSectionData = formData.sections.splice(index,1);
+    // console.log("Updated section ", updatedSectionData)
+    setFormData({
+      ...formData,
+      sections: formData.sections,
+    });
+  }
 
   // Add new point in a section
   const addPoint = (index) => {
@@ -118,16 +129,16 @@ const PrivacyPolicy = () => {
   };
 
 
-    // Add new Summary in a section
-    const addSummary = (index) => {
-      const updatedSections = formData.sections.map((section, i) =>
-        i === index ? { ...section, summary: [...section.summary, ''] } : section
-      );
-      setFormData({
-        ...formData,
-        sections: updatedSections,
-      });
-    };
+  // Add new Summary in a section
+  const addSummary = (index) => {
+    const updatedSections = formData.sections.map((section, i) =>
+      i === index ? { ...section, summary: [...section.summary, ''] } : section
+    );
+    setFormData({
+      ...formData,
+      sections: updatedSections,
+    });
+  };
 
   // Remove a Summary from a section
   const removeSummary = (index, summaryIndex) => {
@@ -144,7 +155,7 @@ const PrivacyPolicy = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("Data ")
     const data = new FormData();
     data.append('title', formData.title);
     data.append('description', formData.description);
@@ -153,7 +164,7 @@ const PrivacyPolicy = () => {
     data.append('sections', JSON.stringify(formData.sections)); // Convert sections array to string
 
     try {
-      console.log("Data send : ",data);
+      console.log("Data send : ", data);
       const result = await axios.post(`${BASE_URL}add-page`, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -229,27 +240,34 @@ const PrivacyPolicy = () => {
         {/* Sections */}
         {formData?.sections?.map((section, index) => (
           <div key={index} className="bg-white p-4 rounded-lg">
-            <label className="block text-lg text-blue-600">Section {index + 1} Heading</label>
+            <div className='flex justify-between'>
+              <label className="block text-lg text-blue-600">Section {index + 1} Heading</label>
+              <button
+                  type="button"
+                  onClick={() => removeSection(index)}
+                  className="ml-4 bg-red-500 hover:bg-red-600 text-xs text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+            </div>
+
             <input
               type="text"
               name="heading"
               value={section.heading}
               onChange={(e) => handleInputChange(e, index)}
               className="mt-2 w-full bg-white border border-gray-700 text-black rounded"
-              required
             />
-
             {/* Points */}
             {section?.point?.map((point, pointIndex) => (
               <div key={pointIndex} className="mt-4 flex items-center">
                 <label className="block w-full flex flex-col text-blue-600">Point {pointIndex + 1}
-                <textarea
-                  value={point}
-                  onChange={(e) => handleInputChange(e, index, pointIndex)}
-                  className="mt-2 min-w-full p-2 bg-white border border-gray-700 text-black rounded"
-                  rows="2"
-                  required
-                />
+                  <textarea
+                    value={point}
+                    onChange={(e) => handleInputChange(e, index, pointIndex)}
+                    className="mt-2 min-w-full p-2 bg-white border border-gray-700 text-black rounded"
+                    rows="2"
+                  />
                 </label>
                 {/* Remove Point Button */}
                 <button
@@ -274,13 +292,12 @@ const PrivacyPolicy = () => {
             {section?.summary?.map((summary, summaryIndex) => (
               <div key={summaryIndex} className="mt-4 flex items-center">
                 <label className="block w-full flex flex-col text-blue-600">Summary {summaryIndex + 1}
-                <textarea
-                  value={summary}
-                  onChange={(e) => handleInputChange(e, index,null ,summaryIndex)}
-                  className="mt-2 min-w-full p-2 bg-white border border-gray-700 text-black rounded"
-                  rows="2"
-                  required
-                />
+                  <textarea
+                    value={summary}
+                    onChange={(e) => handleInputChange(e, index, null, summaryIndex)}
+                    className="mt-2 min-w-full p-2 bg-white border border-gray-700 text-black rounded"
+                    rows="2"
+                  />
                 </label>
                 {/* Remove Point Button */}
                 <button
@@ -296,11 +313,11 @@ const PrivacyPolicy = () => {
             <button
               type="button"
               onClick={() => addSummary(index)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded ml-4"
             >
               Add Summary
             </button>
-            
+
           </div>
         ))}
 
