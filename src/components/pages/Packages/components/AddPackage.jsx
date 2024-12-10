@@ -23,9 +23,7 @@ const AddPackagePage = () => {
         "GET",
         `${BASE_URL}places?page=${currentPage}`
       );
-      console.log(response, "response partners");
       if (response) {
-        console.log(response.data, "response");
         setPackages(response.data);
         setTotalPages(response.totalPages);
       }
@@ -41,13 +39,11 @@ const AddPackagePage = () => {
   const handleEdit = (id) => {
     // Implement edit functionality
     navigate(`/home/visa/country/${id}`);
-    console.log("Edit package", id);
   };
 
   const handleDelete = (id) => {
     setIsModelOpen(true);
     setDeletedId(id);
-    console.log("Delete package", id);
   };
 
   const confirmDelete = async () => {
@@ -56,7 +52,6 @@ const AddPackagePage = () => {
         "DELETE",
         `${BASE_URL}delete-place/${deletedId}`
       );
-      console.log(response);
       if (response) {
         toast.success("Successfully Deleted");
         try {
@@ -64,7 +59,6 @@ const AddPackagePage = () => {
             "GET",
             `${BASE_URL}places?page=${currentPage}`
           );
-          console.log(response);
           if (response) {
             setPackages(response.data);
             setTotalPages(response.totalPages);

@@ -62,7 +62,6 @@ return;
           `${BASE_URL}add-partner`,
           newformData
         );
-        console.log(response);
         if (response) {
           toast.success(" Added successfully");
           setFormData({

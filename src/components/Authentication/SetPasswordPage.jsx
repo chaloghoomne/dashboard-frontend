@@ -104,7 +104,6 @@ const SetPasswordPage = () => {
           confirmPassword: formData.confirmPassword,
         }
       );
-      console.log(response);
       toast.success(response.message);
       navigate("/login");
     } catch (error) {

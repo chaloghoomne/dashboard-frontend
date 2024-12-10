@@ -23,7 +23,6 @@ const Subscribers = () => {
           "GET",
           `${BASE_URL}subscriptions`
         );
-        console.log(response, "response partners");
         if (response) {
           setSubscribers(response.data);
         }

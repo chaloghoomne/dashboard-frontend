@@ -21,7 +21,6 @@ const ImportantPoints = () => {
     const fetchProfileImage = async () => {
       try {
         const response = await fetchDataFromAPI("GET", `${BASE_URL}notes`);
-        console.log(response);
         if (response) {
           setImportantPoints(response.data);
           setTotalPages(response.totalPages);
@@ -48,12 +47,10 @@ const ImportantPoints = () => {
         "DELETE",
         `${BASE_URL}notes/${deletedId}`
       );
-      console.log(response);
       if (response) {
         toast.success(`Deleted SuccessFully`);
         try {
           const response = await fetchDataFromAPI("GET", `${BASE_URL}notes`);
-          console.log(response);
           if (response) {
             setImportantPoints(response.data);
             setTotalPages(response.totalPages);

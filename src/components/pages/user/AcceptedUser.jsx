@@ -48,7 +48,6 @@ const AcceptedUser = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_CITIES}`
         );
-        console.log(response);
         setCities(response.data);
         console.log(cities);
       } catch (error) {

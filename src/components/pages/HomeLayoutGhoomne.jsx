@@ -27,7 +27,6 @@ function HomeLayoutGhoomne() {
           "GET",
           BASE_URL + NetworkConfig.ADMINPROFILE
         );
-        console.log(response.result);
         setAdminDetails({
           name: response.result.name,
           profilePic: response.result.prifilePic,

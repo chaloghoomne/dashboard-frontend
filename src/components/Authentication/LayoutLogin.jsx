@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 
 
 const LoginLayout = () => {
-  console.log("joker")
   return (
     <div
       className="w-screen h-screen bg-no-repeat bg-cover"

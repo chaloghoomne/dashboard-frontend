@@ -23,7 +23,6 @@ const NotificationSend = () => {
     const fetchData = async () => {
       try {
         const response = await fetchDataFromAPI("GET", `${BASE_URL}users`);
-        console.log(response, "response");
         setAllUsers(response.data);
       } catch (error) {
         console.log(error);
@@ -96,7 +95,6 @@ const NotificationSend = () => {
           },
         }
       );
-      console.log(response);
       if (response) {
         toast.success("Notifications sent successfully");
         setTitle("");

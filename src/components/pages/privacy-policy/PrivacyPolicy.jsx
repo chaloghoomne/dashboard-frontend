@@ -60,7 +60,6 @@ const PrivacyPolicy = () => {
         });
       }
       else if (pointIndex != null && summaryIndex === null) {
-        console.log("point")
         const updatedPoints = formData.sections[index].point.map((point, pi) =>
           pi === pointIndex ? value : point
         );
@@ -72,7 +71,6 @@ const PrivacyPolicy = () => {
           sections: updatedSections,
         });
       } else {
-        console.log("Summary")
         const updatedSummary = formData.sections[index].summary.map((summary, pi) =>
           pi === summaryIndex ? value : summary
         );
@@ -97,7 +95,6 @@ const PrivacyPolicy = () => {
 
   //remove section 
   const removeSection = (index) => {
-    console.log("Section to be removed : ", formData.sections)
     const updatedSectionData = formData.sections.splice(index,1);
     // console.log("Updated section ", updatedSectionData)
     setFormData({
@@ -155,7 +152,6 @@ const PrivacyPolicy = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Data ")
     const data = new FormData();
     data.append('title', formData.title);
     data.append('description', formData.description);
@@ -164,7 +160,6 @@ const PrivacyPolicy = () => {
     data.append('sections', JSON.stringify(formData.sections)); // Convert sections array to string
 
     try {
-      console.log("Data send : ", data);
       const result = await axios.post(`${BASE_URL}add-page`, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });

@@ -369,7 +369,6 @@ const Docs = () => {
   const fetchDocuments = async () => {
     try {
       const response = await fetchDataFromAPI("GET", `${BASE_URL}documents`);
-      console.log(response, "response descriptions");
       if (response) {
         setDocuments(response.data);
       }
@@ -394,7 +393,6 @@ const Docs = () => {
           `${BASE_URL}edit-document/${formData.id}`,
           data
         );
-        console.log(response);
         if (response) {
           toast.success(" Updated  successfully");
           setShowLoader(false);
@@ -403,7 +401,6 @@ const Docs = () => {
               "GET",
               `${BASE_URL}documents`
             );
-            console.log(response, "response descriptions");
             if (response) {
               setDocuments(response.data);
             }
@@ -423,7 +420,6 @@ const Docs = () => {
           `${BASE_URL}add-document`,
           data
         );
-        console.log(response);
         if (response) {
           setShowLoader(false);
           toast.success(" Added  successfully");
@@ -444,7 +440,6 @@ const Docs = () => {
         "GET",
         `${BASE_URL}document/${id}`
       );
-      console.log(response);
       if (response) {
         setFormData({
           id: response.data._id,
@@ -465,7 +460,6 @@ const Docs = () => {
         "DELETE",
         `${BASE_URL}delete-document/${id}`
       );
-      console.log(response);
       if (response) {
         toast.success("Deleted Succesfully");
         fetchDocuments();

@@ -18,7 +18,6 @@ const BlackListRequest = () => {
           `${BASE_URL}visa-orders?page=${currentPage}&status=blacklist`
         );
         if (response) {
-          console.log(response, "wefghjk");
           setUsers(response.data);
           setTotalPages(response.totalPages);
         }

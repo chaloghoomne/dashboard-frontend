@@ -17,7 +17,6 @@ const PackageList = ({ data, deleted, edit, fetchPackages }) => {
   const [selectedDocuments, setSelectedDocuments] = useState(null);
   const [selectedFAQ, setSelectedFAQ] = useState(null);
   const navigate = useNavigate();
-  console.log("asdfghjkl;", data);
   const handleImageClick = (imageUrl) => {
     setModalContent({ type: "image", content: imageUrl });
     setImageModalOpen(true);

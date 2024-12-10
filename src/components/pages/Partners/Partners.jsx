@@ -21,7 +21,6 @@ const Partners = () => {
     const fetchProfileImage = async () => {
       try {
         const response = await fetchDataFromAPI("GET", `${BASE_URL}partners`);
-        console.log(response, "response partners");
         if (response) {
           setPartners(response.data);
           setTotalPages(response.totalPages);
@@ -49,12 +48,10 @@ const Partners = () => {
         "DELETE",
         `${BASE_URL}delete-partner/${deletedId}`
       );
-      console.log(response);
       if (response) {
         toast.success("Successfully Deleted");
         try {
           const response = await fetchDataFromAPI("GET", `${BASE_URL}partners`);
-          console.log(response);
           if (response) {
             setPartners(response.data);
             setTotalPages(response.totalPages);

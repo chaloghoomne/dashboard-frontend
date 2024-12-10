@@ -14,7 +14,6 @@ const StepTwo = ({
   handleSubmit,
   setFormData,
 }) => {
-  console.log(setFormData, "dfgh");
   const [faq, setFaq] = useState([]);
   const [documents, setDocuments] = useState([]);
   const [show, setShow] = useState(false);
@@ -28,7 +27,6 @@ const StepTwo = ({
   const fetchDocuments = async () => {
     try {
       const response = await fetchDataFromAPI("GET", `${BASE_URL}documents`);
-      console.log(response, "response descriptions");
       if (response) {
         setDocuments(response.data);
       }
@@ -68,7 +66,6 @@ const StepTwo = ({
   };
 
   const handleSave = () => {
-    console.log(faq, "dfghj", selectedDocuments);
 
     handleDocumentsChange(documents);
 

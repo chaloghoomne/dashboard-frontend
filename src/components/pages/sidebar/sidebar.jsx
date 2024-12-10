@@ -31,7 +31,6 @@ const SidebarGhoomne = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [pendingPosts, setPendingPosts] = useState([]);
   const [tickets, setTickets] = useState([]);
-  console.log(typeof tickets, typeof pendingPosts);
   useEffect(() => {
     const parts = pathName.split("/");
     const main = parts[2];
@@ -74,7 +73,6 @@ const SidebarGhoomne = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_TICKETS}`
         );
-        console.log(response);
 
         if (response) {
           // const openTickets = response?.data?.filter((item)=>{

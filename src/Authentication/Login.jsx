@@ -9,7 +9,6 @@ import { IoMdEyeOff } from "react-icons/io";
 import { generateToken } from "../firebase/config";
 
 const LoginPage = () => {
-  console.log("hellooooo");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -30,13 +29,11 @@ const LoginPage = () => {
 
   const generateDeviceToken = async () => {
     const resp = await generateToken();
-    console.log("resp", resp);
     const tken = localStorage.getItem("deviceToken");
     setToken(tken);
   };
 
   useEffect(() => {
-    console.log("asdasd");
     generateDeviceToken();
   }, []);
 

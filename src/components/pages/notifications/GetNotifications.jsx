@@ -21,7 +21,6 @@ const GetNotifications = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.NOTIFICATIONLST}?page=${currentPage}`
         );
-        console.log(response);
 
         setNotifications(response?.data);
         setTotalPages(response.totalPages);

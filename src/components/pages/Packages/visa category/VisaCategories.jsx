@@ -28,7 +28,6 @@ const VisaCategories = () => {
   const fetchDocuments = async () => {
     try {
       const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types`);
-      console.log(response, "response descriptions");
       if (response) {
         setDocuments(response.data);
       }
@@ -52,13 +51,11 @@ const VisaCategories = () => {
           `${BASE_URL}edit-tour-type/${formData.id}`,
           data
         );
-        console.log(response);
         if (response) {
           setShowLoader(false)
           toast.success(" Updated  Successfully");
           try {
             const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types`);
-            console.log(response, "response descriptions");
             if (response) {
               setDocuments(response.data);
             }
@@ -77,7 +74,6 @@ const VisaCategories = () => {
           `${BASE_URL}add-tour-type`,
           data
         );
-        console.log(response);
         if (response) {
           toast.success(" Added  successfully");
         }
@@ -96,7 +92,6 @@ const VisaCategories = () => {
         "GET",
         `${BASE_URL}tour-type/${id}`
       );
-      console.log(response);
       if (response) {
         setFormData({
           id: response.data._id,
@@ -117,7 +112,6 @@ const VisaCategories = () => {
         "DELETE",
         `${BASE_URL}delete-tour-type/${id}`
       );
-      console.log(response);
       if (response) {
         toast.success("Deleted Succesfully")
         fetchDocuments();
@@ -137,7 +131,6 @@ const VisaCategories = () => {
     setShowIconModal(true);
   };
 
-  console.log(selectedDocument,"jj")
 
 return (
     <>

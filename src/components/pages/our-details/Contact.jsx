@@ -16,7 +16,6 @@ const ContactUs = () => {
     // Fetch existing contact info (if available)
     const fetchData = async()=>{
     const resp = await axios.get(`${BASE_URL}/contact`)
-    console.log(resp,"djjd")
     setFormData(resp.data.data)
     }
     fetchData()

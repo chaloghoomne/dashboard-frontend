@@ -11,7 +11,6 @@ const TravelAgentList = () => {
     // Fetch Travel Agent submissions from API
     const fetchData = async()=>{
       const resp = await  axios.get(`${BASE_URL}travel-agents`)
-       console.log(resp.data.data)
        setAgents(resp.data.data)
     }
     fetchData()

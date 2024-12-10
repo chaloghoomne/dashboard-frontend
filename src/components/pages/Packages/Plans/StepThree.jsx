@@ -7,7 +7,6 @@ const StepThree = ({ formData, handleChange, prevStep, handleSubmit }) => {
     setDocuments([...documents, { name: "" }]);
   };
 
-  console.log(documents);
 
   // const handleDocumentChangeImage = (index, e, field) => {
   //   const updatedDocuments = documents.map((item, i) =>

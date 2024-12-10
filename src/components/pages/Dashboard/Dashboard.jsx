@@ -53,7 +53,6 @@ const Dashboard = () => {
           "GET",
           `${BASE_URL}top-packages`
         );
-        console.log(response, "response partners");
         if (response) {
           setPackages(response.data);
         }
@@ -70,7 +69,6 @@ const Dashboard = () => {
           "GET",
           `${BASE_URL}top-visa-categories`
         );
-        console.log(response, "response visa category");
         if (response) {
           setTopVisaCategory(response.data);
         }
@@ -87,7 +85,6 @@ const Dashboard = () => {
           "GET",
           `${BASE_URL}top-visa-order`
         );
-        console.log(response, "response visa order");
         if (response) {
           setTopVisaOrder(response.data);
         }

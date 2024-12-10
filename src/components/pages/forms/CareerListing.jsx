@@ -11,7 +11,6 @@ const CareerList = () => {
     // Fetch Career form submissions from API
     const fetchData = async () => {
       const resp = await axios.get(`${BASE_URL}careers`);
-      console.log(resp.data.data);
       setCareers(resp.data.data);
     };
     fetchData();

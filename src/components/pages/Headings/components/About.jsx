@@ -21,7 +21,6 @@ const About = ({ type }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/${type}`
         );
-        console.log(response);
         if (response) {
           setTitle(response.data.title);
           setDescription(response.data.description);
@@ -55,7 +54,6 @@ const About = ({ type }) => {
           },
         }
       );
-      console.log(response);
       if (response) {
         toast.success(" Updated successfully");
       }

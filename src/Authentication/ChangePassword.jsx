@@ -12,7 +12,6 @@ const ChangePassword = () => {
   const isValidEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);
   };
-  console.log("heloowowoowo")
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -34,7 +33,6 @@ const ChangePassword = () => {
         BASE_URL + NetworkConfig.FORGOTPASSWORD,
         { email: email }
       );
-      console.log("response", response);
       localStorage.setItem('id', response.id);
       navigate(`/changePasswordOTP/${email}`);
       toast.success(response.message);

@@ -5,7 +5,6 @@ import MainlayoutGhoomne from './MainLayoutGhoomne';
 
 function App() {
   
-console.log("hello")
   return (
     <>
    <MainlayoutGhoomne />

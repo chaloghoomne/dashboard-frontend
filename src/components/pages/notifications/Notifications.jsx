@@ -23,7 +23,6 @@ const Notifications = () => {
           "GET",
           `${BASE_URL}users-notifications?page=${currentPage}`
         );
-        console.log(response);
         setNotifications(response?.data);
         setTotalPages(response.totalPages);
       } catch (error) {
