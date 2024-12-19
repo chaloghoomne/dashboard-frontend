@@ -16,6 +16,7 @@
     "@ramonak/react-progress-bar": "^5.2.0",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "crypto-js": "^4.2.0",
     "file-saver": "^2.0.5",
     "firebase": "^10.12.2",
     "moment": "^2.30.1",

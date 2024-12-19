@@ -1,7 +1,6 @@
-
-export const BASE_URL='https://chaloghoomneapi.kickrtechnology.in/api/v1/'
+// export const BASE_URL='https://chaloghoomneapi.kickrtechnology.in/api/v1/'
 // export const BASE_URL = "https://api.chaloghoomne.com/api/v1/";
-
+export const BASE_URL = "http://127.0.0.1:3001/api/v1/";
 export const NetworkConfig = {
   ADDCONTENT: "/add-content",
   ADMINLOGIN: "admin-login",
