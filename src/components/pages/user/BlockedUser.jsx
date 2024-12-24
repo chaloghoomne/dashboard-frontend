@@ -25,7 +25,6 @@ const BlockedUser = () => {
           'GET',
           `${BASE_URL}${NetworkConfig.BLOCKEDUSERS}?page=${currentPage}`
         );
-        console.log("response", response);
         // toast.success(response.message);
         setUsers(response.data);
            setTotalPages(response.totalPages)

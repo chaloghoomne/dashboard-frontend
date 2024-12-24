@@ -17,7 +17,6 @@ const RejectedRequests = () => {
           `${BASE_URL}visa-orders?page=${currentPage}&status=rejected`
         );
         if (response) {
-          console.log(response, "wefghjk");
           setUsers(response.data);
           setTotalPages(response.totalPages);
         }

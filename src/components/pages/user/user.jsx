@@ -65,7 +65,6 @@ const User = () => {
         `${BASE_URL}${NetworkConfig.REQUESTRECEIVED}`,
         { id }
       );
-      console.log("response", response);
       if (response) {
         setModalData(response?.requestingCompanies);
         setModalTitle("Request Received");

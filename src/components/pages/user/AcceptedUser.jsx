@@ -49,7 +49,6 @@ const AcceptedUser = () => {
           `${BASE_URL}${NetworkConfig.GET_CITIES}`
         );
         setCities(response.data);
-        console.log(cities);
       } catch (error) {
         console.log(error);
       }
@@ -214,7 +213,6 @@ const AcceptedUser = () => {
   };
 
   const handleTransfer = async (selectedChapter) => {
-    console.log(selectedUsers, parseInt(selectedChapter));
     try {
       const response = await fetchDataFromAPI(
         "POST",

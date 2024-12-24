@@ -96,7 +96,6 @@ const TermsConditions = () => {
   //remove section 
   const removeSection = (index) => {
     const updatedSectionData = formData.sections.splice(index,1);
-    // console.log("Updated section ", updatedSectionData)
     setFormData({
       ...formData,
       sections: formData.sections,

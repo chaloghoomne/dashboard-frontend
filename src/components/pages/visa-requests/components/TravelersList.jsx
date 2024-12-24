@@ -83,7 +83,6 @@ const UserList = ({
 
   const handleSubmit = () => {
     const data = modalType === "approved" ? pdfFile : description;
-    console.log(`hit`);
     handleAction(visaId, modalType, data);
     closeModal();
   };

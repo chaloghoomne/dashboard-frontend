@@ -38,7 +38,6 @@ const PendingUser = () => {
   }, [currentPage]);
 
   const handleApprove = async(id) => {
-    console.log("id",id)
 
     setSelectedUserId(id);
     try {

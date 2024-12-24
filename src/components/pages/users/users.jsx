@@ -23,7 +23,6 @@ const Users = ({ data }) => {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletedId, setDeletedId] = useState(null);
-  console.log(selectedBookings, "selectedBookings");
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -32,7 +31,6 @@ const Users = ({ data }) => {
           "GET",
           `${BASE_URL}users?page=${currentPage}`
         );
-        console.log(response, "response partners");
         if (response) {
           setUsers(response.data);
           setTotalPages(response.totalPages);
@@ -56,7 +54,6 @@ const Users = ({ data }) => {
         `${BASE_URL}user-visa-orders`,
         { id: id }
       );
-      console.log(response, "response data");
       if (response) {
         setSelectedBookings(response.data);
       }
@@ -74,7 +71,6 @@ const Users = ({ data }) => {
         `${BASE_URL}admin-users-transactions/${id}`,
        
       );
-      console.log(response, "response transaction");
       if (response) {
         
         setSelectedTransactions(response.data);
@@ -124,7 +120,6 @@ const Users = ({ data }) => {
         "DELETE",
         `${BASE_URL}delete-user/${deletedId}`
       );
-      console.log(response);
       if (response) {
         toast.success("Deleted SuccessFully");
         try {
@@ -132,7 +127,6 @@ const Users = ({ data }) => {
             "GET",
             `${BASE_URL}users?page=${currentPage}`
           );
-          console.log(response);
           if (response) {
             setUsers(response.data);
             setTotalPages(response.totalPages);

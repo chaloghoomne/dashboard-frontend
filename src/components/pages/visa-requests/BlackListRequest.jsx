@@ -29,7 +29,6 @@ const BlackListRequest = () => {
   }, [currentPage]);
 
   const handleAction = async (userId, action) => {
-    console.log(userId, "sdfghjk");
     try {
       const response = await fetchDataFromAPI(
         "PUT",

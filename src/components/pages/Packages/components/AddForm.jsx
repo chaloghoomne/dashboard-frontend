@@ -19,7 +19,7 @@ const AddForm = ({ handleActive }) => {
     docHeading: "",
     docDescription: "",
     docPoints: [],
-    faq: []
+    faq: [],
   });
   const [visaCategories, setVisaCategories] = useState([]);
 
@@ -100,7 +100,9 @@ const AddForm = ({ handleActive }) => {
       return;
     }
 
-    const validFaq = faq.filter((item) => item.question.trim() || item.answer.trim());
+    const validFaq = faq.filter(
+      (item) => item.question.trim() || item.answer.trim()
+    );
     const data = new FormData();
     data.append("country", formData.country);
     data.append("heading", formData.heading);
@@ -121,7 +123,11 @@ const AddForm = ({ handleActive }) => {
     });
 
     try {
-      const response = await fetchDataFromAPI("POST", `${BASE_URL}add-place`, data);
+      const response = await fetchDataFromAPI(
+        "POST",
+        `${BASE_URL}add-place`,
+        data
+      );
       if (response) {
         toast.success("Added successfully");
         handleActive("list");
@@ -156,7 +162,9 @@ const AddForm = ({ handleActive }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700">Country</label>
+        <label className="block text-sm font-medium text-gray-700">
+          Country
+        </label>
         <input
           type="text"
           name="country"
@@ -178,7 +186,9 @@ const AddForm = ({ handleActive }) => {
         />
       </div> */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
+        <label className="block text-sm font-medium text-gray-700">
+          Description
+        </label>
         <textarea
           name="description"
           value={formData.description}
@@ -213,7 +223,9 @@ const AddForm = ({ handleActive }) => {
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-xl font-bold text-blue-500">Select Visa Categories to Show</h2>
+        <h2 className="text-xl font-bold text-blue-500">
+          Select Visa Categories to Show
+        </h2>
         {visaCategories.map((item) => (
           <div key={item._id} className="flex items-center space-x-2">
             <input
