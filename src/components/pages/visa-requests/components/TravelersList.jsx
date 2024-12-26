@@ -195,7 +195,7 @@ const UserList = ({
                     <CgUnblock
                       className="cursor-pointer text-red-500"
                       onClick={() =>
-                        handleBlockAction(user?._id, "sent-to-immigration")
+                        handleBlockAction(user?.user?._id, "sent-to-immigration")
                       }
                       title="Sent to Immigration again"
                     />
@@ -211,7 +211,7 @@ const UserList = ({
                   {type === "approve" && (
                     <MdDelete
                       className="cursor-pointer text-red-500"
-                      onClick={() => handleBlockAction(user?._id, "approved")}
+                      onClick={() => handleBlockAction(user?.user?._id, "approved")}
                     />
                   )}
                 </td>

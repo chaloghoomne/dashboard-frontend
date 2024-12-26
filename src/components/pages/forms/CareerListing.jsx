@@ -2,19 +2,24 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { BASE_URL } from '../../../Api/urls';
+import Pagination from '../Packages/components/Pagination';
 
 const CareerList = () => {
   const [careers, setCareers] = useState([]);
-  const [selectedCareer,setSelectedCareer] = useState(null)
+  const [selectedCareer, setSelectedCareer] = useState(null)
+
+  const [getTotalPage, setTotalPages] = useState(0);
+  const [getCurrentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     // Fetch Career form submissions from API
     const fetchData = async () => {
-      const resp = await axios.get(`${BASE_URL}careers`);
-      setCareers(resp.data.data);
+      const resp = await axios.get(`${BASE_URL}careers?page=${getCurrentPage}`);
+      setCareers(resp?.data?.data?.careers);
+      setTotalPages(resp?.data?.data?.totalPages)
     };
     fetchData();
-  }, []);
+  }, [getCurrentPage]);
 
   const openModal = (career) => {
     setSelectedCareer(career);
@@ -32,23 +37,23 @@ const CareerList = () => {
         method: 'GET',
         responseType: 'blob', // Important: Set responseType to blob
       });
-  
+
       // Create a blob URL for the file
       const blob = new Blob([response.data], { type: response.data.type });
       const url = window.URL.createObjectURL(blob);
-      
+
       // Create temporary link element
       const link = document.createElement('a');
       link.href = url;
-      
+
       // Extract filename from URL or use default
       const filename = resumeUrl.substring(resumeUrl.lastIndexOf('/') + 1) || 'resume.pdf';
       link.setAttribute('download', filename);
-      
+
       // Append to body, click and remove
       document.body.appendChild(link);
       link.click();
-      
+
       // Cleanup
       window.URL.revokeObjectURL(url);
       document.body.removeChild(link);
@@ -58,14 +63,14 @@ const CareerList = () => {
     }
   };
 
-//   const handleResumeDownloadfull = (url)=>{
-//   const fullResumeUrl = `${BASE_URL}${url}`;
-// handleResumeDownload(fullResumeUrl);
-//   }
+  //   const handleResumeDownloadfull = (url)=>{
+  //   const fullResumeUrl = `${BASE_URL}${url}`;
+  // handleResumeDownload(fullResumeUrl);
+  //   }
 
 
   return (
-    <div className="p-8 bg-slate-300 min-h-[89%]">
+    <div className="p-8 bg-slate-300 min-h-[89%]" style={{ overflowY: 'scroll' }}>
       <h1 className="text-3xl font-bold text-[#F26337] mb-6">Career Submissions</h1>
       <table className="min-w-full border-collapse">
         <thead>
@@ -81,7 +86,7 @@ const CareerList = () => {
           </tr>
         </thead>
         <tbody>
-          {careers.map((career) => (
+          {careers?.map((career) => (
             <tr key={career.id} className="text-center">
               <td className="border border-black p-2">{career?.name}</td>
               <td className="border border-black p-2">{career?.phoneNumber}</td>
@@ -90,11 +95,11 @@ const CareerList = () => {
               <td className="border border-black p-2">{career?.position}</td>
               <td className="border border-black p-2">{career?.skills}</td>
               <td
-  onClick={() => handleResumeDownload(career?.resume)} // Make sure career.resume contains the full URL
-  className="border text-orange-500 border-black p-2 cursor-pointer"
->
-  Download Resume
-</td>
+                onClick={() => handleResumeDownload(career?.resume)} // Make sure career.resume contains the full URL
+                className="border text-orange-500 border-black p-2 cursor-pointer"
+              >
+                Download Resume
+              </td>
               <td className="border border-black p-2">
                 <button onClick={() => openModal(career)}>
                   <FaEye className="text-xl text-[#F26337]" />
@@ -137,6 +142,8 @@ const CareerList = () => {
           </div>
         </div>
       )}
+            <Pagination currentPage={getCurrentPage} totalPages={getTotalPage} onPageChange={setCurrentPage}/>
+
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
 import PlanEdit from "../Plans/components.jsx/PlanEdit";
 import Loader from "../../../Loader/Loader";
+import Pagination from "../components/Pagination";
 
 const VisaCategories = () => {
   const [documents, setDocuments] = useState([]);
@@ -20,16 +21,19 @@ const VisaCategories = () => {
   
   const [showIconModal, setShowIconModal] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
+  const [getTotalPage,setTotalPages] = useState(0);
+  const [getCurrentPage,setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchDocuments();
-  }, []);
+  }, [getCurrentPage]);
 
   const fetchDocuments = async () => {
     try {
-      const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types`);
+      const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types?page=${getCurrentPage}`);
       if (response) {
         setDocuments(response.data);
+        setTotalPages(response.totalPages)
       }
     } catch (error) {
       console.log(error);
@@ -52,12 +56,12 @@ const VisaCategories = () => {
           data
         );
         if (response) {
-          setShowLoader(false)
           toast.success(" Updated  Successfully");
           try {
-            const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types`);
+            const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types?page=${getCurrentPage}`);
             if (response) {
               setDocuments(response.data);
+              setTotalPages(response.totalPages)
             }
           } catch (error) {
             console.log(error);
@@ -84,6 +88,7 @@ const VisaCategories = () => {
     }
     setFormData({ id: null, name: "", image: null});
     fetchDocuments();
+    setShowLoader(false)
   };
 
   const handleEdit = async (id) => {
@@ -130,6 +135,7 @@ const VisaCategories = () => {
     setSelectedDocument(document);
     setShowIconModal(true);
   };
+  
 
 
 return (
@@ -242,6 +248,8 @@ return (
           </div>
         </div>
       )} */}
+
+      <Pagination currentPage={getCurrentPage} totalPages={getTotalPage} onPageChange={setCurrentPage}/>
 
       {showIconModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
