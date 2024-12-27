@@ -27,7 +27,6 @@ const ProfileEdit = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_PROFILE_PIC}`
         );
-        console.log(response);
         if (response) {
           setProfileImageUrl(response.data.profile_url);
         }
@@ -62,7 +61,6 @@ const ProfileEdit = () => {
           },
         }
       );
-      console.log(response);
       if (response.message === "admin updated successfully") {
         setProfileImageUrl(response.imageUrl);
         toast.success("Profile picture updated successfully");

@@ -14,7 +14,6 @@ const VisaTypes = ({ type }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/${type}`
         );
-        console.log(response);
         if (response) {
           setHeading(response.data.heading);
           setDescription(response.data.description);
@@ -44,7 +43,6 @@ const VisaTypes = ({ type }) => {
           },
         }
       );
-      console.log(response);
       if (response) {
         toast.success(" Updated successfully");
       }

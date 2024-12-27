@@ -8,6 +8,7 @@ const Main = ({ type }) => {
   const [heading, setHeading] = useState("");
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
+  const[subHeading,setSubHeading]=useState("");
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -16,12 +17,12 @@ const Main = ({ type }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/${type}`
         );
-        console.log(response);
         if (response) {
-          setTitle(response.data.title);
-          setDescription(response.data.description);
-          setShortDescription(response.data.shortDescription);
-          setHeading(response.data.heading);
+          setTitle(response.data?.title);
+          setDescription(response.data?.description);
+          setShortDescription(response.data?.shortDescription);
+          setHeading(response.data?.heading);
+          setSubHeading(response.data?.subHeading)
         }
       } catch (error) {
         console.log(error);
@@ -37,6 +38,7 @@ const Main = ({ type }) => {
       description: description,
       shortDescription: shortDescription,
       heading: heading,
+      subHeading:subHeading,
     };
     e.preventDefault();
     try {
@@ -50,7 +52,6 @@ const Main = ({ type }) => {
           },
         }
       );
-      console.log(response);
       if (response) {
         toast.success(" Updated successfully");
       }
@@ -58,7 +59,6 @@ const Main = ({ type }) => {
       console.log(error);
       alert("Error updating profile picture");
     }
-    console.log(shortDescription, description, title);
   };
 
   return (
@@ -100,6 +100,16 @@ const Main = ({ type }) => {
             type="text"
             value={heading}
             onChange={(e) => setHeading(e.target.value)}
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Sub Heading</label>
+          <input
+            type="text"
+            value={subHeading}
+            onChange={(e) => setSubHeading(e.target.value)}
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             required
           />

@@ -5,14 +5,11 @@ import { BASE_URL } from "../../../../Api/urls";
 const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
   const [countries, setCountries] = useState();
   const [tourtypes, setTourTypes] = useState();
-  console.log(formData, "tourtypes");
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
         const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
-        console.log(response, "response partners");
         if (response) {
-          console.log(response.data, "response");
           setCountries(response.data);
         }
       } catch (error) {

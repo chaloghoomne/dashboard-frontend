@@ -1,7 +1,7 @@
 import axios from "axios";
+import encryptData from "../utils/encryptData";
 
 export const fetchDataFromAPI = (method, url, body, requestHeaders, form) => {
-  console.log(requestHeaders);
   let contentType;
   if (form === true) {
     contentType = "multipart/form-data";
@@ -13,6 +13,13 @@ export const fetchDataFromAPI = (method, url, body, requestHeaders, form) => {
     Authorization: "Bearer " + localStorage.getItem("token"),
     ...requestHeaders,
   };
+
+  const encryptedBody =
+    body &&
+    !(body instanceof FormData) &&
+    (method === "POST" || method === "PUT" || method === "PATCH")
+      ? { data: encryptData(body) }
+      : body;
 
   switch (method) {
     case "GET": {
@@ -41,7 +48,7 @@ export const fetchDataFromAPI = (method, url, body, requestHeaders, form) => {
     case "POST": {
       return new Promise((resolve, reject) => {
         axios
-          .post(url, body, {
+          .post(url, encryptedBody, {
             headers: reqHeader,
           })
           .then((res) => {
@@ -87,7 +94,7 @@ export const fetchDataFromAPI = (method, url, body, requestHeaders, form) => {
     case "PUT": {
       return new Promise((resolve, reject) => {
         axios
-          .put(url, body, {
+          .put(url, encryptedBody, {
             headers: reqHeader,
           })
           .then((res) => {

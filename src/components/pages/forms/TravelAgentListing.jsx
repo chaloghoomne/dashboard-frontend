@@ -2,21 +2,24 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { BASE_URL } from '../../../Api/urls';
+import Pagination from '../Packages/components/Pagination';
 
 const TravelAgentList = () => {
   const [agents, setAgents] = useState([]);
   const [selectedAgent, setSelectedAgent] = useState(null);
+    const [getTotalPage, setTotalPages] = useState(0);
+    const [getCurrentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     // Fetch Travel Agent submissions from API
     const fetchData = async()=>{
-      const resp = await  axios.get(`${BASE_URL}travel-agents`)
-       console.log(resp.data.data)
-       setAgents(resp.data.data)
+      const resp = await  axios.get(`${BASE_URL}travel-agents?page=${getCurrentPage}`)
+       setAgents(resp?.data?.data?.travelAgents)
+       setTotalPages(resp?.data?.data?.totalPages)
     }
     fetchData()
   
-  }, []);
+  }, [getCurrentPage]);
 
   const openModal = (agent) => {
     setSelectedAgent(agent);
@@ -27,7 +30,7 @@ const TravelAgentList = () => {
   };
 
   return (
-    <div className="p-8 bg-slate-300 min-h-[89%]">
+    <div className="p-8 bg-slate-300 min-h-[89%] overflow-auto">
       <h1 className="text-3xl font-bold text-[#F26337] mb-6">Travel Agent Submissions</h1>
       <table className="min-w-full border-collapse">
         <thead>
@@ -55,6 +58,7 @@ const TravelAgentList = () => {
           ))}
         </tbody>
       </table>
+      <Pagination currentPage={getCurrentPage} totalPages={getTotalPage} onPageChange={setCurrentPage} />
 
       {selectedAgent && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">

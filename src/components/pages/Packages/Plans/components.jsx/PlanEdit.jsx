@@ -42,15 +42,12 @@ const PlanEdit = () => {
   const [tourtypes, setTourtypes] = useState([]);
   const [faqs, setFaqs] = useState([]);
   const [documents, setDocuments] = useState([]);
-  console.log(formData, "formData");
-  console.log(documents,"jkjkjk")
   useEffect(() => {
     const fetchPackageData = async () => {
       const packageData = await fetchDataFromAPI(
         "GET",
         `${BASE_URL}visa-category/${id}`
       );
-      console.log("package data", packageData);
       setFormData(packageData.data);
       setDocuments(packageData?.data?.documents);
     };
@@ -60,13 +57,11 @@ const PlanEdit = () => {
 
   useEffect(() => {
     // Create a copy of the second documents array
-    console.log();
     const updatedDocs2 = documents.map((doc2, index) => {
       // Find the corresponding document from the first documents array
       const correspondingDoc1 = formData?.documents.find(
         (doc1) => doc1.name === doc2.name
       );
-      console.log(correspondingDoc1, "nnn");
       // If a corresponding document is found, update the "show" key
       if (correspondingDoc1) {
         return {
@@ -81,7 +76,6 @@ const PlanEdit = () => {
     setDocuments(updatedDocs2);
   }, []);
 
-  console.log(documents, "vvv");
 
   const handleDocumentSelect = (index) => {
     const updatedDocuments = formData?.documents?.map((doc, i) =>
@@ -95,7 +89,6 @@ const PlanEdit = () => {
   const fetchDocuments = async () => {
     try {
       const response = await fetchDataFromAPI("GET", `${BASE_URL}documents`);
-      console.log(response, "response descriptions");
       if (response) {
         setDocuments(response.data);
       }
@@ -115,7 +108,6 @@ const PlanEdit = () => {
         "GET",
         `${BASE_URL}place/${formData?.package}`
       );
-      console.log(tourTypesData.data, "tourTypesData.data");
       setCountries(countriesData.data);
       setTourtypes(tourTypesData.data.tourTypes);
     };

@@ -40,9 +40,7 @@ const ShowFull = () => {
         `${BASE_URL}visa-category-by-package`,
         { package: id, tourType: visaTypeId }
       );
-      console.log(response);
       if (response) {
-        console.log(response.data, "data");
         setPlans(response.data);
       }
     } catch (error) {

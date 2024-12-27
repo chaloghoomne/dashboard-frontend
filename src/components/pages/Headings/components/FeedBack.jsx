@@ -14,7 +14,6 @@ const Feedback = ({ type }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/${type}`
         );
-        console.log(response);
         if (response) {
           setTitle(response.data.title);
           setHeading(response.data.heading);
@@ -44,7 +43,6 @@ const Feedback = ({ type }) => {
           },
         }
       );
-      console.log(response);
       if (response) {
         toast.success(" Updated successfully");
       }
@@ -52,7 +50,6 @@ const Feedback = ({ type }) => {
       console.log(error);
       alert("Error updating profile picture");
     }
-    console.log(heading, title);
   };
 
   return (

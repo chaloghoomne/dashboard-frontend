@@ -13,7 +13,6 @@ const Recommendations = ({ type }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/${type}`
         );
-        console.log(response);
         if (response) {
           setHeading(response.data.heading);
         }
@@ -41,7 +40,6 @@ const Recommendations = ({ type }) => {
           },
         }
       );
-      console.log(response);
       if (response) {
         toast.success(" Updated successfully");
       }

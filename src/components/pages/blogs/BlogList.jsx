@@ -5,6 +5,7 @@ import { BASE_URL } from '../../../Api/urls';
 import { toast } from 'react-toastify';
 import ViewModal from './ViewModal';
 import DeleteModal from './DeleteModal';
+import Pagination from '../Packages/components/Pagination';
 
 
 const BlogList = () => {
@@ -12,12 +13,17 @@ const BlogList = () => {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [getTotalPage,setTotalPages] = useState(0);
+    const [getCurrentPage,setCurrentPage] = useState(1);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}blogs`)
-      .then(response => setBlogs(response.data.data))
+    axios.get(`${BASE_URL}blogs?page=${getCurrentPage}`)
+      .then(response =>{
+        setBlogs(response.data.data)
+        setTotalPages(response.data?.totalPages)
+      })
       .catch(error => toast.error('Error fetching blogs'));
-  }, []);
+  }, [getCurrentPage]);
 
   const handleDelete = (id) => {
     axios.delete(`${BASE_URL}blog/${id}`)
@@ -80,6 +86,7 @@ const BlogList = () => {
           ))}
         </tbody>
       </table>
+      <Pagination currentPage={getCurrentPage} totalPages={getTotalPage} onPageChange={setCurrentPage}/>
 
       {viewModalOpen && <ViewModal blog={selectedBlog} onClose={() => setViewModalOpen(false)} />}
       {deleteModalOpen && <DeleteModal blog={selectedBlog} onDelete={handleDelete} onClose={() => setDeleteModalOpen(false)} />}

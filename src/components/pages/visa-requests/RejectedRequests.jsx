@@ -17,7 +17,6 @@ const RejectedRequests = () => {
           `${BASE_URL}visa-orders?page=${currentPage}&status=rejected`
         );
         if (response) {
-          console.log(response, "wefghjk");
           setUsers(response.data);
           setTotalPages(response.totalPages);
         }
@@ -30,13 +29,15 @@ const RejectedRequests = () => {
 
   const handleAction = async (userId, action) => {
     try {
-      await fetchDataFromAPI("DELETE", `${BASE_URL}users/${userId}`);
+      await fetchDataFromAPI("DELETE", `${BASE_URL}delete-user/${userId}`);
       // Refresh the data after action
       setUsers(users.filter((user) => user.id !== userId));
+      fetchAcceptedRequests();
     } catch (error) {
       console.log(error);
     }
   };
+
 
   return (
     <UserList
@@ -45,6 +46,7 @@ const RejectedRequests = () => {
       totalPages={totalPages}
       onPageChange={setCurrentPage}
       type="approve"
+      handleBlockAction={handleAction}
     />
   );
 };

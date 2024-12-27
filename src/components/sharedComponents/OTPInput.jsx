@@ -59,7 +59,6 @@ const OTPInput = ({
   }, [counter.seconds]);
   const closePopup = () => {
     close();
-    console.log(close());
   };
   const handleTextchange = async (input, index) => {
     setError({isError:false})
@@ -88,8 +87,6 @@ const OTPInput = ({
         //     
         // }
         const response = await fetchDataFromAPI("POST", url, body);
-        console.log(body, "body");
-        console.log(response)
         toast.success(response.message)
         setOTPVerified(true)
         // if (response && response.token) {
@@ -97,13 +94,11 @@ const OTPInput = ({
         // }
         // if (response &&( response.status === 1 || response.result.status_code===200)) {
         //    ;
-        //    console.log('otppop',setOTPVerified)
         // } else {
         //  setError({isError:true})
         // }
       } catch (error) {
         setError({isError:true})
-        console.log("Error verifying OTP:", error);
         toast.error(error.message)
       }
     }

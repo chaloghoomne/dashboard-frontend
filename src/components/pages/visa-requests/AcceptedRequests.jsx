@@ -18,7 +18,6 @@ const AcceptedRequests = () => {
           `${BASE_URL}visa-orders?page=${currentPage}&status=sent-to-immigration`
         );
         if (response) {
-          console.log(response, "wefghjk");
           setUsers(response.data);
           setTotalPages(response.totalPages);
         }
@@ -30,7 +29,6 @@ const AcceptedRequests = () => {
   }, [currentPage]);
 
   const handleAction = async (userId, action, data) => {
-    console.log(`data`, data);
     if (typeof data === "string") {
       try {
         const response = await fetchDataFromAPI(

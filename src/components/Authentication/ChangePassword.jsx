@@ -33,7 +33,6 @@ const ChangePassword = () => {
         BASE_URL + NetworkConfig.FORGOTPASSWORD,
         { email: email }
       );
-      console.log("response", response);
       localStorage.setItem("id", response.id);
       navigate(`/changePasswordOTP/${email}`);
       toast.success(response.message);

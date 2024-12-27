@@ -24,7 +24,6 @@ const EditImportantPoints = () => {
           "GET",
           `${BASE_URL}notes/${id}`
         );
-        console.log(response, "response");
         if (response) {
           setFormData(response.data);
         }
@@ -39,9 +38,7 @@ const EditImportantPoints = () => {
     const fetchProfileImage = async () => {
       try {
         const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
-        console.log(response, "response partners");
         if (response) {
-          console.log(response.data, "response");
           setCountries(response.data);
         }
       } catch (error) {
@@ -70,7 +67,6 @@ const EditImportantPoints = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Submit updated form data to API
-    console.log("Updated form data:", formData);
     const newformData = new FormData();
     newformData.append("type", formData?.type);
     newformData.append("heading", formData?.heading);
@@ -86,7 +82,6 @@ const EditImportantPoints = () => {
         `${BASE_URL}edit-note/${id}`,
         newformData
       );
-      console.log(response, "response");
       if (response) {
         setFormData(response.data);
       }

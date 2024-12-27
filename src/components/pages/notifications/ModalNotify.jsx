@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 
 const ModalNotify = ({ show, onClose, content, title }) => {
-  // console.log(content,content.endsWith('.mp4'))
-  console.log(content, "content");
   useEffect(() => {
     const handleEsc = (event) => {
       if (event.key === "Escape") {

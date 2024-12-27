@@ -52,7 +52,6 @@ const Plans = () => {
           "GET",
           `${BASE_URL}visa-categories?page=${currentPage}`
         );
-        console.log(response, "response partners");
         if (response) {
           setPlans(response.data);
           setTotalPages(response.totalPages);
@@ -71,23 +70,19 @@ const Plans = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  console.log(formData, "formDat");
 
   const handleImageChange = (e, field) => {
     setFormData({ ...formData, [field]: e.target.files[0] });
   };
 
   const handleFaqChange = (FAQ) => {
-    console.log("faq", FAQ);
 
     setFormData({ ...formData, faq: FAQ });
   };
   const handleDocumentsChange = (docs) => {
-    console.log("docs", docs);
     setFormData({ ...formData, documents: docs });
   };
   const handleLongDescriptionChange = (longDescription) => {
-    console.log("hit");
     setFormData({ ...formData, longDescription: longDescription });
   };
 
@@ -130,7 +125,6 @@ const Plans = () => {
         `${BASE_URL}add-visa-category`,
         newformData
       );
-      console.log(response);
       if (response) {
         toast.success("Added successfully");
        window.location.href =  `/home/visa/plans`;
@@ -156,7 +150,6 @@ const Plans = () => {
         "DELETE",
         `${BASE_URL}delete-visa-category/${deletedId}`
       );
-      console.log(response);
       if (response) {
         toast.success("Successfully Deleted");
         try {
@@ -164,7 +157,6 @@ const Plans = () => {
             "GET",
             `${BASE_URL}visa-categories?page=${currentPage}`
           );
-          console.log(response, "response partners");
           if (response) {
             setPlans(response.data);
             setTotalPages(response.totalPages);

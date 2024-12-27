@@ -23,7 +23,6 @@ const DraftRequests = () => {
           setTotalPages(response.totalPages);
         }
       } catch (error) {
-        console.log(error);
       }
     };
     fetchPendingRequests();
@@ -48,11 +47,9 @@ const DraftRequests = () => {
             setTotalPages(response.totalPages);
           }
         } catch (error) {
-          console.log(error);
         }
       }
     } catch (error) {
-      console.log(error);
     }
   };
 

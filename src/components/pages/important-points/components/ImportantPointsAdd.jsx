@@ -16,9 +16,7 @@ const AddImportantPoints = ({ handleActive }) => {
     const fetchProfileImage = async () => {
       try {
         const response = await fetchDataFromAPI("GET", `${BASE_URL}places`);
-        console.log(response, "response partners");
         if (response) {
-          console.log(response.data, "response");
           setCountries(response.data);
         }
       } catch (error) {
@@ -51,7 +49,6 @@ const AddImportantPoints = ({ handleActive }) => {
         `${BASE_URL}add-note`,
         formData
       );
-      console.log(response);
       if (response) {
         toast.success(" Added successfully");
         setPoints([]);

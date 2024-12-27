@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchDataFromAPI } from "../../../Api/fetchData";
 import { BASE_URL } from "../../../Api/urls";
 import { MdAttachEmail } from "react-icons/md";
+import Pagination from "../Packages/components/Pagination";
 
 const StatCard = ({ title, value, icon }) => (
   <div className="bg-white rounded-lg shadow-md p-6">
@@ -15,27 +16,29 @@ const StatCard = ({ title, value, icon }) => (
 
 const Subscribers = () => {
   const [subscribers, setSubscribers] = useState();
+  const [getTotalPage,setTotalPages] = useState(0);
+    const [getCurrentPage,setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
         const response = await fetchDataFromAPI(
           "GET",
-          `${BASE_URL}subscriptions`
+          `${BASE_URL}subscriptions?page=${getCurrentPage}`
         );
-        console.log(response, "response partners");
         if (response) {
           setSubscribers(response.data);
+          setTotalPages(response.totalPages)
         }
       } catch (error) {
         console.log(error);
       }
     };
     fetchProfileImage();
-  }, []);
+  }, [getCurrentPage]);
 
   return (
-    <div className="bg-gray-100 min-h-screen p-8">
+    <div className="bg-gray-100 min-h-screen p-8 overflow-y-auto">
       <h1 className="text-3xl font-bold mb-8 text-gray-800">
         Subscriber Dashboard
       </h1>
@@ -129,7 +132,7 @@ const Subscribers = () => {
               {subscribers?.map((subscriber, index) => (
                 <tr key={subscriber.id} className="text-center">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {index + 1}
+                    {subscriber.s_no}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {subscriber.email}
@@ -151,6 +154,7 @@ const Subscribers = () => {
           </table>
         </div>
       </div>
+      <Pagination currentPage={getCurrentPage} totalPages={getTotalPage} onPageChange={setCurrentPage}/>
     </div>
   );
 };

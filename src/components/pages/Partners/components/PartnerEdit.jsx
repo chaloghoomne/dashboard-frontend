@@ -26,7 +26,6 @@ const EditPartner = () => {
           "GET",
           `${BASE_URL}partner/${id}`
         );
-        console.log(response, "response");
         if (response) {
           setFormData(response.data);
         }
@@ -59,7 +58,6 @@ const EditPartner = () => {
     setFormData({ ...formData, image: e.target.files[0] });
     const file = e.target.files[0];
     setImagePreview(URL.createObjectURL(file));
-    console.log(imagePreview, "imagePreview");
   };
 
   const handleSubmit = async (e) => {
@@ -90,7 +88,6 @@ const EditPartner = () => {
         `${BASE_URL}edit-partner/${id}`,
         newformData
       );
-      console.log(response, "response");
       if (response) {
         toast.success("SuccessFully Updated")
         setFormData(response.data);

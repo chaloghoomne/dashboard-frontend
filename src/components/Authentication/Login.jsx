@@ -33,12 +33,10 @@ const LoginPage = () => {
   
 const generateDeviceToken = async()=>{
 const resp = await generateToken()
-console.log(resp)
 const tken = localStorage.getItem("deviceToken");
     setToken(tken);
 }
   useEffect(() => {
-    console.log("function")
     generateDeviceToken()
   }, []);
 
@@ -112,7 +110,6 @@ const tken = localStorage.getItem("deviceToken");
         navigate("/home");
       }
     } catch (error) {
-      console.log(error);
       // toast.error(error.message);
     }
   };

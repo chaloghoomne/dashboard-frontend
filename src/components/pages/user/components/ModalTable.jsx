@@ -13,7 +13,6 @@ const ModalTable = ({ companies }) => {
     setModalTitle(title);
     setShowModal(true);
   };
-    console.log(companies)
   return (
     <div className="max-w-full w-[95%] max-h-[90%] min-h-[85%] ">
       <table className="min-w-full bg-white">

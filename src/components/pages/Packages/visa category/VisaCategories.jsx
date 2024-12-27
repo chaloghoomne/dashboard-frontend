@@ -7,6 +7,7 @@ import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
 import PlanEdit from "../Plans/components.jsx/PlanEdit";
 import Loader from "../../../Loader/Loader";
+import Pagination from "../components/Pagination";
 
 const VisaCategories = () => {
   const [documents, setDocuments] = useState([]);
@@ -20,17 +21,19 @@ const VisaCategories = () => {
   
   const [showIconModal, setShowIconModal] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
+  const [getTotalPage,setTotalPages] = useState(0);
+  const [getCurrentPage,setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchDocuments();
-  }, []);
+  }, [getCurrentPage]);
 
   const fetchDocuments = async () => {
     try {
-      const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types`);
-      console.log(response, "response descriptions");
+      const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types?page=${getCurrentPage}`);
       if (response) {
         setDocuments(response.data);
+        setTotalPages(response.totalPages)
       }
     } catch (error) {
       console.log(error);
@@ -52,15 +55,13 @@ const VisaCategories = () => {
           `${BASE_URL}edit-tour-type/${formData.id}`,
           data
         );
-        console.log(response);
         if (response) {
-          setShowLoader(false)
           toast.success(" Updated  Successfully");
           try {
-            const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types`);
-            console.log(response, "response descriptions");
+            const response = await fetchDataFromAPI("GET", `${BASE_URL}tour-types?page=${getCurrentPage}`);
             if (response) {
               setDocuments(response.data);
+              setTotalPages(response.totalPages)
             }
           } catch (error) {
             console.log(error);
@@ -77,7 +78,6 @@ const VisaCategories = () => {
           `${BASE_URL}add-tour-type`,
           data
         );
-        console.log(response);
         if (response) {
           toast.success(" Added  successfully");
         }
@@ -88,6 +88,7 @@ const VisaCategories = () => {
     }
     setFormData({ id: null, name: "", image: null});
     fetchDocuments();
+    setShowLoader(false)
   };
 
   const handleEdit = async (id) => {
@@ -96,7 +97,6 @@ const VisaCategories = () => {
         "GET",
         `${BASE_URL}tour-type/${id}`
       );
-      console.log(response);
       if (response) {
         setFormData({
           id: response.data._id,
@@ -117,7 +117,6 @@ const VisaCategories = () => {
         "DELETE",
         `${BASE_URL}delete-tour-type/${id}`
       );
-      console.log(response);
       if (response) {
         toast.success("Deleted Succesfully")
         fetchDocuments();
@@ -136,8 +135,8 @@ const VisaCategories = () => {
     setSelectedDocument(document);
     setShowIconModal(true);
   };
+  
 
-  console.log(selectedDocument,"jj")
 
 return (
     <>
@@ -249,6 +248,8 @@ return (
           </div>
         </div>
       )} */}
+
+      <Pagination currentPage={getCurrentPage} totalPages={getTotalPage} onPageChange={setCurrentPage}/>
 
       {showIconModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">

@@ -25,7 +25,6 @@ const Navbar = ({ handlesidebar }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.NOTIFICATIONLST}`
         );
-        console.log(response);
 
         setCount(response?.unreadNotifications);
       } catch (error) {
@@ -42,7 +41,6 @@ const Navbar = ({ handlesidebar }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_PROFILE_PIC}`
         );
-        console.log(response);
         if (response) {
           setProfileImageUrl(response?.data?.profile_url);
         }

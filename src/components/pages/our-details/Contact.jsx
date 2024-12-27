@@ -16,7 +16,6 @@ const ContactUs = () => {
     // Fetch existing contact info (if available)
     const fetchData = async()=>{
     const resp = await axios.get(`${BASE_URL}/contact`)
-    console.log(resp,"djjd")
     setFormData(resp.data.data)
     }
     fetchData()
@@ -44,7 +43,6 @@ const ContactUs = () => {
     setFormData({ ...formData, offices: [...formData.offices, { city: '', address: '' ,phone:"",email:"" }] });
   };
 
-console.log(formData)
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,6 +51,18 @@ console.log(formData)
       .then(data => toast.success('Contact information updated successfully!'));
   };
 
+  const handleRemove = (index)=>{
+    formData.offices.splice(index,1);
+    console.log("New form data : ",formData)
+    setFormData({...formData})
+  }
+
+  useEffect(()=>{
+
+  },[formData])
+
+  console.log("Formdata : ",formData)
+
   return (
     <div className="bg-slate-300 text-black overflow-auto p-8 min-h-[89%]">
       <h1 className="text-3xl text-blue-600 font-bold mb-6"> Contact Us </h1>
@@ -60,6 +70,9 @@ console.log(formData)
         {/* Offices */}
         {formData?.offices?.map((office, index) => (
           <div key={index}>
+            <div className='w-full flex items-end justify-end'>  
+              <button type='button' className='bg-red-700 text-white font-bold rounded-md px-2 py-1' onClick={()=>handleRemove(index)}>Remove</button>
+            </div>
             <label className="block mb-2">City {index + 1}</label>
             <input
               type="text"

@@ -18,7 +18,6 @@ const BlackListRequest = () => {
           `${BASE_URL}visa-orders?page=${currentPage}&status=blacklist`
         );
         if (response) {
-          console.log(response, "wefghjk");
           setUsers(response.data);
           setTotalPages(response.totalPages);
         }
@@ -30,7 +29,6 @@ const BlackListRequest = () => {
   }, [currentPage]);
 
   const handleAction = async (userId, action) => {
-    console.log(userId, "sdfghjk");
     try {
       const response = await fetchDataFromAPI(
         "PUT",

@@ -6,7 +6,6 @@ import { BASE_URL, NetworkConfig } from '../../../../Api/urls';
 const ChapterSelectionModal = ({ isOpen, onClose, onConfirm,userId, userinfo }) => {
   const [chapters, setChapters] = useState([]);
   const [selectedChapter, setSelectedChapter] = useState('');
-console.log(userinfo)
   
 
   useEffect(() => {

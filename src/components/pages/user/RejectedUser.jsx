@@ -25,7 +25,6 @@ const RejectedUser = () => {
           'GET',
           `${BASE_URL}${NetworkConfig.REJECTEDUSERS}?page=${currentPage}`
         );
-        console.log(response);
         // toast.success(response.message);
         setUsers(response.profiles);
         setTotalPages(response.totalPages)
@@ -37,7 +36,6 @@ const RejectedUser = () => {
   }, [currentPage]);
 
  const handleApprove = async (id) => {
-    console.log("status", id);
     try {
       const response = await fetchDataFromAPI(
         "PUT",
@@ -47,7 +45,6 @@ const RejectedUser = () => {
           status: "approved",
         }
       );
-      console.log(response);
       if (response.message === "Profile Approved") {
         toast.success(response.message);
         const refreshedData = await fetchDataFromAPI(
