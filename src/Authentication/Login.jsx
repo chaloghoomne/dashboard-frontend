@@ -114,7 +114,6 @@ const LoginPage = () => {
       }
     } catch (error) {
       toast.error("Invalid Credentials");
-      console.log(error);
     }
   };
 

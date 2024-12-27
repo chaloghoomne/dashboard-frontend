@@ -110,7 +110,6 @@ const tken = localStorage.getItem("deviceToken");
         navigate("/home");
       }
     } catch (error) {
-      console.log(error);
       // toast.error(error.message);
     }
   };
