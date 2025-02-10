@@ -14,8 +14,9 @@ const About = ({ type }) => {
     { heading: "", description: "" },
   ]);
 
+  // Fetch data from API when component mounts
   useEffect(() => {
-    const fetchProfileImage = async () => {
+    const fetchProfileData = async () => {
       try {
         const response = await fetchDataFromAPI(
           "GET",
@@ -25,24 +26,33 @@ const About = ({ type }) => {
           setTitle(response.data.title);
           setDescription(response.data.description);
           setHeading(response.data.heading);
-          setBoxes(response.data.subItems);
+          setBoxes(response.data.subItems || []); // Safely set boxes data
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching profile data:", error);
       }
     };
-    fetchProfileImage();
-  }, []);
+    fetchProfileData();
+  }, [type]);
 
+  // Handle form submission and save data
   const handleSave = async (e) => {
-    // Send data to backend
+    e.preventDefault();
+
+    // Log the boxes data before submission
+    console.log("Boxes data before submission:", boxes);
+
+    // Check if boxes contain any valid data
     const formData = {
       title: title,
       description: description,
       heading: heading,
-      subItems: boxes,
+      subItems: boxes, // Include boxes data
     };
-    e.preventDefault();
+
+    // Log form data for debugging
+    console.log("Form Data to be sent:", formData);
+
     try {
       const response = await fetchDataFromAPI(
         "PUT",
@@ -50,23 +60,32 @@ const About = ({ type }) => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json", // Send as JSON
           },
         }
       );
       if (response) {
-        toast.success(" Updated successfully");
+        toast.success("Updated successfully");
       }
     } catch (error) {
-      console.log(error);
-      alert("Error updating profile picture");
+      console.error("Error during save operation:", error);
+      toast.error("Error updating the page");
     }
+  };
+
+  // Update box data dynamically
+  const handleBoxChange = (index, field, value) => {
+    const updatedBoxes = [...boxes];
+    updatedBoxes[index][field] = value;
+    setBoxes(updatedBoxes);
   };
 
   return (
     <div className="p-4 bg-white rounded-md shadow-md">
-      <form action="" onSubmit={handleSave}>
+      <form onSubmit={handleSave}>
         <h2 className="text-xl font-bold mb-4">About Page</h2>
+
+        {/* Title input */}
         <div className="mb-4">
           <label className="block text-gray-700">Title</label>
           <input
@@ -77,6 +96,8 @@ const About = ({ type }) => {
             required
           />
         </div>
+
+        {/* Heading input */}
         <div className="mb-4">
           <label className="block text-gray-700">Heading</label>
           <input
@@ -87,6 +108,8 @@ const About = ({ type }) => {
             required
           />
         </div>
+
+        {/* Description input */}
         <div className="mb-4">
           <label className="block text-gray-700">Description</label>
           <textarea
@@ -96,6 +119,8 @@ const About = ({ type }) => {
             required
           />
         </div>
+
+        {/* Boxes input */}
         {boxes.map((box, index) => (
           <div key={index} className="mb-4">
             <label className="block text-gray-700">
@@ -104,31 +129,26 @@ const About = ({ type }) => {
             <input
               type="text"
               value={box.heading}
-              onChange={(e) => {
-                const newBoxes = [...boxes];
-                newBoxes[index].heading = e.target.value;
-                setBoxes(newBoxes);
-              }}
+              onChange={(e) => handleBoxChange(index, "heading", e.target.value)}
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               required
             />
+
             <label className="block text-gray-700">
               Box {index + 1} Description
             </label>
             <textarea
               value={box.description}
-              onChange={(e) => {
-                const newBoxes = [...boxes];
-                newBoxes[index].description = e.target.value;
-                setBoxes(newBoxes);
-              }}
+              onChange={(e) => handleBoxChange(index, "description", e.target.value)}
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               required
             />
           </div>
         ))}
+
+        {/* Save button */}
         <button
-          onClick={handleSave}
+          type="submit"
           className="bg-[#11aaf6] text-white p-2 rounded-md"
         >
           Save

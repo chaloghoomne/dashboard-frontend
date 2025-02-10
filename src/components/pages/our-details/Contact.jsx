@@ -107,6 +107,7 @@ const ContactUs = () => {
             />
           </div>
         ))}
+        
         <button type="button" onClick={addOffice} className="bg-blue-500 text-white p-2 rounded">Add Office</button>
 
         {/* Support Email */}
@@ -159,6 +160,7 @@ const ContactUs = () => {
       </form>
     </div>
   );
+  
 };
 
 export default ContactUs;
