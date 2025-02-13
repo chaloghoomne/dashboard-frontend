@@ -86,8 +86,8 @@ const CareerList = () => {
           </tr>
         </thead>
         <tbody>
-          {careers?.map((career) => (
-            <tr key={career.id} className="text-center">
+          {careers?.map((career,index) => (
+            <tr key={career?.id || index} className="text-center">
               <td className="border border-black p-2">{career?.name}</td>
               <td className="border border-black p-2">{career?.phoneNumber}</td>
               <td className="border border-black p-2">{career?.email}</td>

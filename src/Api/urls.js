@@ -27,7 +27,7 @@ export const NetworkConfig = {
 	CHANGE_PASSWORD: "admin-change-password",
 	ADDPLAN: "add-plan",
 	EDITPLAN: "edit-plan",
-	NOTIFICATIONLST: "admin-notifications",
+	NOTIFICATIONLST: "admins-notifications",
 	NOTIFICATIONUSERSLST: "users-notifications",
 	DASHBOARD: "dashboard",
 	DELETEUSER: "delete-user",

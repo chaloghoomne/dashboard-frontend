@@ -31,11 +31,13 @@ const AcceptedRequests = () => {
   const handleAction = async (userId, action, data) => {
     if (typeof data === "string") {
       try {
+       
         const response = await fetchDataFromAPI(
           "PUT",
           `${BASE_URL}process-visa-order/${userId}`,
           { status: `${action}`, description: data }
         );
+        console.log("data",response);
         if (response) {
           toast.success(`${action.toUpperCase()}`);
           try {

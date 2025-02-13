@@ -59,7 +59,7 @@ const SidebarGhoomne = () => {
       try {
         const response = await fetchDataFromAPI(
           "GET",
-          `${BASE_URL}/pending-post`
+          `${BASE_URL}pending-post`
         );
         setPendingPosts(response.post);
       } catch (error) {
@@ -118,7 +118,7 @@ const SidebarGhoomne = () => {
       ),
     },
     {
-      id: 1,
+      id: 2,
       name: "Users",
       to: "/home/users",
       icon: (
@@ -126,7 +126,7 @@ const SidebarGhoomne = () => {
       ),
     },
     {
-      id: 2,
+      id: 3,
       name: "Visa Requests",
       to: "/home/request/accepted",
       icon: (
@@ -181,7 +181,7 @@ const SidebarGhoomne = () => {
       ],
     },
     {
-      id: 1,
+      id: 4,
       name: "Draft  Visa Request ",
       to: "/home/pending",
       icon: (
@@ -192,7 +192,7 @@ const SidebarGhoomne = () => {
       ),
     },
     {
-      id: 3,
+      id: 5,
       name: "Visa",
       to: "/home/visa/country",
       icon: (
@@ -242,7 +242,7 @@ const SidebarGhoomne = () => {
       ],
     },
     {
-      id: 1,
+      id: 6,
       name: "Headings",
       to: "/home/headings",
       icon: (
@@ -253,7 +253,7 @@ const SidebarGhoomne = () => {
       ),
     },
     {
-      id: 1,
+      id: 7,
       name: "Partners",
       to: "/home/partners",
       icon: (
@@ -275,7 +275,7 @@ const SidebarGhoomne = () => {
     //   ),
     // },
     {
-      id: 1,
+      id: 8,
       name: "Subscribers",
       to: "/home/subscriber",
       icon: (
@@ -286,7 +286,7 @@ const SidebarGhoomne = () => {
       ),
     },
     {
-      id: 1,
+      id: 9,
       name: "Blogs",
       to: "/home/blogs",
       icon: (
@@ -297,7 +297,7 @@ const SidebarGhoomne = () => {
       ),
     },
     {
-      id: 3,
+      id: 10,
       name: "Policies",
       to: "/home/policies/privacy",
       icon: (
@@ -338,7 +338,7 @@ const SidebarGhoomne = () => {
       ],
     },
     {
-      id: 3,
+      id: 11,
       name: "Our Details",
       to: "/home/details/contact",
       icon: (
@@ -370,7 +370,7 @@ const SidebarGhoomne = () => {
       ],
     },
     {
-      id: 3,
+      id: 12,
       name: "Forms",
       to: "/home/forms/career",
       icon: (
@@ -415,7 +415,7 @@ const SidebarGhoomne = () => {
    
 
     {
-      id: 1,
+      id: 13,
       name: "Notifications",
       to: "/home/notification",
       icon: (
@@ -436,8 +436,8 @@ const SidebarGhoomne = () => {
     <div className="w-full h-full gap-4 flex flex-col">
       <img src={logo} className="pt-5 pb-2 self-center w-[50%]" />
       <div className="w-full max-h-full  overflow-auto no-scrollbar flex flex-col gap-4">
-        {menuItems.map((item) => (
-          <div key={item.id} className="w-full">
+        {menuItems.map((item,index) => (
+          <div key={item?.id + index } className="w-full">
             <div
               className={`${
                 activeItem === item.to.split("/")[2]
@@ -476,7 +476,7 @@ const SidebarGhoomne = () => {
               <div className="w-full cursor-pointer self-center flex flex-col justify-center items-center">
                 <div className="w-[70%] flex flex-col justify-start items-center">
                   <p className="w-[15px] ml-7  self-start h-2 border-b-2 border-l-2 border-[#11aaf6]"></p>
-                  {item.sublist.map((subitem) => (
+                  {item.sublist.map((subitem,index) => (
                     <>
                       <p
                         className={`${
@@ -488,7 +488,7 @@ const SidebarGhoomne = () => {
                         |
                       </p>
                       <div
-                        key={subitem.url}
+                        key={subitem.url || index}
                         onClick={() =>
                           handleNavigate(
                             subitem.url,

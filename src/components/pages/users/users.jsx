@@ -180,7 +180,7 @@ const Users = ({ data }) => {
           </thead>
           <tbody className="bg-white divide-y text-center divide-gray-200">
             {users?.map((user, index) => (
-              <tr key={user.id}>
+              <tr key={index}>
                 <td className="px-6 py-1 whitespace-nowrap">{index + 1}</td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {user?.firstName ? (

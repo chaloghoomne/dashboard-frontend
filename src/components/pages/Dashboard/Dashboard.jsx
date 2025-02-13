@@ -118,10 +118,10 @@ const Dashboard = () => {
           <CarouselContainer style={{ width: "40%", marginLeft: "20px" }}>
             <h1 className="text-2xl">Top Visa </h1>
             <Slider {...carouselSettings}>
-              {packages?.map((item) => {
+              {packages?.map((item,index) => {
                 return (
                   <>
-                    <Box>
+                    <Box key = {index}>
                       <img
                         className="bg-cover"
                         src={item?.package?.image}
@@ -151,10 +151,10 @@ const Dashboard = () => {
           <CarouselContainer style={{ width: "40%", marginLeft: "20px" }}>
             <h1 className="text-2xl">Top Plans</h1>
             <Slider {...carouselSettings}>
-              {visaCategory?.map((item) => {
+              {visaCategory?.map((item, index) => {
                 return (
                   <>
-                    <Box>
+                    <Box key = {index}>
                       <img
                         className="bg-cover"
                         src={item?.image}
@@ -189,7 +189,7 @@ const Dashboard = () => {
                 {packages?.map((item) => {
                   return (
                     <>
-                      <span> {item?.package?.country},</span>
+                      <span key = {item?.id}> {item?.package?.country},</span>
                     </>
                   );
                 })}

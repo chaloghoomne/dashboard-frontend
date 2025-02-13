@@ -25,7 +25,7 @@ function HomeLayoutGhoomne() {
       try {
         const response = await fetchDataFromAPI(
           "GET",
-          BASE_URL + NetworkConfig.ADMINPROFILE
+          BASE_URL + NetworkConfig.GET_PROFILE_PIC
         );
         setAdminDetails({
           name: response.result.name,
