@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
+import {jwtDecode} from "jwt-decode";
 
 const ProfileEdit = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -23,12 +24,19 @@ const ProfileEdit = () => {
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
+        const token = localStorage.getItem("token");
         const response = await fetchDataFromAPI(
           "GET",
-          `${BASE_URL}${NetworkConfig.GET_PROFILE_PIC}`
+          `${BASE_URL}${NetworkConfig.GET_PROFILE_PIC}`,{
+            headers:{
+              Authorization: `Bearer ${token}`,
+            }
+          }
         );
-        if (response) {
-          setProfileImageUrl(response.data.profile_url);
+        // console.log(response.data)
+        if (response){
+          // console.log(response.data)
+          setProfileImageUrl(response.data.image);
         }
       } catch (error) {
         console.log(error);
@@ -47,7 +55,16 @@ const ProfileEdit = () => {
 
   const handleProfileImageSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token"); // Get the token
+
+    if (!token) {
+        console.log("No token found in localStorage");
+        return;
+    }
+
+    // console.log("token userId:", token);
     const formData = new FormData();
+    formData.append("token", token);
     formData.append("image", profileImage);
 
     try {
@@ -61,8 +78,10 @@ const ProfileEdit = () => {
           },
         }
       );
-      if (response.message === "admin updated successfully") {
-        setProfileImageUrl(response.imageUrl);
+      // console.log(response.message)
+      // console.log(response)
+      if (response.message === "Profile updated successfully") {
+        setProfileImageUrl(response);
         toast.success("Profile picture updated successfully");
         navigate("/home");
       }

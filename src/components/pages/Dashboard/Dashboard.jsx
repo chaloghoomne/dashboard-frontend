@@ -53,6 +53,8 @@ const Dashboard = () => {
           "GET",
           `${BASE_URL}top-packages`
         );
+
+        // console.log(response);
         if (response) {
           setPackages(response.data);
         }
@@ -69,6 +71,7 @@ const Dashboard = () => {
           "GET",
           `${BASE_URL}top-visa-categories`
         );
+        console.log(response)
         if (response) {
           setTopVisaCategory(response.data);
         }
@@ -88,6 +91,7 @@ const Dashboard = () => {
         if (response) {
           setTopVisaOrder(response.data);
         }
+
       } catch (error) {
         console.log(error);
       }
@@ -186,10 +190,10 @@ const Dashboard = () => {
             <Card>
               <SectionTitle variant="h5">Top Countries</SectionTitle>
               <Typography>
-                {packages?.map((item) => {
+                {packages?.map((item ,index) => {
                   return (
                     <>
-                      <span key = {item?.id}> {item?.package?.country},</span>
+                      <span key = {item?.id || index}> {item?.package?.country},</span>
                     </>
                   );
                 })}
