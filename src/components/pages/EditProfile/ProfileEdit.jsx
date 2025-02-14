@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import {jwtDecode} from "jwt-decode";
+import axios from 'axios'
 
 const ProfileEdit = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -58,7 +59,7 @@ const ProfileEdit = () => {
     const token = localStorage.getItem("token"); // Get the token
 
     if (!token) {
-        console.log("No token found in localStorage");
+        // console.log("No token found in localStorage");
         return;
     }
 
@@ -103,13 +104,25 @@ const ProfileEdit = () => {
       newPassword,
       confirmPassword,
     };
-
+ 
     try {
-      const response = await fetchDataFromAPI(
-        "POST",
-        `${BASE_URL}admin-reset-password`,
-        passwordData
-      );
+      //this is the previous code  which doesn't work because of wrong decryption
+      // const response = await fetchDataFromAPI(
+      //   "POST",
+      //   `${BASE_URL}admin-reset-password`,
+      //   passwordData
+      // );
+
+      const response = await axios.post(`${BASE_URL}admin-reset-password`, {
+        oldPass : oldPassword,
+        newPass : newPassword,
+        confirmPass : confirmPassword
+      },{
+        headers:{
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+
       if (response) {
         setOldPassword("");
         setNewPassword("");

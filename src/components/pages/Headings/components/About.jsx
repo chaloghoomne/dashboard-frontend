@@ -40,7 +40,7 @@ const About = ({ type }) => {
     e.preventDefault();
 
     // Log the boxes data before submission
-    console.log("Boxes data before submission:", boxes);
+    // console.log("Boxes data before submission:", boxes);
 
     // Check if boxes contain any valid data
     const formData = {
@@ -51,7 +51,7 @@ const About = ({ type }) => {
     };
 
     // Log form data for debugging
-    console.log("Form Data to be sent:", formData);
+    // console.log("Form Data to be sent:", formData);
 
     try {
       const response = await fetchDataFromAPI(

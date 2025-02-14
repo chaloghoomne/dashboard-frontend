@@ -89,19 +89,19 @@ const LoginPage = () => {
 	const onNextButtonClick = async (e) => {
 		e.preventDefault();
 
-		console.log("before");
+
 		if (!validateInputs()) {
 			return;
 		}
-		console.log("form validated");
+		// console.log("form validated");
 
 		try {
-			console.log(
-				"email: ",
-				formData.email,
-				"password: ",
-				formData.password
-			);
+			// console.log(
+			// 	"email: ",
+			// 	formData.email,
+			// 	"password: ",
+			// 	formData.password
+			// );
 			// const response = await fetchDataFromAPI(
 			// 	"POST",
 			// 	BASE_URL + NetworkConfig.ADMINLOGIN,
@@ -118,7 +118,7 @@ const LoginPage = () => {
 					password: formData.password,
 				}
 			);
-			console.log("response: ", response);
+			// console.log("response: ", response);s
 
 			if (response.data) {
 				toast.success("Successfully Login");

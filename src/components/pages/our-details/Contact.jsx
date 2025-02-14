@@ -53,7 +53,7 @@ const ContactUs = () => {
 
   const handleRemove = (index)=>{
     formData.offices.splice(index,1);
-    console.log("New form data : ",formData)
+    // console.log("New form data : ",formData)
     setFormData({...formData})
   }
 
@@ -61,7 +61,7 @@ const ContactUs = () => {
 
   },[formData])
 
-  console.log("Formdata : ",formData)
+  // console.log("Formdata : ",formData)
 
   return (
     <div className="bg-slate-300 text-black overflow-auto p-8 min-h-[89%]">

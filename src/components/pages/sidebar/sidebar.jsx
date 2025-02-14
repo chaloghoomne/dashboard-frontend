@@ -31,6 +31,7 @@ const SidebarGhoomne = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [pendingPosts, setPendingPosts] = useState([]);
   const [tickets, setTickets] = useState([]);
+
   useEffect(() => {
     const parts = pathName.split("/");
     const main = parts[2];
@@ -42,6 +43,7 @@ const SidebarGhoomne = () => {
 
   const activecolor = "#11aaf6";
   const inactivecolor = "";
+  
   useEffect(() => {
     const fetchPendingUsers = async () => {
       try {
@@ -73,19 +75,15 @@ const SidebarGhoomne = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_TICKETS}`
         );
-
         if (response) {
-          // const openTickets = response?.data?.filter((item)=>{
-          //   return item.status === 'open'
-          // })
           setTickets(response?.data);
         }
       } catch (error) {
         console.log(error);
       }
     };
-    fetchIssues();
 
+    fetchIssues();
     fetchPendingUsers();
     fetchPendingPosts();
   }, []);
@@ -263,17 +261,6 @@ const SidebarGhoomne = () => {
         />
       ),
     },
-    // {
-    //   id: 1,
-    //   name: "Important Points",
-    //   to: "/home/important",
-    //   icon: (
-    //     <MdLabelImportant
-    //       color={activeItem === "important" ? "white" : "black"}
-    //       size={20}
-    //     />
-    //   ),
-    // },
     {
       id: 8,
       name: "Subscribers",
@@ -301,7 +288,10 @@ const SidebarGhoomne = () => {
       name: "Policies",
       to: "/home/policies/privacy",
       icon: (
-        <MdPolicy color={activeItem === "policies" ? "white" : "black"} size={20} />
+        <MdPolicy
+          color={activeItem === "policies" ? "white" : "black"}
+          size={20}
+        />
       ),
       sublist: [
         {
@@ -334,7 +324,6 @@ const SidebarGhoomne = () => {
           ),
           url: "/home/policies/terms",
         },
-       
       ],
     },
     {
@@ -342,7 +331,10 @@ const SidebarGhoomne = () => {
       name: "Our Details",
       to: "/home/details/contact",
       icon: (
-        <MdContactPhone color={activeItem === "details" ? "white" : "black"} size={20} />
+        <MdContactPhone
+          color={activeItem === "details" ? "white" : "black"}
+          size={20}
+        />
       ),
       sublist: [
         {
@@ -365,8 +357,6 @@ const SidebarGhoomne = () => {
           ),
           url: "/home/details/about",
         },
-        
-       
       ],
     },
     {
@@ -374,7 +364,10 @@ const SidebarGhoomne = () => {
       name: "Forms",
       to: "/home/forms/career",
       icon: (
-        <SiGoogleforms color={activeItem === "forms" ? "white" : "black"} size={20} />
+        <SiGoogleforms
+          color={activeItem === "forms" ? "white" : "black"}
+          size={20}
+        />
       ),
       sublist: [
         {
@@ -397,23 +390,8 @@ const SidebarGhoomne = () => {
           ),
           url: "/home/forms/travel",
         },
-        
-       
       ],
     },
-    // {
-    //   id: 1,
-    //   name: "Transactions",
-    //   to: "/home/transaction",
-    //   icon: (
-    //     <LiaBlogSolid
-    //       color={activeItem === "transaction" ? "white" : "black"}
-    //       size={20}
-    //     />
-    //   ),
-    // },
-   
-
     {
       id: 13,
       name: "Notifications",
@@ -434,14 +412,14 @@ const SidebarGhoomne = () => {
 
   return (
     <div className="w-full h-full gap-4 flex flex-col">
-      <img src={logo} className="pt-5 pb-2 self-center w-[50%]" />
-      <div className="w-full max-h-full  overflow-auto no-scrollbar flex flex-col gap-4">
-        {menuItems.map((item,index) => (
-          <div key={item?.id + index } className="w-full">
+      <img src={logo} className="pt-5 pb-2 self-center w-[50%]" alt="logo" />
+      <div className="w-full max-h-full overflow-auto no-scrollbar flex flex-col gap-4">
+        {menuItems.map((item) => (
+          <div key={item.id} className="w-full">
             <div
               className={`${
                 activeItem === item.to.split("/")[2]
-                  ? `border-l-4 border-[#11aaf6]`
+                  ? "border-l-4 border-[#11aaf6]"
                   : ""
               } w-full cursor-pointer flex justify-center items-center`}
             >
@@ -453,14 +431,14 @@ const SidebarGhoomne = () => {
                 }
                 className={`${
                   activeItem === item.to.split("/")[2]
-                    ? `bg-[#11aaf6]  text-white`
-                    : "text-black "
+                    ? "bg-[#11aaf6] text-white"
+                    : "text-black"
                 } min-w-[70%] rounded-sm p-2 gap-2 flex items-center`}
               >
                 <p>{item.icon}</p>
                 <p>{item.name}</p>
                 {item.name === "Users" && pendingUsers?.length >= 1 && (
-                  <span className="text-red-500  ml-2">•</span>
+                  <span className="text-red-500 ml-2">•</span>
                 )}
                 {item.name === "Post" && pendingPosts?.length >= 1 && (
                   <span className="text-red-500 ml-2">•</span>
@@ -475,20 +453,19 @@ const SidebarGhoomne = () => {
             {item.sublist && activeItem === item.to.split("/")[2] && (
               <div className="w-full cursor-pointer self-center flex flex-col justify-center items-center">
                 <div className="w-[70%] flex flex-col justify-start items-center">
-                  <p className="w-[15px] ml-7  self-start h-2 border-b-2 border-l-2 border-[#11aaf6]"></p>
-                  {item.sublist.map((subitem,index) => (
-                    <>
+                  <p className="w-[15px] ml-7 self-start h-2 border-b-2 border-l-2 border-[#11aaf6]"></p>
+                  {item.sublist.map((subitem, index) => (
+                    <React.Fragment key={`${item.id}-sub-${index}`}>
                       <p
                         className={`${
                           activeSublist === subitem.url.split("/")[3]
-                            ? " self-start "
+                            ? "self-start"
                             : "self-start"
-                        }  gap-2 mt-[-8px] font-bold px-2 ml-8 text-[#11aaf6] flex justify-center items-center`}
+                        } gap-2 mt-[-8px] font-bold px-2 ml-8 text-[#11aaf6] flex justify-center items-center`}
                       >
                         |
                       </p>
                       <div
-                        key={subitem.url || index}
                         onClick={() =>
                           handleNavigate(
                             subitem.url,
@@ -498,22 +475,22 @@ const SidebarGhoomne = () => {
                         }
                         className={`${
                           activeSublist === subitem.url.split("/")[3]
-                            ? " self-start "
+                            ? "self-start"
                             : "self-start"
-                        }  px-2 gap-2 ml-6 text-black flex justify-center items-center`}
+                        } px-2 gap-2 ml-6 text-black flex justify-center items-center`}
                       >
                         <p>{subitem.icon}</p>
                         <p>{subitem.subitem}</p>
                         {subitem.subitem === "Pending User" &&
                           pendingUsers?.length >= 1 && (
-                            <span className="text-red-500  ml-2">•</span>
+                            <span className="text-red-500 ml-2">•</span>
                           )}
                         {subitem.subitem === "Query" &&
                           pendingUsers?.length >= 1 && (
-                            <span className="text-red-500  ml-2">•</span>
+                            <span className="text-red-500 ml-2">•</span>
                           )}
                       </div>
-                    </>
+                    </React.Fragment>
                   ))}
                 </div>
               </div>
@@ -521,7 +498,7 @@ const SidebarGhoomne = () => {
           </div>
         ))}
         <div
-          className={`active:border-l-4 cursor-pointer self-start  active:border-orange-400 w-[70%] flex justify-center items-center`}
+          className={`active:border-l-4 cursor-pointer self-start active:border-orange-400 w-[70%] flex justify-center items-center`}
         >
           <div
             onClick={handleLogout}

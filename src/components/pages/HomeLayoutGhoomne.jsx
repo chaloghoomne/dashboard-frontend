@@ -32,7 +32,7 @@ function HomeLayoutGhoomne() {
           profilePic: response.result.prifilePic,
         });
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
 
