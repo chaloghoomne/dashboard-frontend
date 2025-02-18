@@ -349,7 +349,7 @@ const AboutUs = () => {
 			</form>
 		</div>
 	);
-	console.log("Formdata : ", formData);
+	// console.log("Formdata : ", formData);
 };
 
 export default AboutUs;

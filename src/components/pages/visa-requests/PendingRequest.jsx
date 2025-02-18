@@ -30,7 +30,7 @@ const PendingRequests = () => {
 	}, [currentPage]);
 
 	const handleAction = async (userId, action, data) => {
-		console.log("userId: ", userId, action, data);
+		// console.log("userId: ", userId, action, data);
 
 		try {
 			const response = await fetchDataFromAPI(  
@@ -41,7 +41,7 @@ const PendingRequests = () => {
 					description: data,
 				}
 			);
-			console.log("response of process-visa-order: ", response);
+			// console.log("response of process-visa-order: ", response);
 			if (response) {
 				toast.success(`${action.toUpperCase()}`);
 				try {

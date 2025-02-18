@@ -157,7 +157,7 @@ const Plans = () => {
             "GET",
             `${BASE_URL}visa-categories?page=${currentPage}`
           );
-          console.log(response);
+          // console.log(response);
           if (response) {
             setPlans(response.data);
             setTotalPages(response.totalPages);

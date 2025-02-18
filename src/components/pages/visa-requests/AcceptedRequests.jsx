@@ -37,7 +37,7 @@ const AcceptedRequests = () => {
           `${BASE_URL}process-visa-order/${userId}`,
           { status: `${action}`, description: data }
         );
-        console.log("data",response);
+        // console.log("data",response);
         if (response) {
           toast.success(`${action.toUpperCase()}`);
           try {
