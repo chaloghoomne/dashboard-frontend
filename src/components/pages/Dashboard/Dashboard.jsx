@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Box, Typography, Container, Grid } from "@mui/material";
-import { styled } from "@mui/system";
+import { borderRadius, styled } from "@mui/system";
 import { BASE_URL } from "../../../Api/urls";
 import { fetchDataFromAPI } from "../../../Api/fetchData";
 
@@ -162,7 +162,7 @@ const Dashboard = () => {
 							{visaCategory?.map((item, index) => {
 								return (
 									<Box key={item?.id || index}>
-										<img
+										{/* <img
 											className="bg-cover"
 											src={item?.image}
 											alt="Rome"
@@ -172,7 +172,39 @@ const Dashboard = () => {
 												height: "250px",
 												marginTop: "10px",
 											}}
-										/>
+										/> */}
+
+										<div
+											style={{
+												backgroundImage: `url("https://static.vecteezy.com/system/resources/thumbnails/008/079/335/small_2x/empty-showcase-abstract-pastel-color-background-3d-illustration-free-vector.jpg")`, // Dynamically set background image
+											}}
+											className="w-[540px] h-[250px] rounded-xl p-4 mt-2.5 flex flex-col justify-between text--right bg-cover"
+										>
+											{/* Tour Type */}
+											<div className="font-bold text-lg text-gray-800">
+												Tour Type:{" "}
+												{item?.visaTypeHeading.toString() +
+													"Visa" || "N/A"}
+											</div>
+
+											{/* Price */}
+											<div className="font-bold text-xl text-gray-800">
+												Price: ₹
+												{item?.price?.toLocaleString()}
+											</div>
+
+											{/* Child Price */}
+											<div className="text-lg text-gray-600">
+												Child Price: ₹
+												{item?.childPrice?.toLocaleString()}
+											</div>
+
+											{/* Processing Time */}
+											<div className="text-sm text-gray-500">
+												Processing Time:{" "}
+												{item?.processingTime} days
+											</div>
+										</div>
 										<Typography
 											variant="h4"
 											style={{
