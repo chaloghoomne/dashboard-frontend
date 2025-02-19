@@ -137,7 +137,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Stay Period <span className="text-xs">(number)</span>
         </label>
         <input
-          type="text"
+          type="number"
           name="period"
           value={formData.period}
           onChange={handleChange}
@@ -151,7 +151,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Visa Validity <span className="text-xs">(number)</span>
         </label>
         <input
-          type="text"
+          type="number"
           name="validity"
           value={formData.validity}
           onChange={handleChange}
@@ -165,7 +165,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Processing Time
         </label>
         <input
-          type="text"
+          type="number"
           name="processingTime"
           value={formData.processingTime}
           onChange={handleChange}
@@ -201,7 +201,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Insurance Amount <span className="text-xs">(optional*)</span>
         </label>
         <input
-          type="text"
+          type="number"
           name="insuranceAmount"
           value={formData.insuranceAmount}
           onChange={handleChange}
@@ -253,7 +253,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Express Price
         </label>
         <input
-          type="text"
+          type="number"
           name="expressPrice"
           value={formData.expressPrice}
           onChange={handleChange}
@@ -265,7 +265,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Express Processing Time <span className="text-xs">(number)</span>
         </label>
         <input
-          type="text"
+          type="number"
           name="expressDays"
           value={formData.expressDays}
           onChange={handleChange}
@@ -296,7 +296,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Instant Price
         </label>
         <input
-          type="text"
+          type="number"
           name="instantPrice"
           value={formData.instantPrice}
           onChange={handleChange}
@@ -308,7 +308,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Instant Processing Time <span className="text-xs">(number)</span>
         </label>
         <input
-          type="text"
+          type="number"
           name="instantDays"
           value={formData.instantDays}
           onChange={handleChange}
