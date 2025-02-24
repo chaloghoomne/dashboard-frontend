@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchDataFromAPI } from "../../../../Api/fetchData";
 import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
+import TextEditor from "../../blogs/TextEditor";
 
 const AddForm = ({ handleActive }) => {
   const [headings, setHeadings] = useState([]);
@@ -148,6 +149,12 @@ const AddForm = ({ handleActive }) => {
     );
     setFaq(updatedFaq);
   };
+  const handleEditorChange = (index, value) => {
+		const updatedFaq = faq.map(
+			(item, i) => (i === index ? { ...item, answer: value } : item) // ✅ Set `answer` directly
+		);
+		setFaq(updatedFaq);
+	};
 
   const handleRemoveQuestion = (index) => {
     const updatedFaq = faq.filter((item, i) => i !== index);
@@ -259,7 +266,7 @@ const AddForm = ({ handleActive }) => {
               placeholder="Question"
               required
             />
-            <input
+            {/* <input
               type="text"
               name="answer"
               value={item.answer}
@@ -267,7 +274,14 @@ const AddForm = ({ handleActive }) => {
               className="block w-1/2 p-2 border border-gray-300 rounded-md"
               placeholder="Answer"
               required
-            />
+            /> */}
+            <TextEditor
+								className="w-full h-32 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
+								value={item.answer}
+								onChange={(value) =>
+									handleEditorChange(index, value)
+								} // ✅ Use a new handler for TextEditor
+							/>
             <button
               type="button"
               onClick={() => handleRemoveQuestion(index)}
