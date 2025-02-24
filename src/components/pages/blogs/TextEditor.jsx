@@ -41,8 +41,9 @@ const TextEditor = ({ value, onChange }) => {
 			onChange={onChange}
 			modules={modules}
 			formats={formats}
-			className="w-full h-50 border rounded-lg bg-white"
+			className="w-full min-h-[150px] max-h-[300px] overflow-auto border rounded-lg bg-white"
 			placeholder="Write your blog here..."
+			style={{ resize: "vertical" }} // ✅ Allows user to resize the editor manually
 		/>
 	);
 };

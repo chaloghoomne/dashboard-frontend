@@ -308,7 +308,7 @@ const CountryEdit = () => {
                 required
               /> */}
 							<TextEditor
-								className="w-full h-32 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
+								className="w-full h-100 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
 								value={item.answer}
 								onChange={(value) =>
 									handleEditorChange(index, value)
