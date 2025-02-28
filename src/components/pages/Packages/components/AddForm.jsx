@@ -122,6 +122,7 @@ const AddForm = ({ handleActive }) => {
       data.append(`faq[${index}][question]`, item.question);
       data.append(`faq[${index}][answer]`, item.answer);
     });
+    // console.log("formdata",formData)
 
     try {
       const response = await fetchDataFromAPI(

@@ -169,6 +169,12 @@ const CountryEdit = () => {
 		);
 		setFaq(updatedFaq);
 	};
+	const handleQuestionChange = (index, e) => {
+		const updatedFaq = faq.map((item, i) =>
+		  i === index ? { ...item, [e.target.name]: e.target.value } : item
+		);
+		setFaq(updatedFaq);
+	  };
 
 	const handleRemoveQuestion = (index) => {
 		const updatedFaq = faq.filter((_, i) => i !== index);
