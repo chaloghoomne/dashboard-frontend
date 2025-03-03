@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../../Api/urls';
 import { toast } from 'react-toastify';
+import TextEditor from '../blogs/TextEditor'
 
 const PrivacyPolicy = () => {
   const [formData, setFormData] = useState({
@@ -179,8 +180,15 @@ const PrivacyPolicy = () => {
     }
   };
 
+  async function handleEditorChange(value) {
+    setFormData({
+      ...formData,
+      description:value,
+    })
+  }
+
   return (
-    <div className="bg-slate-300 min-h-[89%] overflow-auto p-8 text-white">
+    <div className="bg-slate-300 min-h-[89%] overflow-auto p-8 text-black">
       <h1 className="text-3xl font-bold mb-6 text-blue-700">Privacy Policy</h1>
 
       <form onSubmit={handleSubmit} className="space-y-8">
@@ -205,15 +213,7 @@ const PrivacyPolicy = () => {
           <label htmlFor="description" className="block text-lg text-blue-600">
             Description
           </label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            className="mt-2 w-full p-2 bg-white border border-gray-700 text-black rounded"
-            rows="4"
-            required
-          />
+          <TextEditor value = {formData.description} onChange = {handleEditorChange}/>
         </div>
 
         {/* Image */}
@@ -230,99 +230,6 @@ const PrivacyPolicy = () => {
             accept="image/*"
           />
         </div>
-
-        {/* Sections */}
-        {formData?.sections?.map((section, index) => (
-          <div key={index} className="bg-white p-4 rounded-lg">
-            <div className='flex justify-between'>
-              <label className="block text-lg text-blue-600">Section {index + 1} Heading</label>
-              <button
-                  type="button"
-                  onClick={() => removeSection(index)}
-                  className="ml-4 bg-red-500 hover:bg-red-600 text-xs text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-            </div>
-
-            <input
-              type="text"
-              name="heading"
-              value={section.heading}
-              onChange={(e) => handleInputChange(e, index)}
-              className="mt-2 w-full bg-white border border-gray-700 text-black rounded"
-            />
-            {/* Points */}
-            {section?.point?.map((point, pointIndex) => (
-              <div key={pointIndex} className="mt-4 flex items-center">
-                <label className="block w-full flex flex-col text-blue-600">Point {pointIndex + 1}
-                  <textarea
-                    value={point}
-                    onChange={(e) => handleInputChange(e, index, pointIndex)}
-                    className="mt-2 min-w-full p-2 bg-white border border-gray-700 text-black rounded"
-                    rows="2"
-                  />
-                </label>
-                {/* Remove Point Button */}
-                <button
-                  type="button"
-                  onClick={() => removePoint(index, pointIndex)}
-                  className="ml-4 bg-red-500 hover:bg-red-600 text-xs text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            {/* Add Point Button */}
-            <button
-              type="button"
-              onClick={() => addPoint(index)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-            >
-              Add Point
-            </button>
-
-            {/* Summary */}
-            {section?.summary?.map((summary, summaryIndex) => (
-              <div key={summaryIndex} className="mt-4 flex items-center">
-                <label className="block w-full flex flex-col text-blue-600">Summary {summaryIndex + 1}
-                  <textarea
-                    value={summary}
-                    onChange={(e) => handleInputChange(e, index, null, summaryIndex)}
-                    className="mt-2 min-w-full p-2 bg-white border border-gray-700 text-black rounded"
-                    rows="2"
-                  />
-                </label>
-                {/* Remove Point Button */}
-                <button
-                  type="button"
-                  onClick={() => removeSummary(index, summaryIndex)}
-                  className="ml-4 bg-red-500 hover:bg-red-600 text-xs text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            {/* Add Point Button */}
-            <button
-              type="button"
-              onClick={() => addSummary(index)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded ml-4"
-            >
-              Add Summary
-            </button>
-
-          </div>
-        ))}
-
-        {/* Add Section Button */}
-        <button
-          type="button"
-          onClick={addSection}
-          className="bg-orange-500 ml-5 hover:bg-orange-600 text-black py-2 px-4 rounded"
-        >
-          Add Section
-        </button>
 
         {/* Submit Button */}
         <button
