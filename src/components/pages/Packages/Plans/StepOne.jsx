@@ -137,7 +137,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Stay Period <span className="text-xs">(number)</span>
         </label>
         <input
-          type="number"
+          type="text"
           name="period"
           value={formData.period}
           onChange={handleChange}
@@ -151,7 +151,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Visa Validity <span className="text-xs">(number)</span>
         </label>
         <input
-          type="number"
+          type="text"
           name="validity"
           value={formData.validity}
           onChange={handleChange}
@@ -165,7 +165,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           Processing Time
         </label>
         <input
-          type="number"
+          type="text"
           name="processingTime"
           value={formData.processingTime}
           onChange={handleChange}
