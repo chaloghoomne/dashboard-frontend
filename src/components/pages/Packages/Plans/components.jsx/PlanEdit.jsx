@@ -218,7 +218,7 @@ const PlanEdit = () => {
   return (
     <div className="bg-slate-300 min-h-[85%]  p-6">
       <h1 className="text-2xl text-blue-500 font-semibold">Edit Plan</h1>
-      <div className="min-h-[95%] max-h-[95%] overflow-auto py-2">
+      <div className="min-h-[95%] max-h-[95%] overflow-x-scroll py-2">
         {step === 1 && (
           <form onSubmit={handleNext} className="space-y-4">
             <div>

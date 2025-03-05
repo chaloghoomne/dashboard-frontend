@@ -157,7 +157,7 @@ const PrivacyPolicy = () => {
     data.append('description', formData.description);
     data.append('pageType', 'privacy'); // Add type to formData
     data.append('image', formData.image); // Append the image file
-    data.append('sections', JSON.stringify(formData.sections)); // Convert sections array to string
+// Convert sections array to string
 
     try {
       const result = await axios.post(`${BASE_URL}add-page`, data, {

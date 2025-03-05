@@ -26,9 +26,9 @@ const PlanListing = ({ data, deleted, edit, view }) => {
   };
 
   return (
-    <div className="relative w-full h-full">
-      <div className="w-full max-h-[90%] overflow-auto min-h-[90%]">
-        <table className="min-w-full divide-y overflow-auto divide-gray-200">
+    <div className="relative overflow-x-scroll w-full h-full">
+      <div className="w-full max-h-[90%]  min-h-[90%]">
+        <table className="min-w-full divide-y  divide-gray-200">
           <thead className="bg-[#11aaf6] text-center">
             <tr className="text-center">
               <th className="px-6 py-3 min-w-32 bg-[#11aaf6] text-xs font-medium text-white uppercase tracking-wider">
@@ -82,7 +82,7 @@ const PlanListing = ({ data, deleted, edit, view }) => {
           </thead>
           <tbody className="bg-white divide-y text-center divide-gray-200">
             {data?.map((pkg, index) => (
-              <tr key={pkg?.id}>
+              <tr key={index}>
                 <td className="px-6 py-1 whitespace-nowrap">{index + 1}</td>
                 {!view && (
                   <td className="px-6 py-1 whitespace-nowrap">
