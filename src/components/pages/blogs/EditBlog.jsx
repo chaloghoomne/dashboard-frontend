@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../../Api/urls';
 import { toast } from 'react-toastify';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { json, Link, useNavigate, useParams } from 'react-router-dom';
 
 const EditBlog = () => {
   const { blogId } = useParams();
@@ -36,6 +36,11 @@ const EditBlog = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const keywords =
+    typeof formData.metaKeywords === "string"
+      ? formData.metaKeywords.split(",").map((kw) => kw.trim())
+      : [];
+
     const data = new FormData();
     data.append('title', formData.title);
     data.append('description', formData.description);
@@ -43,7 +48,8 @@ const EditBlog = () => {
     data.append('readingTime', formData.readingTime);
     data.append("metaTitle", formData.metaTitle);
     data.append("metaDescription", formData.metaDescription);
-    data.append("metaKeywords", formData.metaKeywords.split(",").map((kw) => kw.trim()));
+    
+  data.append("metaKeywords", JSON.stringify(keywords));
     if (formData.image) {
       data.append('image', formData.image);
     }
