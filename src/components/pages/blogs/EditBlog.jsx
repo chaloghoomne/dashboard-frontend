@@ -13,6 +13,9 @@ const EditBlog = () => {
     image: null,
     publisher: '',
     readingTime: '',
+    metaTitle: "",
+    metaDescription: "",
+    metaKeywords: "",
   });
 
   useEffect(() => {
@@ -38,6 +41,9 @@ const EditBlog = () => {
     data.append('description', formData.description);
     data.append('publisher', formData.publisher);
     data.append('readingTime', formData.readingTime);
+    data.append("metaTitle", formData.metaTitle);
+    data.append("metaDescription", formData.metaDescription);
+    data.append("metaKeywords", formData.metaKeywords.split(",").map((kw) => kw.trim()));
     if (formData.image) {
       data.append('image', formData.image);
     }
@@ -136,6 +142,36 @@ const EditBlog = () => {
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
             onChange={handleChange}
             required
+          />
+        </div>
+        {/* Meta Fields */}
+        <div>
+          <label className="block text-lg font-semibold mb-2">Meta Title</label>
+          <input
+            type="text"
+            name="metaTitle"
+            value={formData.metaTitle}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label className="block text-lg font-semibold mb-2">Meta Description</label>
+          <textarea
+            name="metaDescription"
+            value={formData.metaDescription}
+            className="w-full h-24 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label className="block text-lg font-semibold mb-2">Meta Keywords (comma separated)</label>
+          <input
+            type="text"
+            name="metaKeywords"
+            value={formData.metaKeywords}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+            onChange={handleChange}
           />
         </div>
         <button
