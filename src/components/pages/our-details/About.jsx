@@ -9,6 +9,9 @@ const AboutUs = () => {
 		title: "",
 		description: "",
 		image: null,
+		metaTitle: "",
+		metaDescription: "",
+		metaKeywords: "",
 	});
 
 	// Handle form changes
@@ -74,54 +77,64 @@ const AboutUs = () => {
 		const fetchData = async () => {
 			const resp = await axios.get(`${BASE_URL}about`);
 			setFormData(resp.data.data);
-			console.log(resp.data)
+			console.log(resp.data);
 		};
 		fetchData();
 	}, []);
 
 	const handleInputChange = (e) => {
-		
-	  const { name, value } = e.target;
-	  setFormData({ ...formData, [name]: value });
+		const { name, value } = e.target;
+		setFormData({ ...formData, [name]: value });
 	};
 
 	const handleImageChange = (e) => {
 		setFormData({ ...formData, image: e.target.files[0] });
-	  };
+	};
 	const handleEditorChange = (value) => {
 		setFormData((prev) => ({
 			...prev,
 			description: value,
 		}));
 	};
-	
 
-
+	const keywords =
+    typeof formData.metaKeywords === "string"
+      ? formData.metaKeywords.split(",").map((kw) => kw.trim())
+      : [];
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // ✅ Prevent default form submission
-	
+
 		const formDataToSend = {
 			title: formData.title || "",
 			description: formData.description || "",
 			image: formData.image, // ✅ Ensure image is a string URL
+			metaTitle:formData.metaTitle || "",
+			metaDescription:formData.metaDescription || "",
+			metaKeywords:formData.metaKeywords || "",
 		};
-		console.log("Sendig form data",formData)
-		console.log("🚀 Sending JSON Data:", formDataToSend);
-	
+		// console.log("Sendig form data", formData);
+		// console.log("🚀 Sending JSON Data:", formDataToSend);
+
 		try {
-			const response = await axios.post(`${BASE_URL}about`, formDataToSend, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-			toast.success(response.data.message || "About Us updated successfully!");
+			const response = await axios.post(
+				`${BASE_URL}about`,
+				formDataToSend,
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			toast.success(
+				response.data.message || "About Us updated successfully!"
+			);
 		} catch (error) {
 			console.error("❌ Error submitting form:", error);
-			toast.error(error.response?.data?.message || "Failed to update About Us.");
+			toast.error(
+				error.response?.data?.message || "Failed to update About Us."
+			);
 		}
 	};
-	
-
 
 	return (
 		<div className="bg-slate-300  text-black overflow-auto p-8 min-h-[89%]">
@@ -176,9 +189,48 @@ const AboutUs = () => {
 							className="mt-2 w-20 h-20 object-cover"
 						/>
 					)}
-					<button type="submit" className="bg-blue-500 text-white px-4 py-2 mt-4 rounded">
-					Save
-				</button>
+					{/* Meta Fields */}
+					<div>
+						<label className="block text-lg font-semibold mb-2">
+							Meta Title
+						</label>
+						<input
+							type="text"
+							name="metaTitle"
+							value={formData.metaTitle}
+							className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+							onChange={handleInputChange}
+						/>
+					</div>
+					<div>
+						<label className="block text-lg font-semibold mb-2">
+							Meta Description
+						</label>
+						<textarea
+							name="metaDescription"
+							value={formData.metaDescription}
+							className="w-full h-24 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+							onChange={handleInputChange}
+						/>
+					</div>
+					<div>
+						<label className="block text-lg font-semibold mb-2">
+							Meta Keywords (comma separated)
+						</label>
+						<input
+							type="text"
+							name="metaKeywords"
+							value={formData.metaKeywords}
+							className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+							onChange={handleInputChange}
+						/>
+					</div>
+					<button
+						type="submit"
+						className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+					>
+						Save
+					</button>
 				</div>
 			</form>
 		</div>
