@@ -94,6 +94,9 @@ const CountryEdit = () => {
 					docHeading: data.docHeading,
 					tourTypes: data.tourTypes.map((type) => type._id), // Store only IDs
 					faq: data.faq || [],
+					metaTitle: data.metaTitle,
+					metaDescription: data.metaDescription,
+					metaKeywords: data.metaKeywords,
 				});
 				setFaq(data.faq || []);
 			}
@@ -120,6 +123,11 @@ const CountryEdit = () => {
 		setFormData({ ...formData, tourTypes: updatedTourTypes });
 	};
 
+	const keywords =
+		typeof formData.metaKeywords === "string"
+			? formData.metaKeywords.split(",").map((kw) => kw.trim())
+			: [];
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -128,6 +136,13 @@ const CountryEdit = () => {
 		data.append("heading", formData.heading);
 		data.append("description", formData.description);
 		data.append("price", formData.price);
+		data.append("metaTitle", formData.metaTitle);
+		data.append("metaDescription", formData.metaDescription);
+
+		data.append("metaKeywords", JSON.stringify(keywords));
+		if (formData.image) {
+			data.append("image", formData.image);
+		}
 		if (formData.image instanceof File) {
 			data.append("image", formData.image);
 		}
@@ -171,10 +186,10 @@ const CountryEdit = () => {
 	};
 	const handleQuestionChange = (index, e) => {
 		const updatedFaq = faq.map((item, i) =>
-		  i === index ? { ...item, [e.target.name]: e.target.value } : item
+			i === index ? { ...item, [e.target.name]: e.target.value } : item
 		);
 		setFaq(updatedFaq);
-	  };
+	};
 
 	const handleRemoveQuestion = (index) => {
 		const updatedFaq = faq.filter((_, i) => i !== index);
@@ -242,6 +257,42 @@ const CountryEdit = () => {
 						onChange={handleChange}
 						className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
 						required
+					/>
+				</div>
+				{/* Meta Fields */}
+				<div>
+					<label className="block text-lg font-semibold mb-2">
+						Meta Title
+					</label>
+					<input
+						type="text"
+						name="metaTitle"
+						value={formData.metaTitle}
+						className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+						onChange={handleChange}
+					/>
+				</div>
+				<div>
+					<label className="block text-lg font-semibold mb-2">
+						Meta Description
+					</label>
+					<textarea
+						name="metaDescription"
+						value={formData.metaDescription}
+						className="w-full h-24 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+						onChange={handleChange}
+					/>
+				</div>
+				<div>
+					<label className="block text-lg font-semibold mb-2">
+						Meta Keywords (comma separated)
+					</label>
+					<input
+						type="text"
+						name="metaKeywords"
+						value={formData.metaKeywords}
+						className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+						onChange={handleChange}
 					/>
 				</div>
 

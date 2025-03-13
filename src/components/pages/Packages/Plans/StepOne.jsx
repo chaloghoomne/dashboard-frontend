@@ -56,9 +56,9 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           <option value="">Select Country</option>
           {countries?.map((country) => {
             return (
-              <>
+              <div key = {country._id}>
                 <option value={country?._id}>{country?.country}</option>
-              </>
+              </div>
             );
           })}
           {/* Fetch and map package options from API */}
