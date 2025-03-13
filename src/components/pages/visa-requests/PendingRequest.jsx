@@ -41,7 +41,7 @@ const PendingRequests = () => {
 					description: data,
 				}
 			);
-			// console.log("response of process-visa-order: ", response);
+			console.log("response of process-visa-order: ", response);
 			if (response) {
 				toast.success(`${action.toUpperCase()}`);
 				try {
@@ -49,6 +49,7 @@ const PendingRequests = () => {
 						"GET",
 						`${BASE_URL}visa-orders?page=${currentPage}&status=pending`
 					);
+					console.log(response)
 					if (response) {
 						setUsers(response.data);
 						setTotalPages(response.totalPages);

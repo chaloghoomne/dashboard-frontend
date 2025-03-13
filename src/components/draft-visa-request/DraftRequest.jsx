@@ -18,6 +18,7 @@ const DraftRequests = () => {
           "GET",
           `${BASE_URL}draft-visa-orders?page=${currentPage}`
         );
+        // console.log(response)
         if (response) {
           setUsers(response.data);
           setTotalPages(response.totalPages);

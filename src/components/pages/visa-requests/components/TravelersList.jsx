@@ -43,6 +43,7 @@ const UserList = ({
 				"GET",
 				`${BASE_URL}order-details-by-category/${id}`
 			);
+			console.log(response)
 			if (response) {
 				setSelectedBookings(response.data);
 			}
