@@ -94,6 +94,7 @@ const CountryEdit = () => {
 					docHeading: data.docHeading,
 					tourTypes: data.tourTypes.map((type) => type._id), // Store only IDs
 					faq: data.faq || [],
+					altImage: data.altImage,
 					metaTitle: data.metaTitle,
 					metaDescription: data.metaDescription,
 					metaKeywords: data.metaKeywords,
@@ -138,6 +139,7 @@ const CountryEdit = () => {
 		data.append("price", formData.price);
 		data.append("metaTitle", formData.metaTitle);
 		data.append("metaDescription", formData.metaDescription);
+		data.append("altImage", formData.altImage);
 
 		data.append("metaKeywords", JSON.stringify(keywords));
 		if (formData.image) {
@@ -317,6 +319,18 @@ const CountryEdit = () => {
 							className="mt-2 w-20 h-20 object-cover"
 						/>
 					)}
+				</div>
+				<div>
+					<label className="block text-lg font-semibold mb-2">
+						Alt Text for Image
+					</label>
+					<input
+						type="text"
+						name="altImage"
+						value={formData.altImage}
+						className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+						onChange={handleChange}
+					/>
 				</div>
 
 				<div className="space-y-4">

@@ -24,6 +24,7 @@ const AddForm = ({ handleActive }) => {
 		metaTitle: "",
 		metaDescription: "",
 		metaKeywords: "",
+		altImage: "",
 	});
 	const [visaCategories, setVisaCategories] = useState([]);
 
@@ -123,6 +124,7 @@ const AddForm = ({ handleActive }) => {
 		data.append("image", formData.image);
 		data.append("metaTitle", formData.metaTitle);
 		data.append("metaDescription", formData.metaDescription);
+		data.append("altImage", formData.altImage);
 
 		data.append("metaKeywords", JSON.stringify(keywords));
 		if (formData.image) {
@@ -247,6 +249,18 @@ const AddForm = ({ handleActive }) => {
 					onChange={handleImageChange}
 					className="mt-1 block bg-white p-1 px-2 rounded-md w-full"
 					required
+				/>
+			</div>
+			<div>
+				<label className="block text-lg font-semibold mb-2">
+				 Alternate Image Title
+				</label>
+				<input
+					type="text"
+					name="altImage"
+					value={formData.altImage}
+					className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+					onChange={handleChange}
 				/>
 			</div>
 			{/* Meta Fields */}
