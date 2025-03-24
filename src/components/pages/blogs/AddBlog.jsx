@@ -44,9 +44,9 @@ const AddBlog = () => {
 		if (formData.image) {
 			data.append("image", formData.image);
 		}
-		for (let pair of data.entries()) {
-			console.log(pair[0], pair[1]); // Logs each key-value pair
-		}
+		// for (let pair of data.entries()) {
+		// 	console.log(pair[0], pair[1]); // Logs each key-value pair
+		// }
 		
 		try {
 			const resp = await axios.post(`${BASE_URL}add-blog`, data,
