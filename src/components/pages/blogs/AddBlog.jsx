@@ -23,9 +23,15 @@ const AddBlog = () => {
 			[name]: files ? files[0] : value,
 		});
 	};
+
+	const handleImageChange = (e) => {
+		setFormData({ ...formData, image: e.target.files[0] });
+	  };
+
 	const handleEditorChange = (content) => {
 		setFormData({ ...formData, description: content });
 	};
+	console.log(formData)
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -38,17 +44,26 @@ const AddBlog = () => {
 		if (formData.image) {
 			data.append("image", formData.image);
 		}
-
+		for (let pair of data.entries()) {
+			console.log(pair[0], pair[1]); // Logs each key-value pair
+		}
+		
 		try {
-			const resp = await axios.post(`${BASE_URL}add-blog`, data);
+			const resp = await axios.post(`${BASE_URL}add-blog`, data,
+				{
+					headers: { "Content-Type": "multipart/form-data" },
+				  }
+			);
 
 			if (resp) {
 				toast.success("Blog added!");
 				navigate(`/home/blog/list`);
 			}
 		} catch (error) {
+			console.log(error)
 			toast.error("Error adding blog", error);
 		}
+		console.log(data)
 	};
 
 	return (
@@ -111,7 +126,7 @@ const AddBlog = () => {
 						id="image"
 						name="image"
 						className="block w-full bg-white p-2 text-gray-500 border border-gray-300 rounded-lg cursor-pointer"
-						onChange={handleChange}
+						onChange={handleImageChange}
 						required
 					/>
 				</div>
