@@ -3,91 +3,145 @@ import AddDescription from "./components.jsx/AddDescription"; // Assuming this i
 import { fetchDataFromAPI } from "../../../../Api/fetchData";
 import { BASE_URL } from "../../../../Api/urls";
 import { toast } from "react-toastify";
+import {
+	Button,
+	Label,
+	ListBox,
+	ListBoxItem,
+	Popover,
+	Select,
+	SelectValue,
+} from "react-aria-components";
 
 const StepTwo = ({
-  formData,
-  handleChange,
-  nextStep,
-  prevStep,
-  handleLongDescriptionChange,
-  handleDocumentsChange,
-  handleSubmit,
-  setFormData,
+	formData,
+	handleChange,
+	nextStep,
+	prevStep,
+	handleLongDescriptionChange,
+	handleDocumentsChange,
+	handleSubmit,
+	setFormData,
 }) => {
-  const [faq, setFaq] = useState([]);
-  const [documents, setDocuments] = useState([]);
-  const [show, setShow] = useState(false);
-  const [selectedDocuments, setSelectedDocuments] = useState([]);
-  const [longDescription, setLongDescription] = useState("");
+	const [faq, setFaq] = useState([]);
+	const [documents, setDocuments] = useState([]);
+	const [show, setShow] = useState(false);
+	const [selectedDocuments, setSelectedDocuments] = useState([]);
+	const [longDescription, setLongDescription] = useState("");
+	const [selectedOPtions, setSelectedOptions] = useState("");
 
-  useEffect(() => {
-    fetchDocuments();
-  }, []);
+	useEffect(() => {
+		fetchDocuments();
+	}, []);
 
-  const fetchDocuments = async () => {
-    try {
-      const response = await fetchDataFromAPI("GET", `${BASE_URL}documents`);
-      if (response) {
-        setDocuments(response.data);
+	const fetchDocuments = async () => {
+		try {
+			const response = await fetchDataFromAPI(
+				"GET",
+				`${BASE_URL}documents`
+			);
+			if (response) {
+				setDocuments(response.data);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	let options = [
+		{ id: 1, name: "Aardvark" },
+		{ id: 2, name: "Cat" },
+		{ id: 3, name: "Dog" },
+		{ id: 4, name: "Kangaroo" },
+		{ id: 5, name: "Koala" },
+		{ id: 6, name: "Penguin" },
+		{ id: 7, name: "Snake" },
+		{ id: 8, name: "Turtle" },
+		{ id: 9, name: "Wombat" },
+	];
+
+	const handleAddQuestion = () => {
+		setFaq([...faq, { question: "", answer: "" }]);
+	};
+
+	const handleQuestionChange = (index, e) => {
+		const updatedFaq = faq.map((item, i) =>
+			i === index ? { ...item, [e.target.name]: e.target.value } : item
+		);
+		setFaq(updatedFaq);
+	};
+
+	const handleRemoveQuestion = (index) => {
+		const updatedFaq = faq.filter((item, i) => i !== index);
+		setFaq(updatedFaq);
+	};
+
+	const handleDocumentSelect = (index) => {
+    setDocuments((prevDocs) => {
+      let updatedDocs = [...prevDocs];
+  
+      // Toggle selection
+      updatedDocs[index].show = !updatedDocs[index].show;
+  
+      // If newly selected, assign next available position
+      if (updatedDocs[index].show) {
+        const maxPosition =
+          Math.max(...updatedDocs.map((doc) => doc.position || 0), 0) + 1;
+        updatedDocs[index].position = maxPosition;
+      } else {
+        // Reset position if deselected
+        updatedDocs[index].position = 0;
       }
-    } catch (error) {
-      console.log(error);
-    }
+  
+      // Sort by position so the order is maintained
+      updatedDocs.sort((a, b) => (a.position || 999) - (b.position || 999));
+  
+      return updatedDocs;
+    });
   };
-
-  const handleAddQuestion = () => {
-    setFaq([...faq, { question: "", answer: "" }]);
+  
+  const handlePositionChange = (index, position) => {
+    setDocuments((prevDocs) => {
+      let updatedDocs = [...prevDocs];
+  
+      // Update position without affecting selection
+      updatedDocs[index].position = position;
+  
+      // Ensure sorting by position
+      updatedDocs.sort((a, b) => (a.position || 999) - (b.position || 999));
+  
+      return updatedDocs;
+    });
   };
+  
+  
 
-  const handleQuestionChange = (index, e) => {
-    const updatedFaq = faq.map((item, i) =>
-      i === index ? { ...item, [e.target.name]: e.target.value } : item
-    );
-    setFaq(updatedFaq);
-  };
+	const saveFaq = () => {
+		handleChange(faq);
+		toast.success(` Faq Saved SuccessFully!  `);
+	};
 
-  const handleRemoveQuestion = (index) => {
-    const updatedFaq = faq.filter((item, i) => i !== index);
-    setFaq(updatedFaq);
-  };
+	const handleSave = () => {
+		handleDocumentsChange(documents);
 
-  const handleDocumentSelect = (index) => {
-    const updatedDocuments = documents.map((doc, i) =>
-      i === index ? { ...doc, show: !doc.show } : doc
-    );
-    setDocuments(updatedDocuments);
+		setShow(true);
+		toast.success(` Documents Saved SuccessFully!  `);
+	};
 
-    //
-  };
+	const savedesc = () => {
+		handleLongDescriptionChange(longDescription);
+		toast.success(`Long  Description Saved SuccessFully!  `);
+	};
 
-  const saveFaq = () => {
-    handleChange(faq);
-    toast.success(` Faq Saved SuccessFully!  `);
-  };
+	const handleNext = (e) => {
+		e.preventDefault();
 
-  const handleSave = () => {
+		setShow(false);
+		handleSubmit();
+	};
 
-    handleDocumentsChange(documents);
-
-    setShow(true);
-    toast.success(` Documents Saved SuccessFully!  `);
-  };
-
-  const savedesc = () => {
-    handleLongDescriptionChange(longDescription);
-    toast.success(`Long  Description Saved SuccessFully!  `);
-  };
-
-  const handleNext = (e) => {
-    e.preventDefault();
-
-    setShow(false);
-    handleSubmit();
-  };
-
-  return (
-    <div className="flex flex-col gap-10">
-      {/* <div className="space-y-2">
+	return (
+		<div className="flex flex-col gap-10">
+			{/* <div className="space-y-2">
         <h2 className="text-xl font-bold text-blue-500">FAQ Section</h2>
         {faq.map((item, index) => (
           <div key={index} className="flex space-x-2">
@@ -134,72 +188,98 @@ const StepTwo = ({
         </button>
       </div> */}
 
-      <div className="space-y-4">
-        <h2 className="text-xl font-bold text-blue-500">
-          Select Documents to Show
-        </h2>
-        {documents.map((doc, index) => (
-          <div key={doc.id} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={doc.show ? true: false}
-              onChange={() => handleDocumentSelect(index)}
-            />
-            <span>{doc.name}</span>
-          </div>
-        ))}
-      </div>
+<div className="space-y-4">
+  <h2 className="text-xl font-bold text-blue-500">Select Documents to Show</h2>
+  {documents.map((doc, index) => (
+    <div key={index} className="flex items-center space-x-4">
+      {/* Checkbox for Show/Hide */}
+      <input
+        type="checkbox"
+        checked={doc.show}
+        onChange={() => handleDocumentSelect(index)}
+      />
+      <span>{doc.name}</span>
 
-      <button
-        type="button"
-        onClick={handleSave}
-        className="px-4 py-2 bg-blue-500 w-44 text-black rounded-md"
-      >
-        Save Documents
-      </button>
-
-      <div className="space-y-2">
-        <h2 className="text-xl font-bold text-blue-500">Long Description</h2>
-        <textarea
-          name="longDescription"
-          value={longDescription}
-          onChange={(e) => setLongDescription(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="Enter the long description here..."
-          rows="4"
-          required
-        ></textarea>
-      </div>
-
-      <div className="flex justify-between">
-        <div className="flex gap-5">
-          <button
-            type="button"
-            onClick={prevStep}
-            className="px-4 py-2 bg-gray-400 text-black rounded-md"
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            onClick={savedesc}
-            className="px-4 py-2 bg-blue-500 w-44 text-black rounded-md"
-          >
-            Save Description
-          </button>
-        </div>
-        <button
-          onClick={handleNext}
-          disabled={!show}
-          className="px-4 py-2 bg-blue-500  text-white rounded-md"
+      {/* Dropdown for Position Selection */}
+      {doc.show && (
+        <Select
+          selectedKey={String(doc?.position)}
+          onSelectionChange={(value) =>
+            handlePositionChange(index, Number(value))
+          }
         >
-          Submit
-        </button>
-      </div>
-
-      {/* <AddDescription /> */}
+          <Label className="m-2">Select Position</Label>
+          <Button>
+            <SelectValue />
+            <span aria-hidden="true">▼</span>
+          </Button>
+          <Popover>
+            <ListBox className="bg-slate-900 p-5 m-2 text-white">
+              {[...Array(documents.length)].map((_, i) => (
+                <ListBoxItem key={i + 1} id={String(i + 1)}>
+                  {i + 1}
+                </ListBoxItem>
+              ))}
+            </ListBox>
+          </Popover>
+        </Select>
+      )}
     </div>
-  );
+  ))}
+</div>
+
+			<button
+				type="button"
+				onClick={handleSave}
+				className="px-4 py-2 bg-blue-500 w-44 text-black rounded-md"
+			>
+				Save Documents
+			</button>
+
+			<div className="space-y-2">
+				<h2 className="text-xl font-bold text-blue-500">
+					Long Description
+				</h2>
+				<textarea
+					name="longDescription"
+					value={longDescription}
+					onChange={(e) => setLongDescription(e.target.value)}
+					className="w-full p-2 border border-gray-300 rounded-md"
+					placeholder="Enter the long description here..."
+					rows="4"
+					required
+				></textarea>
+			</div>
+
+			<div className="flex justify-between">
+				<div className="flex gap-5">
+					<button
+						type="button"
+						onClick={prevStep}
+						className="px-4 py-2 bg-gray-400 text-black rounded-md"
+					>
+						Back
+					</button>
+					<button
+						type="button"
+						onClick={savedesc}
+						className="px-4 py-2 bg-blue-500 w-44 text-black rounded-md"
+					>
+						Save Description
+					</button>
+				</div>
+				<button
+					onClick={handleNext}
+					disabled={!show}
+					className="px-4 py-2 bg-blue-500  text-white rounded-md"
+				>
+					Submit
+				</button>
+			</div>
+
+			{/* <AddDescription /> */}
+		</div>
+	);
 };
 
 export default StepTwo;

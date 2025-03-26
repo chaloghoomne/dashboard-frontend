@@ -86,6 +86,8 @@ const Plans = () => {
     setFormData({ ...formData, longDescription: longDescription });
   };
 
+  console.log(formData, "formData");
+
   const handleSubmit = async () => {
     const newformData = new FormData();
 
@@ -118,13 +120,17 @@ const Plans = () => {
       newformData.append(`documents[${index}][icon]`, item.icon);
       newformData.append(`documents[${index}][description]`, item.description);
       newformData.append(`documents[${index}][show]`, item.show);
+      newformData.append(`documents[${index}][position]`, item.position);
     });
+
+    console.log(formData?.documents)
     try {
       const response = await fetchDataFromAPI(
         "POST",
         `${BASE_URL}add-visa-category`,
         newformData
       );
+      console.log(newformData)
       if (response) {
         toast.success("Added successfully");
        window.location.href =  `/home/visa/plans`;
