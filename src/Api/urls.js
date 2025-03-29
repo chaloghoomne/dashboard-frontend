@@ -1,5 +1,5 @@
 // export const BASE_URL = "https://dashboard-backend-r1xk.onrender.com/api/v1/";
-export const BASE_URL = "http://82.29.167.247:3001/api/v1/";
+export const BASE_URL = "https://api.chaloghoomne.com/api/v1/";
 export const NetworkConfig = {
 	ADDCONTENT: "/add-content",
 	ADMINLOGIN: "admin-login",
