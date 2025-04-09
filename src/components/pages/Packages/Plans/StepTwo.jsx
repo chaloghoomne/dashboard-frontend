@@ -29,6 +29,7 @@ const StepTwo = ({
 	const [selectedDocuments, setSelectedDocuments] = useState([]);
 	const [longDescription, setLongDescription] = useState("");
 	const [selectedOPtions, setSelectedOptions] = useState("");
+	const [clicked, setClicked] = useState(false);
 
 	useEffect(() => {
 		fetchDocuments();
@@ -269,9 +270,11 @@ const StepTwo = ({
 					</button>
 				</div>
 				<button
-					onClick={handleNext}
+					onClick={() => {handleSubmit();setClicked(!clicked)}}
 					disabled={!show}
-					className="px-4 py-2 bg-blue-500  text-white rounded-md"
+					className={`px-4 py-2 rounded text-white ${
+						clicked ? "bg-green-500" : "bg-blue-800"
+					  }`}
 				>
 					Submit
 				</button>
