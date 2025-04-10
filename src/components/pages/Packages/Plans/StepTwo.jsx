@@ -133,8 +133,8 @@ const StepTwo = ({
 		toast.success(`Long  Description Saved SuccessFully!  `);
 	};
 
-	const handleNext = (e) => {
-		e.preventDefault();
+	const handleNext = () => {
+		// e.preventDefault();
 
 		setShow(false);
 		handleSubmit();
@@ -208,6 +208,7 @@ const StepTwo = ({
           onSelectionChange={(value) =>
             handlePositionChange(index, Number(value))
           }
+		  
         >
           <Label className="m-2">Select Position</Label>
           <Button>
@@ -270,7 +271,7 @@ const StepTwo = ({
 					</button>
 				</div>
 				<button
-					onClick={() => {handleSubmit();setClicked(!clicked)}}
+					onClick={() => {handleNext();setClicked(!clicked)}}
 					disabled={!show}
 					className={`px-4 py-2 rounded text-white ${
 						clicked ? "bg-green-500" : "bg-blue-800"

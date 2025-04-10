@@ -86,7 +86,7 @@ const Plans = () => {
     setFormData({ ...formData, longDescription: longDescription });
   };
 
-  console.log(formData, "formData");
+  // console.log(formData, "formData");
 
   const handleSubmit = async () => {
     const newformData = new FormData();
@@ -123,7 +123,7 @@ const Plans = () => {
       newformData.append(`documents[${index}][position]`, item.position);
     });
 
-    console.log(formData?.documents)
+    // console.log(formData?.documents)
     try {
       const response = await fetchDataFromAPI(
         "POST",
