@@ -12,6 +12,7 @@ import {
 	Select,
 	SelectValue,
 } from "react-aria-components";
+import TextEditor from "../../blogs/TextEditor";
 
 const StepTwo = ({
 	formData,
@@ -34,6 +35,10 @@ const StepTwo = ({
 	useEffect(() => {
 		fetchDocuments();
 	}, []);
+
+	const handleEditorChange = (value) => {
+		setLongDescription(value);
+	};
 
 	const fetchDocuments = async () => {
 		try {
@@ -242,15 +247,25 @@ const StepTwo = ({
 				<h2 className="text-xl font-bold text-blue-500">
 					Long Description
 				</h2>
-				<textarea
+				{/* <textarea
 					name="longDescription"
-					value={longDescription}
+					
 					onChange={(e) => setLongDescription(e.target.value)}
 					className="w-full p-2 border border-gray-300 rounded-md"
 					placeholder="Enter the long description here..."
 					rows="4"
-					required
-				></textarea>
+					
+				></textarea> */}
+		
+					<TextEditor
+
+						className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
+						value={longDescription}
+						onChange={(value) => handleEditorChange(value)} // ✅ Use a new handler for TextEditor
+						required
+					/>
+		
+				
 			</div>
 
 			<div className="flex justify-between">
