@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { fetchDataFromAPI } from "../../../../../Api/fetchData";
 import { BASE_URL } from "../../../../../Api/urls";
 import { useNavigate, useParams } from "react-router-dom";
+import TextEditor from "../../../blogs/TextEditor";
 
 const PlanEdit = () => {
   const { id } = useParams();
@@ -42,6 +43,15 @@ const PlanEdit = () => {
   const [tourtypes, setTourtypes] = useState([]);
   const [faqs, setFaqs] = useState([]);
   const [documents, setDocuments] = useState([]);
+
+
+  const handleEditorChange = (value) => {
+		setFormData((prev) => ({
+			...prev,
+			longDescription: value,
+		}));
+	};
+
   useEffect(() => {
     const fetchPackageData = async () => {
       const packageData = await fetchDataFromAPI(
@@ -582,7 +592,7 @@ const PlanEdit = () => {
               <h2 className="text-xl font-bold text-blue-500">
                 Long Description
               </h2>
-              <textarea
+              {/* <textarea
                 name="longDescription"
                 value={formData?.longDescription}
                 onChange={(e) => handleChange(e)}
@@ -590,7 +600,16 @@ const PlanEdit = () => {
                 placeholder="Enter the long description here..."
                 rows="4"
                 required
-              ></textarea>
+              ></textarea> */}
+              <TextEditor
+                            className="w-full h-auto px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
+                            name="longDescription"
+                            value={formData?.longDescription}
+                            onChange={(value) =>
+                              handleEditorChange(value)
+                            } // ✅ Use a new handler for TextEditor
+                            required
+                          />
             </div>
             <div className="flex justify-between">
               <button
