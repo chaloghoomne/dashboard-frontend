@@ -269,7 +269,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           name="expressDays"
           value={formData.expressDays}
           onChange={handleChange}
-          placeholder="3"
+          placeholder="3 to 5"
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         />
       </div>
@@ -312,7 +312,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           name="instantDays"
           value={formData.instantDays}
           onChange={handleChange}
-          placeholder="2"
+          placeholder="2 to 3"
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         />
       </div>
