@@ -111,7 +111,13 @@ const PlanListing = ({ data, deleted, edit, view }) => {
                   {pkg?.period} <span className="text-xs">Days</span>
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
-                  {pkg?.validity} <span className="text-xs">Days</span>
+                {pkg?.validity
+											? pkg.validity
+													.toLowerCase()
+													.includes("hour")
+												? pkg.validity
+												: `${pkg.validity} Days`
+											: "N/A"}
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   {pkg?.processingTime} <span className="text-xs">Days</span>

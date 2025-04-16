@@ -123,7 +123,7 @@ const Plans = () => {
       newformData.append(`documents[${index}][position]`, item.position);
     });
 
-    // console.log(formData?.documents)
+    // console.log(newformData)
     try {
       const response = await fetchDataFromAPI(
         "POST",
@@ -149,6 +149,7 @@ const Plans = () => {
     setIsModalOpen(true);
     setDeletedId(id);
   };
+  // console.log(formData.validity,formData.tourType)
 
   const confirmDelete = async () => {
     try {
