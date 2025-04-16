@@ -80,7 +80,7 @@ const StepOne = ({ formData, handleChange, handleImageChange, nextStep }) => {
           {tourtypes?.map((tour) => {
             return (
               <>
-                <option value={tour._id}>{tour.name}</option>
+                <option key={tour._id} value={tour._id}>{tour.name}</option>
               </>
             );
           })}
