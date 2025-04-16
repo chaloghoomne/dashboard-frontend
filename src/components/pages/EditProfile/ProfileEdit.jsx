@@ -34,7 +34,7 @@ const ProfileEdit = () => {
             }
           }
         );
-        // console.log(response.data)
+        console.log(response.data)
         if (response){
           // console.log(response.data)
           setProfileImageUrl(response.data.image);
