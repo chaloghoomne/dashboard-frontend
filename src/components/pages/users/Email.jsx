@@ -1,14 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const EmailModal = ({ mailModelOpen, setMailModelOpen, emailIdentities = [], onSendEmail ,to:initialTo}) => {
   const [form, setForm] = useState({
     fromIndex: {
       from: '',
     pass: '',},
-    to: initialTo ,
+    to: '' ,
     subject: '',
     message: ''
   });
+
+  useEffect(() => {
+    if (initialTo && mailModelOpen) {
+      setForm((prev) => ({
+        ...prev,
+        to: initialTo
+      }));
+    }
+  }, [initialTo, mailModelOpen]);
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
