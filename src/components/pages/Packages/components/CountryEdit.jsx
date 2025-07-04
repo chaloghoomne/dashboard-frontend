@@ -9,7 +9,7 @@ const CountryEdit = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [headings, setHeadings] = useState([]);
-	const [descriptions, setDescriptions] = useState([]);
+
 	const [faq, setFaq] = useState([]);
 	const [formData, setFormData] = useState({
 		country: "",
@@ -23,13 +23,14 @@ const CountryEdit = () => {
 		docHeading: "",
 		docDescription: "",
 		docPoints: [],
+		slug: "",
 	});
-
+	const [descriptions, setDescriptions] = useState(formData.description || "");
 	const [visaCategories, setVisaCategories] = useState([]);
 
 	useEffect(() => {
 		fetchHeadings();
-		fetchDescriptions();
+		// fetchDescriptions();
 		fetchVisaCategories();
 		fetchPackageData();
 	}, [id]);
@@ -48,19 +49,20 @@ const CountryEdit = () => {
 		}
 	};
 
-	const fetchDescriptions = async () => {
-		try {
-			const response = await fetchDataFromAPI(
-				"GET",
-				`${BASE_URL}package-note-by-type/description`
-			);
-			if (response) {
-				setDescriptions(response.data);
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	// const fetchDescriptions = async () => {
+	// 	try {
+	// 		const response = await fetchDataFromAPI(
+	// 			"GET",
+	// 			`${BASE_URL}package-note-by-type/description`
+	// 		);
+	// 		if (response) {
+	// 			setDescriptions(response.data);
+	// 			console.log(descriptions)
+	// 		}
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
 
 	const fetchVisaCategories = async () => {
 		try {
@@ -90,6 +92,7 @@ const CountryEdit = () => {
 					description: data.description,
 					price: data.price,
 					image: data.image,
+					slug: data.slug,
 					docDescription: data.docDescription,
 					docHeading: data.docHeading,
 					tourTypes: data.tourTypes.map((type) => type._id), // Store only IDs
@@ -99,6 +102,7 @@ const CountryEdit = () => {
 					metaDescription: data.metaDescription,
 					metaKeywords: data.metaKeywords,
 				});
+				setDescriptions(data.description);
 				setFaq(data.faq || []);
 			}
 		} catch (error) {
@@ -111,6 +115,10 @@ const CountryEdit = () => {
 		const { name, value } = e.target;
 		setFormData({ ...formData, [name]: value });
 	};
+
+	const handleDescriptionChange =  (value) => {
+		setDescriptions(value);
+	}
 
 	const handleImageChange = (e) => {
 		setFormData({ ...formData, image: e.target.files[0] });
@@ -135,12 +143,12 @@ const CountryEdit = () => {
 		const data = new FormData();
 		data.append("country", formData.country);
 		data.append("heading", formData.heading);
-		data.append("description", formData.description);
+		data.append("description", descriptions);
 		data.append("price", formData.price);
 		data.append("metaTitle", formData.metaTitle);
 		data.append("metaDescription", formData.metaDescription);
 		data.append("altImage", formData.altImage);
-
+		data.append("slug", formData.slug);
 		data.append("metaKeywords", JSON.stringify(keywords));
 		if (formData.image) {
 			data.append("image", formData.image);
@@ -186,6 +194,8 @@ const CountryEdit = () => {
 		);
 		setFaq(updatedFaq);
 	};
+
+
 	const handleQuestionChange = (index, e) => {
 		const updatedFaq = faq.map((item, i) =>
 			i === index ? { ...item, [e.target.name]: e.target.value } : item
@@ -236,17 +246,35 @@ const CountryEdit = () => {
 						required
 					/>
 				</div>
+				<div >
+					<label className="block text-sm font-medium text-gray-700">
+					Slug
+					</label>
+					<input
+						type="text"
+						name="slug"
+						value={formData.slug}
+						onChange={handleChange}
+						className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+						required
+					/>
+				</div>
 				<div>
 					<label className="block text-sm font-medium text-gray-700">
 						Description
 					</label>
-					<textarea
+					<TextEditor
+								className="w-full h-100 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
+								value={descriptions}
+								onChange={handleDescriptionChange} // ✅ Use a new handler for TextEditor
+							/>
+					{/* <textarea
 						name="description"
 						value={formData.description}
 						onChange={handleChange}
 						className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
 						required
-					/>
+					/> */}
 				</div>
 				<div>
 					<label className="block text-sm font-medium text-gray-700">

@@ -13,6 +13,7 @@ const AddForm = ({ handleActive }) => {
 		heading: "",
 		description: "",
 		price: "",
+		slug: "",
 		image: null,
 		rating: "",
 		showCoTraveller: "",
@@ -121,6 +122,7 @@ const AddForm = ({ handleActive }) => {
 		data.append("heading", formData.heading);
 		data.append("description", formData.description);
 		data.append("price", formData.price);
+		data.append("slug", formData.slug);
 		data.append("image", formData.image);
 		data.append("metaTitle", formData.metaTitle);
 		data.append("metaDescription", formData.metaDescription);
@@ -177,6 +179,10 @@ const AddForm = ({ handleActive }) => {
 		setFaq(updatedFaq);
 	};
 
+	const handleDescriptionChange =  (value) => {
+		setDescriptions(value);
+	}
+
 	const handleRemoveQuestion = (index) => {
 		const updatedFaq = faq.filter((item, i) => i !== index);
 		setFaq(updatedFaq);
@@ -217,12 +223,24 @@ const AddForm = ({ handleActive }) => {
 				<label className="block text-sm font-medium text-gray-700">
 					Description
 				</label>
-				<textarea
-					name="description"
-					value={formData.description}
+				<TextEditor
+								className="w-full h-100 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
+								value={descriptions}
+								onChange={handleDescriptionChange} // ✅ Use a new handler for TextEditor
+							/>
+			</div>
+			<div>
+				<label className="block text-sm font-medium text-gray-700">
+					Slug
+				</label>
+				<input
+					type="text"
+					name="price"
+					value={formData.slug}
 					onChange={handleChange}
 					className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
 					required
+					pattern="[0-9]*"
 				/>
 			</div>
 			<div>
