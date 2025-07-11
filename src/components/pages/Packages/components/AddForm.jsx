@@ -235,12 +235,11 @@ const AddForm = ({ handleActive }) => {
 				</label>
 				<input
 					type="text"
-					name="price"
+					name="slug"
 					value={formData.slug}
 					onChange={handleChange}
 					className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
 					required
-					pattern="[0-9]*"
 				/>
 			</div>
 			<div>
