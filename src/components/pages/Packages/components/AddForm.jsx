@@ -7,15 +7,18 @@ import TextEditor from "../../blogs/TextEditor";
 const AddForm = ({ handleActive }) => {
 	const [headings, setHeadings] = useState([]);
 	const [descriptions, setDescriptions] = useState([]);
+	const [seoDescription, setSeoDescription] = useState([]);
 	const [faq, setFaq] = useState([]);
 	const [formData, setFormData] = useState({
 		country: "",
 		heading: "",
 		description: "",
+		seoDescription:"",
 		price: "",
 		slug: "",
 		image: null,
 		rating: "",
+		bannerImage:null,
 		showCoTraveller: "",
 		tourTypes: [], // Stores selected visa category IDs
 		docHeading: "",
@@ -90,6 +93,10 @@ const AddForm = ({ handleActive }) => {
 		setFormData({ ...formData, image: e.target.files[0] });
 	};
 
+	const handleBannerImageChange = (e) => {
+		setFormData({ ...formData, bannerImage: e.target.files[0] });
+	};
+
 	const handleVisaCategoryChange = (id) => {
 		const isSelected = formData.tourTypes.includes(id);
 
@@ -120,7 +127,8 @@ const AddForm = ({ handleActive }) => {
 		const data = new FormData();
 		data.append("country", formData.country);
 		data.append("heading", formData.heading);
-		data.append("description", formData.description);
+		data.append("description", descriptions);
+		data.append("seoDescription", seoDescription);
 		data.append("price", formData.price);
 		data.append("slug", formData.slug);
 		data.append("image", formData.image);
@@ -131,6 +139,9 @@ const AddForm = ({ handleActive }) => {
 		data.append("metaKeywords", JSON.stringify(keywords));
 		if (formData.image) {
 			data.append("image", formData.image);
+		}
+		if (formData.bannerImage) {
+			data.append("bannerImage", formData.bannerImage);
 		}
 		// data.append("docHeading", formData.docHeading);
 		// data.append("docDescription", formData.docDescription);
@@ -183,6 +194,10 @@ const AddForm = ({ handleActive }) => {
 		setDescriptions(value);
 	}
 
+	const handleSeoDescriptionChange =  (value) => {
+		setSeoDescription(value);
+	}
+
 	const handleRemoveQuestion = (index) => {
 		const updatedFaq = faq.filter((item, i) => i !== index);
 		setFaq(updatedFaq);
@@ -229,6 +244,17 @@ const AddForm = ({ handleActive }) => {
 								onChange={handleDescriptionChange} // ✅ Use a new handler for TextEditor
 							/>
 			</div>
+			
+			<div>
+				<label className="block text-sm font-medium text-gray-700">
+					Seo	Description
+				</label>
+				<TextEditor
+								className="w-full h-100 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
+								value={seoDescription}
+								onChange={handleSeoDescriptionChange} // ✅ Use a new handler for TextEditor
+							/>
+			</div>
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
 					Slug
@@ -236,7 +262,7 @@ const AddForm = ({ handleActive }) => {
 				<input
 					type="text"
 					name="slug"
-					value={formData.slug}
+					value={formData.slug.toLowerCase().replace(/\s+/g, "-")}
 					onChange={handleChange}
 					className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
 					required
@@ -265,7 +291,19 @@ const AddForm = ({ handleActive }) => {
 					accept="image/*"
 					onChange={handleImageChange}
 					className="mt-1 block bg-white p-1 px-2 rounded-md w-full"
-					required
+					
+				/>
+			</div>
+			<div className="">
+				<label className="block text-sm font-medium text-gray-700">
+					Banner Image <span className="text-xs">(280*192px)</span>
+				</label>
+				<input
+					type="file"
+					accept="image/*"
+					onChange={handleBannerImageChange}
+					className="mt-1 block bg-white p-1 px-2 rounded-md w-full"
+					
 				/>
 			</div>
 			<div>

@@ -15,17 +15,20 @@ const CountryEdit = () => {
 		country: "",
 		heading: "",
 		description: "",
+		seoDescription: "",
 		price: "",
 		image: null,
 		tourTypes: [],
 		showCoTraveller: "",
 		rating: "",
+		bannerImage: null,
 		docHeading: "",
 		docDescription: "",
 		docPoints: [],
 		slug: "",
 	});
 	const [descriptions, setDescriptions] = useState(formData.description || "");
+	const [seoDescription, setSeoDescription] = useState(formData.seoDescription || "");
 	const [visaCategories, setVisaCategories] = useState([]);
 
 	useEffect(() => {
@@ -92,7 +95,9 @@ const CountryEdit = () => {
 					description: data.description,
 					price: data.price,
 					image: data.image,
+					bannerImage: data.bannerImage,
 					slug: data.slug,
+					seoDescription: data.seoDescription,
 					docDescription: data.docDescription,
 					docHeading: data.docHeading,
 					tourTypes: data.tourTypes.map((type) => type._id), // Store only IDs
@@ -102,6 +107,7 @@ const CountryEdit = () => {
 					metaDescription: data.metaDescription,
 					metaKeywords: data.metaKeywords,
 				});
+				setSeoDescription(data.seoDescription);
 				setDescriptions(data.description);
 				setFaq(data.faq || []);
 			}
@@ -119,9 +125,16 @@ const CountryEdit = () => {
 	const handleDescriptionChange =  (value) => {
 		setDescriptions(value);
 	}
+	const handleSeoDescriptionChange =  (value) => {
+		setSeoDescription(value);
+	}
 
 	const handleImageChange = (e) => {
 		setFormData({ ...formData, image: e.target.files[0] });
+	};
+
+	const handleBannerImageChange = (e) => {
+		setFormData({ ...formData, bannerImage: e.target.files[0] });
 	};
 
 	const handleVisaCategoryChange = (id) => {
@@ -145,6 +158,8 @@ const CountryEdit = () => {
 		data.append("heading", formData.heading);
 		data.append("description", descriptions);
 		data.append("price", formData.price);
+		data.append("seoDescription", seoDescription);
+	
 		data.append("metaTitle", formData.metaTitle);
 		data.append("metaDescription", formData.metaDescription);
 		data.append("altImage", formData.altImage);
@@ -156,6 +171,14 @@ const CountryEdit = () => {
 		if (formData.image instanceof File) {
 			data.append("image", formData.image);
 		}
+
+		if (formData.bannerImage) {
+			data.append("bannerImage", formData.bannerImage);
+		}
+		if (formData.bannerImage instanceof File) {
+			data.append("bannerImage", formData.bannerImage);
+		}
+		
 
 		formData.tourTypes.forEach((typeId) => {
 			data.append("tourTypes[]", typeId);
@@ -253,7 +276,7 @@ const CountryEdit = () => {
 					<input
 						type="text"
 						name="slug"
-						value={formData.slug}
+						value={formData.slug.toLowerCase().replace(/\s+/g, "-")}
 						onChange={handleChange}
 						className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
 						required
@@ -275,6 +298,16 @@ const CountryEdit = () => {
 						className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
 						required
 					/> */}
+				</div>
+				<div>
+					<label className="block text-sm font-medium text-gray-700">
+						Seo Description
+					</label>
+					<TextEditor
+								className="w-full h-100 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 overflow-scroll"
+								value={seoDescription}
+								onChange={handleSeoDescriptionChange} 
+							/>
 				</div>
 				<div>
 					<label className="block text-sm font-medium text-gray-700">
@@ -342,6 +375,28 @@ const CountryEdit = () => {
 								typeof formData.image === "string"
 									? formData.image
 									: URL.createObjectURL(formData.image)
+							}
+							alt="Current"
+							className="mt-2 w-20 h-20 object-cover"
+						/>
+					)}
+				</div>
+				<div>
+					<label className="block text-sm font-medium text-gray-700">
+						Banner Image
+					</label>
+					<input
+						type="file"
+						accept="image/*"
+						onChange={handleBannerImageChange}
+						className="mt-1 block w-full"
+					/>
+					{formData.bannerImage && (
+						<img
+							src={
+								typeof formData.bannerImage === "string"
+									? formData.bannerImage
+									: URL.createObjectURL(formData.bannerImage)
 							}
 							alt="Current"
 							className="mt-2 w-20 h-20 object-cover"
